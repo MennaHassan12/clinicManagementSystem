@@ -30,11 +30,24 @@ namespace clinicManagementSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AppointmentId"));
 
-                    b.Property<DateTime>("AppointmentDate")
+                    b.Property<DateOnly>("AppointmentDate")
+                        .HasColumnType("date");
+
+                    b.Property<TimeOnly>("AppointmentTime")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
+
+                    b.Property<int>("DoctorScheduleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
@@ -45,6 +58,8 @@ namespace clinicManagementSystem.Migrations
                     b.HasKey("AppointmentId");
 
                     b.HasIndex("DoctorId");
+
+                    b.HasIndex("DoctorScheduleId");
 
                     b.HasIndex("PatientId");
 
@@ -58,6 +73,11 @@ namespace clinicManagementSystem.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedicalFileId"));
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("FilePath")
                         .IsRequired()
@@ -142,11 +162,17 @@ namespace clinicManagementSystem.Migrations
                         .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)");
 
+                    b.Property<string>("EmergencyContactName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmergencyContactPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmergencyContactRelation")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Gender")
                         .HasColumnType("int");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PatientId");
 
@@ -171,9 +197,6 @@ namespace clinicManagementSystem.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
@@ -182,6 +205,9 @@ namespace clinicManagementSystem.Migrations
 
                     b.Property<byte>("Rating")
                         .HasColumnType("tinyint");
+
+                    b.Property<DateTime>("ReviewDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ReviewId");
 
@@ -347,18 +373,13 @@ namespace clinicManagementSystem.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -453,6 +474,9 @@ namespace clinicManagementSystem.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("LicenseNumber")
+                        .HasColumnType("int");
+
                     b.Property<int>("YearsOfExperience")
                         .HasColumnType("int");
 
@@ -466,12 +490,51 @@ namespace clinicManagementSystem.Migrations
                     b.ToTable("Doctors");
                 });
 
+            modelBuilder.Entity("clinicManagementSystem.Models.DoctorSchedule", b =>
+                {
+                    b.Property<int>("DoctorScheduleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DoctorScheduleId"));
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaxPatients")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("DoctorScheduleId");
+
+                    b.HasIndex("DoctorId");
+
+                    b.ToTable("DoctorSchedules");
+                });
+
             modelBuilder.Entity("ClinicManagementSystem.Models.Appointment", b =>
                 {
                     b.HasOne("clinicManagementSystem.Models.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("clinicManagementSystem.Models.DoctorSchedule", "Schedule")
+                        .WithMany("Appointments")
+                        .HasForeignKey("DoctorScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ClinicManagementSystem.Models.Patient", "Patient")
@@ -483,6 +546,8 @@ namespace clinicManagementSystem.Migrations
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
+
+                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Models.MedicalFile", b =>
@@ -615,6 +680,17 @@ namespace clinicManagementSystem.Migrations
                     b.Navigation("Department");
                 });
 
+            modelBuilder.Entity("clinicManagementSystem.Models.DoctorSchedule", b =>
+                {
+                    b.HasOne("clinicManagementSystem.Models.Doctor", "Doctor")
+                        .WithMany("DoctorSchedules")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+                });
+
             modelBuilder.Entity("ClinicManagementSystem.Models.Appointment", b =>
                 {
                     b.Navigation("MedicalRecord");
@@ -650,7 +726,14 @@ namespace clinicManagementSystem.Migrations
                 {
                     b.Navigation("Appointments");
 
+                    b.Navigation("DoctorSchedules");
+
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("clinicManagementSystem.Models.DoctorSchedule", b =>
+                {
+                    b.Navigation("Appointments");
                 });
 #pragma warning restore 612, 618
         }

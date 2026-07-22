@@ -8,7 +8,9 @@ namespace ClinicManagementSystem.Models
 
         public int MedicalRecordId { get; set; }
 
+        [MaxLength(500)]
 
+        public string FileName { get; set; } = null!;
 
         [MaxLength(500)]
         public string FilePath { get; set; } = null!;

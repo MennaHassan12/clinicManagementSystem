@@ -25,10 +25,13 @@ namespace clinicManagementSystem.Models
             [MaxLength(1000)]
             public string? Bio { get; set; }
 
+            public int LicenseNumber { get; set; }
+
             public ApplicationUser ApplicationUser { get; set; } = null!;
 
             public Department Department { get; set; } = null!;
 
+            public ICollection<DoctorSchedule> DoctorSchedules { get; set; } = new List<DoctorSchedule>();
             public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
             public ICollection<Review> Reviews { get; set; } = new List<Review>();

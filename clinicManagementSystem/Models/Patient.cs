@@ -19,6 +19,7 @@ namespace ClinicManagementSystem.Models
 
         public DateTime BirthDate { get; set; }
 
+
         [MaxLength(5)]
         public string BloodType { get; set; } = null!;
 
@@ -27,8 +28,11 @@ namespace ClinicManagementSystem.Models
         [MaxLength(250)]
         public string Address { get; set; } = null!;
 
-        public string? Image { get; set; }
+        public string? EmergencyContactName { get; set; }
 
+        public string? EmergencyContactPhone { get; set; }
+
+        public string? EmergencyContactRelation { get; set; }
         public ApplicationUser ApplicationUser { get; set; } = null!;
 
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();

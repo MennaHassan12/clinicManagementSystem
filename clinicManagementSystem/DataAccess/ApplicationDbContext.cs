@@ -25,6 +25,7 @@ namespace ClinicManagementSystem.Data
         public DbSet<MedicalFile> MedicalFiles { get; set; }
 
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<DoctorSchedule> DoctorSchedules { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -88,6 +89,17 @@ namespace ClinicManagementSystem.Data
                 .HasOne(a => a.Review)
                 .WithOne(r => r.Appointment)
                 .HasForeignKey<Review>(r => r.AppointmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Appointment>()
+                .HasOne(a => a.Schedule)
+                .WithMany(ds => ds.Appointments)
+                .HasForeignKey(a => a.DoctorScheduleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<DoctorSchedule>()
+                .HasOne(ds => ds.Doctor)
+                .WithMany(d => d.DoctorSchedules)
+                .HasForeignKey(ds => ds.DoctorId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
