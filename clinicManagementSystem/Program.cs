@@ -15,6 +15,7 @@ namespace clinicManagementSystem
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.Configure();
 
             var app = builder.Build();
 
