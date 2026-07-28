@@ -1,4 +1,4 @@
-using ClinicManagementSystem.Data;
+using clinicManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace clinicManagementSystem

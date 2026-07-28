@@ -1,4 +1,4 @@
-﻿using ClinicManagementSystem.Models;
+﻿using clinicManagementSystem.Models;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 

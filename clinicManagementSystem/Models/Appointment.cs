@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System.ComponentModel.DataAnnotations;
 
-namespace ClinicManagementSystem.Models
+namespace clinicManagementSystem.Models
 {
     public enum AppointmentStatus
     {

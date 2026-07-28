@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using clinicManagementSystem.Models;
+using System.ComponentModel.DataAnnotations;
 
-namespace ClinicManagementSystem.Models
+namespace clinicManagementSystem.Models
 {
     public class MedicalRecord
     {
@@ -11,8 +12,7 @@ namespace ClinicManagementSystem.Models
         [MaxLength(1000)]
         public string Diagnosis { get; set; } = null!;
 
-        [MaxLength(2000)]
-        public string? Prescription { get; set; }
+    
 
         [MaxLength(2000)]
         public string? Notes { get; set; }
@@ -22,5 +22,6 @@ namespace ClinicManagementSystem.Models
         public Appointment Appointment { get; set; } = null!;
 
         public ICollection<MedicalFile> MedicalFiles { get; set; } = new List<MedicalFile>();
+        public ICollection<Prescription> Prescriptions {  get; set; } = new List<Prescription>();
     }
 }

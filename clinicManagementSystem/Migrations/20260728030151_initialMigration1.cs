@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace clinicManagementSystem.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class initialMigration1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -299,7 +299,6 @@ namespace clinicManagementSystem.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AppointmentId = table.Column<int>(type: "int", nullable: false),
                     Diagnosis = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    Prescription = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     Notes = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     VisitDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -321,8 +320,6 @@ namespace clinicManagementSystem.Migrations
                     ReviewId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AppointmentId = table.Column<int>(type: "int", nullable: false),
-                    DoctorId = table.Column<int>(type: "int", nullable: false),
-                    PatientId = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<byte>(type: "tinyint", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     ReviewDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -336,18 +333,6 @@ namespace clinicManagementSystem.Migrations
                         principalTable: "Appointments",
                         principalColumn: "AppointmentId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reviews_Doctors_DoctorId",
-                        column: x => x.DoctorId,
-                        principalTable: "Doctors",
-                        principalColumn: "DoctorId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Reviews_Patients_PatientId",
-                        column: x => x.PatientId,
-                        principalTable: "Patients",
-                        principalColumn: "PatientId",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -367,6 +352,30 @@ namespace clinicManagementSystem.Migrations
                     table.PrimaryKey("PK_MedicalFiles", x => x.MedicalFileId);
                     table.ForeignKey(
                         name: "FK_MedicalFiles_MedicalRecords_MedicalRecordId",
+                        column: x => x.MedicalRecordId,
+                        principalTable: "MedicalRecords",
+                        principalColumn: "MedicalRecordId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Prescriptions",
+                columns: table => new
+                {
+                    PrescriptionId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MedicineName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Dosage = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Frequency = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Duration = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Instructions = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    MedicalRecordId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Prescriptions", x => x.PrescriptionId);
+                    table.ForeignKey(
+                        name: "FK_Prescriptions_MedicalRecords_MedicalRecordId",
                         column: x => x.MedicalRecordId,
                         principalTable: "MedicalRecords",
                         principalColumn: "MedicalRecordId",
@@ -461,20 +470,15 @@ namespace clinicManagementSystem.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Prescriptions_MedicalRecordId",
+                table: "Prescriptions",
+                column: "MedicalRecordId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reviews_AppointmentId",
                 table: "Reviews",
                 column: "AppointmentId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reviews_DoctorId",
-                table: "Reviews",
-                column: "DoctorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reviews_PatientId",
-                table: "Reviews",
-                column: "PatientId");
         }
 
         /// <inheritdoc />
@@ -497,6 +501,9 @@ namespace clinicManagementSystem.Migrations
 
             migrationBuilder.DropTable(
                 name: "MedicalFiles");
+
+            migrationBuilder.DropTable(
+                name: "Prescriptions");
 
             migrationBuilder.DropTable(
                 name: "Reviews");

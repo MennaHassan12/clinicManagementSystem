@@ -1,4 +1,4 @@
-﻿using ClinicManagementSystem.Models;
+﻿using clinicManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -34,7 +34,6 @@ namespace clinicManagementSystem.Models
             public ICollection<DoctorSchedule> DoctorSchedules { get; set; } = new List<DoctorSchedule>();
             public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
-            public ICollection<Review> Reviews { get; set; } = new List<Review>();
         }
     }
 

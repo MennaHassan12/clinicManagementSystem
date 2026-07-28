@@ -1,4 +1,4 @@
-﻿using ClinicManagementSystem.Models;
+﻿using clinicManagementSystem.Models;
 
 namespace clinicManagementSystem.Models
 {

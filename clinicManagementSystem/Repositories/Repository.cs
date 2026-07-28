@@ -1,5 +1,5 @@
 ﻿using clinicManagementSystem.Repositories.IRepositories;
-using ClinicManagementSystem.Data;
+using clinicManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

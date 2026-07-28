@@ -1,7 +1,7 @@
 ﻿using clinicManagementSystem.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace ClinicManagementSystem.Models
+namespace clinicManagementSystem.Models
 {
     public class Review
     {
@@ -9,9 +9,7 @@ namespace ClinicManagementSystem.Models
 
         public int AppointmentId { get; set; }
 
-        public int DoctorId { get; set; }
-
-        public int PatientId { get; set; }
+        
 
         [Range(1, 5)]
         public byte Rating { get; set; }
@@ -23,8 +21,6 @@ namespace ClinicManagementSystem.Models
 
         public Appointment Appointment { get; set; } = null!;
 
-        public Doctor Doctor { get; set; } = null!;
-
-        public Patient Patient { get; set; } = null!;
+        
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace ClinicManagementSystem.Models
+namespace clinicManagementSystem.Models
 {
     public enum Gender
     {
@@ -37,6 +37,5 @@ namespace ClinicManagementSystem.Models
 
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
-        public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

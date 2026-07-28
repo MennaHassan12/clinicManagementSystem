@@ -1,7 +1,6 @@
 ﻿using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories;
 using clinicManagementSystem.Repositories.IRepositories;
-using ClinicManagementSystem.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace clinicManagementSystem

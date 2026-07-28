@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ClinicManagementSystem.Models
+namespace clinicManagementSystem.Models
 {
     public class MedicalFile
     {

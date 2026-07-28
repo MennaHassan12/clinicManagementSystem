@@ -1,9 +1,8 @@
 ﻿using clinicManagementSystem.Models;
-using ClinicManagementSystem.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace ClinicManagementSystem.Data
+namespace clinicManagementSystem.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -26,6 +25,8 @@ namespace ClinicManagementSystem.Data
 
         public DbSet<Review> Reviews { get; set; }
         public DbSet<DoctorSchedule> DoctorSchedules { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -73,17 +74,7 @@ namespace ClinicManagementSystem.Data
                 .HasForeignKey(m => m.MedicalRecordId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<Review>()
-                .HasOne(r => r.Doctor)
-                .WithMany(d => d.Reviews)
-                .HasForeignKey(r => r.DoctorId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Review>()
-                .HasOne(r => r.Patient)
-                .WithMany(p => p.Reviews)
-                .HasForeignKey(r => r.PatientId)
-                .OnDelete(DeleteBehavior.Restrict);
+            
 
             builder.Entity<Appointment>()
                 .HasOne(a => a.Review)
@@ -101,6 +92,13 @@ namespace ClinicManagementSystem.Data
                 .WithMany(d => d.DoctorSchedules)
                 .HasForeignKey(ds => ds.DoctorId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Prescription>()
+                .HasOne(p=>p.MedicalRecord)
+                .WithMany(m=>m.Prescriptions)
+                .HasForeignKey(p=>p.MedicalRecordId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }
