@@ -1,0 +1,155 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <div class="col-lg-2 col-md-4 col-6">
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>150</h3>
+                <p>Patients</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-user-injured"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-2 col-md-4 col-6">
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>20</h3>
+                <p>Doctors</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-user-md"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-2 col-md-4 col-6">
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>8</h3>
+                <p>Departments</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-hospital"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-2 col-md-4 col-6">
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>50</h3>
+                <p>Appointments</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-2 col-md-4 col-6">
+        <div class="small-box bg-primary">
+            <div class="inner">
+                <h3>95</h3>
+                <p>Medical Files</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-folder-open"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-2 col-md-4 col-6">
+        <div class="small-box bg-secondary">
+            <div class="inner">
+                <h3>18</h3>
+                <p>Reviews</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-star"></i>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary">
+                <h3 class="card-title">Today's Appointments</h3>
+            </div>
+
+            <div class="card-body p-0">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Ahmed Ali</td>
+                            <td>Dr. Mohamed</td>
+                            <td>10:00 AM</td>
+                            <td><span class="badge badge-success">Confirmed</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Sara Hassan</td>
+                            <td>Dr. Nada</td>
+                            <td>11:30 AM</td>
+                            <td><span class="badge badge-warning">Pending</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Omar Adel</td>
+                            <td>Dr. Ahmed</td>
+                            <td>1:00 PM</td>
+                            <td><span class="badge badge-info">Completed</span></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card">
+
+            <div class="card-header bg-success">
+                <h3 class="card-title">System Overview</h3>
+            </div>
+
+            <div class="card-body">
+
+                <p><strong>Total Patients:</strong> 150</p>
+                <p><strong>Total Doctors:</strong> 20</p>
+                <p><strong>Departments:</strong> 8</p>
+                <p><strong>Appointments Today:</strong> 50</p>
+                <p><strong>Reviews:</strong> 18</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    
+</div>

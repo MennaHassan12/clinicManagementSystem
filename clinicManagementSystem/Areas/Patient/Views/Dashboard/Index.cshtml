@@ -1,0 +1,136 @@
+﻿@{
+    ViewData["Title"] = "Patient Dashboard";
+    Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <div class="col-lg-3 col-md-6 col-12">
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>3</h3>
+                <p>Upcoming Appointments</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-12">
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>12</h3>
+                <p>Medical Records</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-file-medical"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-12">
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>5</h3>
+                <p>Prescriptions</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-prescription-bottle-alt"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-12">
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>4.8</h3>
+                <p>My Rating</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-star"></i>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-8">
+
+        <div class="card">
+
+            <div class="card-header bg-primary">
+                <h3 class="card-title">Upcoming Appointments</h3>
+            </div>
+
+            <div class="card-body p-0">
+
+                <table class="table table-striped">
+
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Doctor</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>12 Aug 2026</td>
+                            <td>Dr. Mohamed</td>
+                            <td>Cardiology</td>
+                            <td><span class="badge badge-success">Confirmed</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>18 Aug 2026</td>
+                            <td>Dr. Nada</td>
+                            <td>Dermatology</td>
+                            <td><span class="badge badge-warning">Pending</span></td>
+                        </tr>
+
+                        <tr>
+                            <td>24 Aug 2026</td>
+                            <td>Dr. Ahmed</td>
+                            <td>Dentistry</td>
+                            <td><span class="badge badge-info">Completed</span></td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card">
+
+            <div class="card-header bg-success">
+                <h3 class="card-title">My Information</h3>
+            </div>
+
+            <div class="card-body">
+
+                <p><strong>Name:</strong> Ahmed Ali</p>
+                <p><strong>Age:</strong> 25 Years</p>
+                <p><strong>Blood Group:</strong> O+</p>
+                <p><strong>Assigned Doctor:</strong> Dr. Mohamed</p>
+                <p><strong>Medical Files:</strong> 12</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
