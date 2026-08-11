@@ -10,8 +10,7 @@ namespace clinicManagementSystem.Models
     {
             public int DoctorId { get; set; }
 
-            [Required]
-            public string ApplicationUserId { get; set; } = null!;
+            public string? ApplicationUserId { get; set; } = null!;
 
             public int DepartmentId { get; set; }
 

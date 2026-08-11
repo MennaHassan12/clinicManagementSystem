@@ -1,4 +1,8 @@
 using clinicManagementSystem.Data;
+using clinicManagementSystem.Models;
+using clinicManagementSystem.Repositories;
+using clinicManagementSystem.Repositories.IRepositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace clinicManagementSystem
@@ -13,10 +17,14 @@ namespace clinicManagementSystem
                 options.UseSqlServer(
                     builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.Configure();
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
+            builder.Services.AddTransient<clinicManagementSystem.Services.IEmailSender, clinicManagementSystem.Services.EmailSender>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -42,6 +50,16 @@ namespace clinicManagementSystem
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            var defaultCulture = new System.Globalization.CultureInfo("en-US");
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(defaultCulture),
+                SupportedCultures = new[] { defaultCulture },
+                SupportedUICultures = new[] { defaultCulture }
+            };
+
+            app.UseRequestLocalization(localizationOptions);
 
             app.Run();
         }
