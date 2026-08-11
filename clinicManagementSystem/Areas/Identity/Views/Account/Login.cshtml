@@ -1,0 +1,80 @@
+﻿
+@model clinicManagementSystem.ViewModels.LoginVM
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_MainLayout";
+}
+
+<h2>Welcome Back</h2>
+<p class="subtitle">Enter your credentials to access the diagnostic platform</p>
+
+<form asp-action="Login" asp-controller="Account" method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+    <div class="form-group">
+        <label asp-for="Email">Email</label>
+        <div class="input-field">
+            <span class="icon icon-user"></span>
+            <input asp-for="Email" placeholder="Enter your Email" autocomplete="Email" />
+        </div>
+        <span asp-validation-for="Email" class="field-error"></span>
+    </div>
+
+    <div class="form-group">
+        <div class="password-label-row">
+            <label asp-for="Password">Password</label>
+            <a asp-action="ForgetPassword" asp-controller="Account" class="forgot-link">Forgot password?</a>
+        </div>
+        <div class="input-field">
+            <span class="icon icon-lock"></span>
+            <input asp-for="Password" type="password" placeholder="Enter your password" autocomplete="current-password" id="loginPasswordInput" />
+            <button type="button" class="toggle-password" onclick="togglePwd('loginPasswordInput', this)">
+                <span class="icon icon-eye"></span>
+            </button>
+        </div>
+        <span asp-validation-for="Password" class="field-error"></span>
+    </div>
+
+    <div class="remember-me-row">
+        <label class="remember-me">
+            <input type="checkbox" asp-for="RememberMe" />
+            <span>Remember me</span>
+        </label>
+    </div>
+    <input asp-for="ReturnUrl" type="hidden" />
+
+    <button type="submit" class="btn-primary">SIGN IN</button>
+</form>
+
+<div class="divider">
+    <span>OR</span>
+</div>
+
+<form asp-action="ExternalLogin" asp-controller="Account" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="provider" value="Google" />
+    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+    <button type="submit" class="btn-google">
+        <span class="icon icon-google"></span>
+        Sign in with Google
+    </button>
+</form>
+
+<div class="switch-link">
+    Don't have an account? <a asp-action="Register" asp-controller="Account">Register</a>
+</div>
+
+<div class="resend-link">
+    Didn't receive the confirmation email?
+    <a asp-action="ResendEmailConfirmation" asp-controller="Account">Resend email confirmation</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <partial name="_NotificationPartial" />
+}

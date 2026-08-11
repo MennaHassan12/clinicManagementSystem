@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clinic System - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/register.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
+</head>
+<body>
+    <div class="register-wrapper">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <span class="icon icon-clinic"></span>
+            </div>
+            <div class="brand-text">
+                <h1>Clinic System</h1>
+                <span>DIAGNOSTIC PLATFORM</span>
+            </div>
+        </div>
+
+        <div class="register-card">
+            <partial name="_NotificationPartial" />
+            @RenderBody()
+        </div>
+
+        <div class="footer-note">
+            HIPAA Compliant Diagnostic System<br />
+            Copyright &copy; 2026 <b>Clinic System</b>. All Rights Reserved.
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <script src="~/js/register.js"></script>
+
+    
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+ 

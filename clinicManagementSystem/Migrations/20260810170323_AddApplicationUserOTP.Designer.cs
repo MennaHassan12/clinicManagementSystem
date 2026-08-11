@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using clinicManagementSystem.Data;
 
@@ -11,9 +12,11 @@ using clinicManagementSystem.Data;
 namespace clinicManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260810170323_AddApplicationUserOTP")]
+    partial class AddApplicationUserOTP
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -335,6 +338,7 @@ namespace clinicManagementSystem.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DoctorId"));
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Bio")
@@ -359,8 +363,7 @@ namespace clinicManagementSystem.Migrations
                     b.HasKey("DoctorId");
 
                     b.HasIndex("ApplicationUserId")
-                        .IsUnique()
-                        .HasFilter("[ApplicationUserId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("DepartmentId");
 
@@ -674,7 +677,8 @@ namespace clinicManagementSystem.Migrations
                     b.HasOne("clinicManagementSystem.Models.ApplicationUser", "ApplicationUser")
                         .WithOne("Doctor")
                         .HasForeignKey("clinicManagementSystem.Models.Doctor", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("clinicManagementSystem.Models.Department", "Department")
                         .WithMany("Doctors")

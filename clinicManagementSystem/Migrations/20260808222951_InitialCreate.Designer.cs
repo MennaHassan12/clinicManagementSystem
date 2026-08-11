@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using clinicManagementSystem.Data;
 
@@ -11,9 +12,11 @@ using clinicManagementSystem.Data;
 namespace clinicManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260808222951_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,38 +231,6 @@ namespace clinicManagementSystem.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("clinicManagementSystem.Models.ApplicationUserOTP", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("OTP")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ValidTo")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("ApplicationUserOTPs");
-                });
-
             modelBuilder.Entity("clinicManagementSystem.Models.Appointment", b =>
                 {
                     b.Property<int>("AppointmentId")
@@ -335,6 +306,7 @@ namespace clinicManagementSystem.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DoctorId"));
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Bio")
@@ -359,8 +331,7 @@ namespace clinicManagementSystem.Migrations
                     b.HasKey("DoctorId");
 
                     b.HasIndex("ApplicationUserId")
-                        .IsUnique()
-                        .HasFilter("[ApplicationUserId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("DepartmentId");
 
@@ -631,17 +602,6 @@ namespace clinicManagementSystem.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("clinicManagementSystem.Models.ApplicationUserOTP", b =>
-                {
-                    b.HasOne("clinicManagementSystem.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
             modelBuilder.Entity("clinicManagementSystem.Models.Appointment", b =>
                 {
                     b.HasOne("clinicManagementSystem.Models.Doctor", "Doctor")
@@ -674,7 +634,8 @@ namespace clinicManagementSystem.Migrations
                     b.HasOne("clinicManagementSystem.Models.ApplicationUser", "ApplicationUser")
                         .WithOne("Doctor")
                         .HasForeignKey("clinicManagementSystem.Models.Doctor", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("clinicManagementSystem.Models.Department", "Department")
                         .WithMany("Doctors")

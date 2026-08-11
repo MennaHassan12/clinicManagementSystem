@@ -1,6 +1,8 @@
 ﻿using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories;
 using clinicManagementSystem.Repositories.IRepositories;
+using clinicManagementSystem.Services;
+using clinicManagementSystem.Services.IServices;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace clinicManagementSystem
@@ -16,6 +18,11 @@ namespace clinicManagementSystem
             services.AddScoped<IRepository<MedicalRecord>, Repository<MedicalRecord>>();
             services.AddScoped<IRepository<MedicalFile>, Repository<MedicalFile>>();
             services.AddScoped<IRepository<Review>, Repository<Review>>();
+            services.AddScoped<IRepository<DoctorSchedule>, Repository<DoctorSchedule>>();
+            services.AddScoped<IRepository<ApplicationUserOTP>, Repository<ApplicationUserOTP>>();
+
+
+            services.AddScoped<IAccountService, AccountService>();
 
             return services;
 

@@ -1,6 +1,8 @@
 ﻿@if (TempData["success_notification"] is not null)
 {
     <script>
+        toastr.success('@TempData["success_notification"]')
+    </script>
         toastr.success('@TempData["success_notification"]');
     </script>
     TempData.Remove("success_notification");
@@ -8,6 +10,8 @@
 else if (TempData["error_notification"] is not null)
 {
     <script>
+        toastr.error('@TempData["error_notification"]')
+    </script>
         toastr.error('@TempData["error_notification"]');
     </script>
     TempData.Remove("error_notification");
@@ -15,6 +19,8 @@ else if (TempData["error_notification"] is not null)
 else if (TempData["warning_notification"] is not null)
 {
     <script>
+        toastr.warning('@TempData["warning_notification"]')
+    </script>
         toastr.warning('@TempData["warning_notification"]');
     </script>
     TempData.Remove("warning_notification");
@@ -22,6 +28,9 @@ else if (TempData["warning_notification"] is not null)
 else if (TempData["info_notification"] is not null)
 {
     <script>
+        toastr.info('@TempData["info_notification"]')
+    </script>
+}
         toastr.info('@TempData["info_notification"]');
     </script>
     TempData.Remove("info_notification");
