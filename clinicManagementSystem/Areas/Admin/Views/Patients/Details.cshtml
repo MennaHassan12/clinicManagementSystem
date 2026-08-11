@@ -1,0 +1,71 @@
+﻿@model clinicManagementSystem.Models.Patient
+
+@{
+    ViewData["Title"] = "Patient Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+    <div class="card shadow border-0 rounded-4 overflow-hidden">
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="mb-0 fw-bold"><i class="bi bi-person-lines-fill me-2"></i>Patient Profile Details</h4>
+        </div>
+        <div class="card-body p-4">
+            <div class="row g-4">
+
+                <div class="col-md-6 border-end">
+                    <h5 class="fw-bold text-primary mb-3">Personal Information</h5>
+                    <div class="mb-3">
+                        <label class="text-muted small d-block">Full Name</label>
+                        <span class="fw-bold text-dark fs-5">@(Model.ApplicationUser?.FullName ?? "Unnamed")</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small d-block">Phone Number</label>
+                        <span class="fw-semibold text-dark">@(Model.ApplicationUser?.PhoneNumber ?? "N/A")</span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small d-block">Birth Date</label>
+                        <span class="fw-semibold text-dark">@Model.BirthDate.ToString("yyyy-MM-dd")</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="text-muted small d-block">Gender</label>
+                            <span class="badge bg-info-subtle text-info-emphasis px-3 py-2 rounded-pill">@Model.Gender</span>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="text-muted small d-block">Blood Type</label>
+                            <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill fw-bold">@Model.BloodType</span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small d-block">Address</label>
+                        <span class="text-secondary">@Model.Address</span>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <h5 class="fw-bold text-danger mb-3">Emergency Contact</h5>
+                    <div class="p-3 bg-light rounded-3 border mb-3">
+                        <div class="mb-2">
+                            <label class="text-muted small d-block">Contact Name</label>
+                            <span class="fw-bold text-dark">@(string.IsNullOrEmpty(Model.EmergencyContactName) ? "N/A" : Model.EmergencyContactName)</span>
+                        </div>
+                        <div class="mb-2">
+                            <label class="text-muted small d-block">Contact Phone</label>
+                            <span class="fw-bold text-dark">@(string.IsNullOrEmpty(Model.EmergencyContactPhone) ? "N/A" : Model.EmergencyContactPhone)</span>
+                        </div>
+                        <div>
+                            <label class="text-muted small d-block">Relationship</label>
+                            <span class="badge bg-secondary">@(string.IsNullOrEmpty(Model.EmergencyContactRelation) ? "N/A" : Model.EmergencyContactRelation)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-light p-3 d-flex gap-2 justify-content-end">
+            <a asp-action="Edit" asp-route-id="@Model.PatientId" class="btn btn-warning px-4 fw-semibold">Edit Patient</a>
+            <a asp-action="Index" class="btn btn-secondary px-4">Back to List</a>
+        </div>
+    </div>
+</div>

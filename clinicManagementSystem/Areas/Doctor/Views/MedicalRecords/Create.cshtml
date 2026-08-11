@@ -1,0 +1,110 @@
+﻿@model clinicManagementSystem.ViewModels.CreateMedicalRecordVM
+
+@{
+    ViewData["Title"] = "Add Medical Record";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+    <div class="card border-0 shadow-sm rounded-4 p-4">
+        <h3 class="fw-bold text-primary mb-3">Add Medical Record & Prescription</h3>
+        <p class="text-muted fs-5">Patient Name: <strong class="text-dark">@Model.PatientName</strong></p>
+
+        <form asp-action="Create" method="post" id="medicalForm">
+            <input type="hidden" name="AppointmentId" value="@Model.AppointmentId" />
+            <input type="hidden" name="DoctorId" value="@Model.DoctorId" />
+            <input type="hidden" name="PatientName" value="@Model.PatientName" />
+            <input type="hidden" name="DoctorName" value="@Model.DoctorName" />
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Diagnosis</label>
+                <textarea name="Diagnosis" class="form-control" rows="3" placeholder="Enter diagnosis details..." required>@Model.Diagnosis</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Notes (Optional)</label>
+                <textarea name="Notes" class="form-control" rows="2" placeholder="Additional doctor notes...">@Model.Notes</textarea>
+            </div>
+
+            <hr class="my-4" />
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0">Prescription (Medications)</h5>
+                <button type="button" class="btn btn-outline-success btn-sm rounded-pill px-3" onclick="addRow()">
+                    ➕ Add Medicine
+                </button>
+            </div>
+
+            <div id="prescription-list">
+                <div class="row g-2 mb-2 prescription-item align-items-center">
+                    <div class="col-md-3">
+                        <input name="Prescriptions[0].MedicineName" class="form-control" placeholder="Medicine Name" />
+                    </div>
+                    <div class="col-md-2">
+                        <input name="Prescriptions[0].Dosage" class="form-control" placeholder="Dosage (500mg)" />
+                    </div>
+                    <div class="col-md-2">
+                        <input name="Prescriptions[0].Frequency" class="form-control" placeholder="Frequency (3x Daily)" />
+                    </div>
+                    <div class="col-md-2">
+                        <input name="Prescriptions[0].Duration" class="form-control" placeholder="Duration (7 Days)" />
+                    </div>
+                    <div class="col-md-2">
+                        <input name="Prescriptions[0].Instructions" class="form-control" placeholder="Instructions" />
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" onclick="removeRow(this)" class="btn btn-outline-danger btn-sm rounded-circle">✖</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-end gap-2">
+                <a href="/Doctor/Appointments?doctorId=@Model.DoctorId" class="btn btn-outline-secondary rounded-pill px-4">Cancel</a>
+                <button type="submit" class="btn btn-primary rounded-pill px-4">Save Medical Record</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function addRow() {
+        var list = document.getElementById("prescription-list");
+        if (!list) return;
+
+        var idx = list.getElementsByClassName("prescription-item").length;
+
+        var div = document.createElement("div");
+        div.className = "row g-2 mb-2 prescription-item align-items-center";
+        div.innerHTML = '<div class="col-md-3"><input name="Prescriptions[' + idx + '].MedicineName" class="form-control" placeholder="Medicine Name" /></div>' +
+'<div class="col-md-2"><input name="Prescriptions[' + idx + '].Dosage" class="form-control" placeholder="Dosage (500mg)" /></div>' +
+            '<div class="col-md-2"><input name="Prescriptions[' + idx + '].Frequency" class="form-control" placeholder="Frequency (3x Daily)" /></div>' +
+            '<div class="col-md-2"><input name="Prescriptions[' + idx + '].Duration" class="form-control" placeholder="Duration (7 Days)" /></div>' +
+            '<div class="col-md-2"><input name="Prescriptions[' + idx + '].Instructions" class="form-control" placeholder="Instructions" /></div>' +
+            '<div class="col-md-1"><button type="button" onclick="removeRow(this)" class="btn btn-outline-danger btn-sm rounded-circle">✖</button></div>';
+
+        list.appendChild(div);
+    }
+
+    function removeRow(btn) {
+        var list = document.getElementById("prescription-list");
+        if (list.getElementsByClassName("prescription-item").length > 1) {
+            btn.closest(".prescription-item").remove();
+            reIndexRows();
+        }
+    }
+
+    function reIndexRows() {
+        var list = document.getElementById("prescription-list");
+        var rows = list.getElementsByClassName("prescription-item");
+
+        for (var i = 0; i < rows.length; i++) {
+            var inputs = rows[i].getElementsByTagName("input");
+            for (var j = 0; j < inputs.length; j++) {
+                var name = inputs[j].getAttribute("name");
+                if (name) {
+                    inputs[j].setAttribute("name", name.replace(/\[\d+\]/, "[" + i + "]"));
+                }
+            }
+        }
+    }
+</script>

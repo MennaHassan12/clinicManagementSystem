@@ -1,0 +1,166 @@
+﻿@model clinicManagementSystem.ViewModels.PatientBookingVM
+
+@{
+    ViewData["Title"] = "Book Appointment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int currentPatientId = ViewBag.PatientId ?? 1;
+    var timeSlots = ViewBag.TimeSlots as List<SelectListItem> ?? new List<SelectListItem>();
+    int selectedDayOfWeek = ViewBag.SelectedDayOfWeek ?? 1;
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-4 p-4">
+                <h3 class="fw-bold text-primary mb-4">Book an Appointment</h3>
+
+                @if (TempData["error_notification"] != null)
+                {
+                    <div class="alert alert-danger mb-3">@TempData["error_notification"]</div>
+                }
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <form action="/Patient/Appointments/Book" method="post" onsubmit="return validateForm()">
+
+                    <input type="hidden" name="patientId" value="@currentPatientId" />
+                    <input type="hidden" name="DoctorId" value="@Model.DoctorId" />
+                    <input type="hidden" name="DoctorName" value="@Model.DoctorName" />
+
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Doctor</label>
+                        <input type="text" class="form-control bg-light fw-bold text-primary" value="@Model.DoctorName" readonly />
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Select Working Shift / Day</label>
+                        @if (Model.AvailableSchedules != null && Model.AvailableSchedules.Any())
+                        {
+                            <select id="DoctorScheduleId" name="DoctorScheduleId" class="form-select" onchange="updateShiftAndReload()" required>
+                                @foreach (var schedule in Model.AvailableSchedules)
+                                {
+                                    bool isSelected = Model.DoctorScheduleId == schedule.DoctorScheduleId;
+                                    <option value="@schedule.DoctorScheduleId" selected="@(isSelected ? "selected" : null)">
+                                        @schedule.DayOfWeek (@DateTime.Today.Add(schedule.StartTime).ToString("hh:mm tt") - @DateTime.Today.Add(schedule.EndTime).ToString("hh:mm tt"))
+                                    </option>
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning py-2 mb-0">No working shifts available for this doctor.</div>
+                        }
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Patient Name</label>
+                        <input type="text" name="PatientName" id="PatientName" class="form-control" value="@Model.PatientName" placeholder="Enter patient full name" required />
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Email Address</label>
+                        <input type="email" name="PatientEmail" id="PatientEmail" class="form-control" value="@Model.PatientEmail" placeholder="example@domain.com" required />
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Select Date</label>
+<input type="date" name="appointmentDate" id="appointmentDate" class="form-control" value="@Model.AppointmentDate" onchange="validateAndReloadDate()" required />
+                        <small id="dateHelp" class="text-danger d-none mt-1">Date must match the chosen shift day!</small>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Select Time Slot</label>
+                        @if (timeSlots.Any())
+                        {
+                            <select name="appointmentTime" class="form-select" required>
+                                <option value="">-- Choose Time Slot --</option>
+                                @foreach (var slot in timeSlots)
+                                {
+                                    <option value="@slot.Value">@slot.Text</option>
+                                }
+                            </select>
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger py-2 text-center mb-0">
+                                No slots available for this schedule.
+                            </div>
+                        }
+                    </div>
+
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Notes / Symptoms (Optional)</label>
+                        <textarea name="Notes" id="Notes" class="form-control" rows="3" placeholder="Describe your symptoms...">@Model.Notes</textarea>
+                    </div>
+
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm" @(timeSlots.Any() ? "" : "disabled")>
+                            Confirm & Book
+                        </button>
+                        <a href="/Patient/Appointments/Doctors?patientId=@currentPatientId" class="btn btn-outline-secondary px-4 py-2 fw-semibold">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var targetDayOfWeek = @selectedDayOfWeek;
+
+    function updateShiftAndReload() {
+        var doctorId = "@Model.DoctorId";
+        var patientId = "@currentPatientId";
+        var scheduleId = document.getElementById('DoctorScheduleId').value;
+        var timeStamp = new Date().getTime();
+
+        window.location.href = /Patient/Appointments/Book?doctorId=${doctorId}&patientId=${patientId}&scheduleId=${scheduleId}&_=${timeStamp};
+    }
+
+    function validateAndReloadDate() {
+        var dateInput = document.getElementById('appointmentDate');
+        var helpText = document.getElementById('dateHelp');
+        var selectedDate = new Date(dateInput.value);
+
+        if (!isNaN(selectedDate.getTime())) {
+            var day = selectedDate.getUTCDay();
+            if (day !== targetDayOfWeek) {
+                helpText.classList.remove('d-none');
+                alert("The selected date does not match the shift day. Please choose a valid date for this shift.");
+                dateInput.value = "@Model.AppointmentDate";
+                return;
+            }
+        }
+
+        helpText.classList.add('d-none');
+        var doctorId = "@Model.DoctorId";
+        var patientId = "@currentPatientId";
+        var scheduleId = document.getElementById('DoctorScheduleId').value;
+        var date = dateInput.value;
+        var timeStamp = new Date().getTime();
+
+        window.location.href = /Patient/Appointments/Book?doctorId=${doctorId}&patientId=${patientId}&scheduleId=${scheduleId}&date=${date}&_=${timeStamp};
+    }
+function validateForm() {
+        var dateInput = document.getElementById('appointmentDate');
+        var selectedDate = new Date(dateInput.value);
+        if (!isNaN(selectedDate.getTime())) {
+            var day = selectedDate.getUTCDay();
+            if (day !== targetDayOfWeek) {
+                alert("Date day does not match shift day!");
+                return false;
+            }
+        }
+        return true;
+    }
+</script>

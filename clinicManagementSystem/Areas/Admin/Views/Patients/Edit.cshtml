@@ -1,0 +1,83 @@
+﻿@model clinicManagementSystem.ViewModels.PatientFormVM
+
+@{
+    ViewData["Title"] = "Edit Patient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-warning text-dark py-3">
+            <h4 class="mb-0 fw-bold">Edit Patient Profile</h4>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="PatientId" />
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Patient Name *</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Phone Number *</label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Birth Date *</label>
+                        <input asp-for="BirthDate" type="date" class="form-control" />
+                        <span asp-validation-for="BirthDate" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Gender *</label>
+                        <select asp-for="Gender" asp-items="Html.GetEnumSelectList<clinicManagementSystem.Models.Gender>()" class="form-select"></select>
+                        <span asp-validation-for="Gender" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Blood Type</label>
+                        <input asp-for="BloodType" class="form-control" />
+                        <span asp-validation-for="BloodType" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Full Address</label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <h6 class="fw-bold text-secondary border-bottom pb-2">Emergency Contact Details</h6>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Contact Name</label>
+                        <input asp-for="EmergencyContactName" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Contact Phone</label>
+                        <input asp-for="EmergencyContactPhone" class="form-control" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Relation</label>
+                        <input asp-for="EmergencyContactRelation" class="form-control" />
+                    </div>
+
+                    <div class="col-12 mt-4 d-flex gap-2">
+                        <button type="submit" class="btn btn-warning px-4 fw-bold">Update Changes</button>
+                        <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
