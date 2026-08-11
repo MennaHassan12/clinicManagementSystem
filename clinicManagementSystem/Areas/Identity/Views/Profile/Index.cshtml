@@ -1,0 +1,76 @@
+﻿@model clinicManagementSystem.ViewModels.ApplicationUserVM
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "_MainLayout";
+}
+
+<div class="profile-avatar-wrap">
+    <div class="profile-avatar">
+        @{
+            var initials = string.IsNullOrWhiteSpace(Model.FullName)
+                ? "?"
+                : string.Concat(Model.FullName.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .Take(2)
+                    .Select(w => char.ToUpper(w[0])));
+        }
+        @initials
+    </div>
+</div>
+
+<h2>@(string.IsNullOrWhiteSpace(Model.FullName) ? "My Profile" : Model.FullName)</h2>
+<p class="subtitle">View and update your account information</p>
+
+<form asp-action="SaveProfile" asp-controller="Profile" method="post">
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+    <input asp-for="Id" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="FullName">Full Name</label>
+        <div class="input-field">
+            <span class="icon icon-user"></span>
+            <input asp-for="FullName" placeholder="Enter your full name" autocomplete="name" />
+        </div>
+        <span asp-validation-for="FullName" class="field-error"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email">Email</label>
+        <div class="input-field readonly-field">
+            <span class="icon icon-email"></span>
+            <input asp-for="Email" type="email" readonly placeholder="Your email" />
+        </div>
+        <span asp-validation-for="Email" class="field-error"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PhoneNumber">Phone Number</label>
+        <div class="input-field">
+            <span class="icon icon-phone"></span>
+            <input asp-for="PhoneNumber" type="tel" placeholder="Enter your phone number" autocomplete="tel" />
+        </div>
+        <span asp-validation-for="PhoneNumber" class="field-error"></span>
+    </div>
+
+    <div class="profile-actions">
+        <button type="submit" class="btn-primary">SAVE PROFILE</button>
+
+        <a asp-action="ChangePassword" asp-controller="Account" class="btn-secondary" style="text-align:center; text-decoration:none; display:block;">CHANGE PASSWORD</a>
+
+        <button type="submit" form="logoutForm" class="btn-danger">LOG OUT</button>
+    </div>
+</form>
+
+<form id="logoutForm" asp-action="Logout" asp-controller="Account" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <partial name="_NotificationPartial" />
+}

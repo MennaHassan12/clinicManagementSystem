@@ -1,0 +1,53 @@
+﻿@model clinicManagementSystem.ViewModels.ValidateOTPVM
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Verify Code";
+    Layout = "_MainLayout";
+}
+
+<h2>Verify Code</h2>
+<p class="subtitle">Enter the 6-digit code sent to Your Email</p>
+
+
+@if (TempData["success_notification"] != null)
+{
+    <div class="success-banner">@TempData["success_notification"]</div>
+}
+
+<form asp-action="ValidateOTP" asp-controller="Account" method="post" id="otpForm">
+    @Html.AntiForgeryToken()
+
+    
+    <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+    
+
+    <input asp-for="Email" type="hidden" />
+
+    <div class="form-group">
+        <input asp-for="Otp" type="text" inputmode="numeric" maxlength="6"
+               class="otp-single-box" autocomplete="one-time-code" autofocus
+               oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        <span asp-validation-for="Otp" class="field-error" style="text-align:center;"></span>
+    </div>
+
+    <button type="submit" class="btn-primary">VERIFY CODE</button>
+</form>
+
+<div class="resend-link">
+    Didn't get the code?
+    <a asp-action="ForgetPassword" asp-controller="Account">Resend code</a>
+</div>
+<form asp-action="ResendOTP" asp-controller="Account" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="email" value="@Model.Email" />
+    <button type="submit" class="btn-secondary">RESEND CODE</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <partial name="_NotificationPartial" />
+}

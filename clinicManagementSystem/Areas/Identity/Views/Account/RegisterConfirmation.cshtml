@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Registration Confirmation";
+    Layout = "_MainLayout";
+}
+
+<h2>Check Your Email</h2>
+<p class="subtitle">We've sent a confirmation link to your email address</p>
+
+<div class="success-banner">
+    Please check your inbox and click the confirmation link to activate your account.
+    If you didn't receive it, check your spam folder.
+</div>
+
+<div class="switch-link">
+    Already confirmed? <a asp-action="Login" asp-controller="Account">Sign In</a>
+</div>
