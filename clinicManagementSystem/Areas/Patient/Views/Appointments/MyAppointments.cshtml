@@ -1,0 +1,103 @@
+﻿@model IEnumerable<clinicManagementSystem.Models.Appointment>
+
+@{
+    ViewData["Title"] = "My Appointments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int currentPatientId = ViewBag.PatientId ?? 1;
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-primary">My Booked Appointments</h2>
+            <p class="text-muted">Track and manage your medical appointments</p>
+        </div>
+        <a href="/Patient/Appointments/Doctors?patientId=@currentPatientId" class="btn btn-primary shadow-sm rounded-pill px-4">
+            👨‍⚕️ Browse Doctors
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="py-3 px-4">DOCTOR</th>
+                        <th class="py-3 px-4">DATE & TIME</th>
+                        <th class="py-3 px-4">STATUS</th>
+                        <th class="py-3 px-4 text-end">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model.OrderByDescending(a => a.AppointmentDate).ThenByDescending(a => a.AppointmentTime))
+                        {
+                            <tr>
+                                <td class="px-4 fw-bold text-dark">
+                                    @(item.Doctor?.ApplicationUser?.FullName ?? "Dr. #" + item.DoctorId)
+                                </td>
+                                <td class="px-4">
+                                    <div class="fw-semibold">@item.AppointmentDate.ToString("yyyy-MM-dd")</div>
+                                    <small class="text-muted">@DateTime.Today.Add(item.AppointmentTime.ToTimeSpan()).ToString("hh:mm tt")</small>
+                                </td>
+                                <td class="px-4">
+                                    @if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Pending)
+                                    {
+                                        <span class="badge bg-warning-subtle text-warning border border-warning px-3 py-2 rounded-pill">Pending</span>
+                                    }
+                                    else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Confirmed)
+                                    {
+                                        <span class="badge bg-info-subtle text-info border border-info px-3 py-2 rounded-pill">Confirmed</span>
+                                    }
+                                    else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Completed)
+                                    {
+                                        <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill">Completed</span>
+                                    }
+                                    else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Cancelled)
+                                    {
+                                        <span class="badge bg-secondary-subtle text-secondary border px-3 py-2 rounded-pill">Cancelled</span>
+                                    }
+                                </td>
+                                <td class="px-4 text-end">
+                                    @if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Pending)
+                                    {
+                                        <form action="/Patient/Appointments/Cancel/@item.AppointmentId?patientId=@currentPatientId" method="post" class="d-inline">
+<button type="submit" class="btn btn-outline-danger btn-sm px-3 rounded-pill" onclick="return confirm('Are you sure you want to cancel the appointment?');">
+                                                Cancel
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Cancelled)
+                                    {
+                                        <form action="/Patient/Appointments/Delete/@item.AppointmentId?patientId=@currentPatientId" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-danger btn-sm px-3 rounded-pill" onclick="return confirm('Are you sure you want to delete the appointment?');">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    }
+                                    else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Completed)
+                                    {
+                                        <a href="/Doctor/MedicalRecords/Details?appointmentId=@item.AppointmentId" class="btn btn-outline-primary btn-sm px-3 rounded-pill">
+                                            📄 View Prescription
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">Confirmed</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">No appointments found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
