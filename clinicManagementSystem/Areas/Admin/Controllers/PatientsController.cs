@@ -318,18 +318,41 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
         {
             try
             {
-                var patient = await _patientRepo.GetOneAsync(expression: p => p.PatientId == id);
+                var patient = await _patientRepo.GetOneAsync(
+                    expression: p => p.PatientId == id,
+                    includes: [p => p.ApplicationUser]
+                );
+
                 if (patient != null)
                 {
+                    var appointments = await _appointmentRepo.GetAsync(a => a.PatientId == id);
+                    if (appointments != null && appointments.Any())
+                    {
+                        foreach (var appointment in appointments)
+                        {
+                            _appointmentRepo.Delete(appointment);
+                        }
+                        await _appointmentRepo.CommitAsync();
+                    }
+
+                    var user = patient.ApplicationUser;
+
                     _patientRepo.Delete(patient);
                     await _patientRepo.CommitAsync();
 
-                    TempData["success_notification"] = "Patient deleted successfully!";
+                    if (user != null)
+                    {
+                        _userRepo.Delete(user);
+                        await _userRepo.CommitAsync();
+                    }
+
+                    TempData["success_notification"] = "Patient, appointments, and account deleted successfully!";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                TempData["error_notification"] = "Cannot delete patient as they have associated records.";
+                var innerMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                TempData["error_notification"] = "Error deleting patient: " + innerMessage;
             }
 
             return RedirectToAction(nameof(Index));
