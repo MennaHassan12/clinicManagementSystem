@@ -8,6 +8,8 @@ using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
 using clinicManagementSystem.ViewModel;
 using DoctorModel = clinicManagementSystem.Models.Doctor;
+using Microsoft.AspNetCore.Authorization;
+using clinicManagementSystem.Utilities;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
@@ -70,6 +72,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
         public async Task<IActionResult> Create()
         {
             var departments = await _departmentRepo.GetAsync();
+
             var viewModel = new DoctorFormVM
             {
                 Departments = departments.Select(d => new SelectListItem
@@ -88,6 +91,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
         {
             ModelState.Remove("DepartmentId");
             ModelState.Remove("Departments");
+            ModelState.Remove("Photo");
 
             if (ModelState.IsValid)
             {
@@ -103,9 +107,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                     };
 
                     string temporaryPassword = GenerateRandomPassword();
-
                     var result = await _userManager.CreateAsync(user, temporaryPassword);
-
                     if (result.Succeeded)
                     {
                         string? uniqueFileName = null;
@@ -130,11 +132,11 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
 
                         string emailSubject = "Clinic System - Your Account Details";
                         string emailBody = $@"
-                            <h3>Welcome Dr. {model.Name},</h3>
-                            <p>Your doctor account has been created by administration.</p>
-                            <p><b>Login Email:</b> {model.Email}</p>
-                            <p><b>Temporary Password:</b> <code>{temporaryPassword}</code></p>
-                            <p>Please log in and update your password.</p>";
+                            Welcome Dr. {model.Name},<br/><br/>
+                            Your doctor account has been created by administration.<br/>
+                            <b>Login Email:</b> {model.Email}<br/>
+                            <b>Temporary Password:</b> {temporaryPassword}<br/><br/>
+                            Please log in and update your password.";
 
                         try
                         {
@@ -144,7 +146,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                         {
                         }
 
-                        TempData["success_notification"] = $"Doctor created successfully and credentials have been sent to the email.";
+                        TempData["success_notification"] = "Doctor created successfully and credentials have been sent to the email.";
                         return RedirectToAction(nameof(Index));
                     }
 
@@ -165,13 +167,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                 TempData["error_notification"] = "Please fill all required fields correctly.";
             }
 
-            var departments = await _departmentRepo.GetAsync();
-            model.Departments = departments.Select(d => new SelectListItem
-            {
-                Value = d.DepartmentId.ToString(),
-                Text = d.Name
-            });
-
+            await RepopulateDepartments(model);
             return View(model);
         }
 
@@ -207,13 +203,13 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
 
             return View(viewModel);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(DoctorFormVM model)
         {
             ModelState.Remove("DepartmentId");
             ModelState.Remove("Departments");
+            ModelState.Remove("Photo");
 
             if (ModelState.IsValid)
             {
@@ -226,14 +222,45 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
 
                     if (doctor == null) return NotFound();
 
+                    bool isEmailChanged = false;
+                    string newPassword = string.Empty;
+
                     if (doctor.ApplicationUser != null)
                     {
                         doctor.ApplicationUser.FullName = model.Name;
                         doctor.ApplicationUser.PhoneNumber = model.Phone;
-                        doctor.ApplicationUser.Email = model.Email;
-                        doctor.ApplicationUser.UserName = model.Email;
 
-                        await _userManager.UpdateAsync(doctor.ApplicationUser);
+                        if (!string.Equals(doctor.ApplicationUser.Email, model.Email, StringComparison.OrdinalIgnoreCase))
+                        {
+                            isEmailChanged = true;
+                            doctor.ApplicationUser.Email = model.Email;
+                            doctor.ApplicationUser.UserName = model.Email;
+
+                            newPassword = GenerateRandomPassword();
+                            var token = await _userManager.GeneratePasswordResetTokenAsync(doctor.ApplicationUser);
+                            var resetResult = await _userManager.ResetPasswordAsync(doctor.ApplicationUser, token, newPassword);
+
+                            if (!resetResult.Succeeded)
+                            {
+                                foreach (var error in resetResult.Errors)
+                                {
+                                    ModelState.AddModelError("", error.Description);
+                                }
+                                await RepopulateDepartments(model);
+                                return View(model);
+                            }
+                        }
+
+                        var userUpdateResult = await _userManager.UpdateAsync(doctor.ApplicationUser);
+                        if (!userUpdateResult.Succeeded)
+                        {
+                            foreach (var error in userUpdateResult.Errors)
+                            {
+                                ModelState.AddModelError("", error.Description);
+                            }
+                            await RepopulateDepartments(model);
+                            return View(model);
+                        }
                     }
 
                     if (model.Photo != null)
@@ -244,6 +271,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                         }
                         doctor.Image = UploadFile(model.Photo);
                     }
+
                     doctor.ConsultationFee = model.ConsultationFee;
                     doctor.YearsOfExperience = model.YearsOfExperience;
                     doctor.Bio = model.Bio;
@@ -253,7 +281,31 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                     _doctorRepo.Update(doctor);
                     await _doctorRepo.CommitAsync();
 
-                    TempData["success_notification"] = "Doctor details updated successfully!";
+                    if (isEmailChanged)
+                    {
+                        string emailSubject = "Clinic System - Updated Account Details";
+                        string emailBody = $@"
+                            Welcome Dr. {model.Name},<br/><br/>
+Your email address has been updated by administration.<br/>
+                            <b>New Login Email:</b> {model.Email}<br/>
+                            <b>New Temporary Password:</b> {newPassword}<br/><br/>
+                            Please log in with your new credentials and update your password.";
+
+                        try
+                        {
+                            await _emailSender.SendEmailAsync(model.Email, emailSubject, emailBody);
+                            TempData["success_notification"] = "Doctor updated and new credentials sent to the new email successfully!";
+                        }
+                        catch
+                        {
+                            TempData["success_notification"] = "Doctor details updated, but failed to send email notification.";
+                        }
+                    }
+                    else
+                    {
+                        TempData["success_notification"] = "Doctor details updated successfully!";
+                    }
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -268,13 +320,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                 TempData["error_notification"] = "Validation failed. Please check input values.";
             }
 
-            var departments = await _departmentRepo.GetAsync();
-            model.Departments = departments.Select(d => new SelectListItem
-            {
-                Value = d.DepartmentId.ToString(),
-                Text = d.Name
-            });
-
+            await RepopulateDepartments(model);
             return View(model);
         }
 
@@ -300,6 +346,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
 
                     _doctorRepo.Delete(doctor);
                     await _doctorRepo.CommitAsync();
+
                     if (linkedUser != null)
                     {
                         await _userManager.DeleteAsync(linkedUser);
@@ -321,13 +368,22 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        private async Task RepopulateDepartments(DoctorFormVM model)
+        {
+            var departments = await _departmentRepo.GetAsync();
+            model.Departments = departments.Select(d => new SelectListItem
+            {
+                Value = d.DepartmentId.ToString(),
+                Text = d.Name
+            });
+        }
+
         private string GenerateRandomPassword()
         {
             const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%^&*";
             var random = new Random();
             return new string(Enumerable.Repeat(chars, 8).Select(s => s[random.Next(s.Length)]).ToArray()) + "aA1!";
         }
-
         private string UploadFile(IFormFile file)
         {
             string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "doctors");
