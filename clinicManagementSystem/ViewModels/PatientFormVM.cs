@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using clinicManagementSystem.Models;
 
-namespace clinicManagementSystem.ViewModel
+namespace clinicManagementSystem.ViewModels
 {
     public class PatientFormVM
     {
