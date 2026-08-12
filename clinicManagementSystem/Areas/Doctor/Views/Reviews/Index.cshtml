@@ -1,42 +1,33 @@
 ﻿@model IEnumerable<clinicManagementSystem.Models.Review>
 
 @{
-    ViewData["Title"] = "Reviews";
+    ViewData["Title"] = "Patient Reviews";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid py-4">
+<div class="container-fluid">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-
-        <div>
-            <h2 class="fw-bold mb-1">Reviews</h2>
-            <p class="text-muted mb-0">
-                View and manage patient reviews
-            </p>
-        </div>
-
+    <div class="mb-4">
+        <h2 class="fw-bold">Patient Reviews</h2>
+        <p class="text-muted">
+            Reviews from your patients
+        </p>
     </div>
 
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success">
-            @TempData["Success"]
-        </div>
-    }
-
-    @if (Model == null || !Model.Any())
+    @if (!Model.Any())
     {
         <div class="card shadow-sm border-0">
+
             <div class="card-body text-center py-5">
 
-                <h5>No Reviews Found</h5>
+                <h5>No Reviews Yet</h5>
 
-                <p class="text-muted mb-0">
-                    There are no patient reviews yet.
+                <p class="text-muted">
+                    You don't have any patient reviews yet.
                 </p>
 
             </div>
+
         </div>
     }
     else
@@ -52,12 +43,10 @@
                         <thead class="table-light">
 
                             <tr>
-                                <th>ID</th>
                                 <th>Appointment</th>
                                 <th>Rating</th>
                                 <th>Comment</th>
                                 <th>Review Date</th>
-                                <th class="text-center">Actions</th>
                             </tr>
 
                         </thead>
@@ -70,12 +59,8 @@
 
                                     <td>
                                         <span class="fw-semibold">
-                                            #@review.ReviewId
+                                            #@review.AppointmentId
                                         </span>
-                                    </td>
-
-                                    <td>
-                                        #@review.AppointmentId
                                     </td>
 
                                     <td>
@@ -106,21 +91,6 @@
 
                                     <td>
                                         @review.ReviewDate.ToString("dd/MM/yyyy")
-                                    </td>
-
-                                    <td class="text-center">
-
-                                        <a asp-area="Admin"
-                                           asp-controller="Reviews"
-                                           asp-action="Delete"
-                                           asp-route-id="@review.ReviewId"
-                                           class="btn btn-danger btn-sm rounded-3">
-
-                                            <i class="bi bi-trash"></i>
-                                            Delete
-
-                                        </a>
-
                                     </td>
 
                                 </tr>

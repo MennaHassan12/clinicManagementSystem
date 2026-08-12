@@ -36,19 +36,11 @@ namespace clinicManagementSystem.Repositories
         //commit
         public async Task<int> CommitAsync(CancellationToken cancellationToken = default)
         {
-            try
-            {
-                return await _context.SaveChangesAsync(cancellationToken);
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                return 0;
-            }
+            return await _context.SaveChangesAsync(cancellationToken);
         }
 
         //Get
-  
+
         public async Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>>? expression = null, Func<IQueryable<T>, 
             IOrderedQueryable<T>>? orderBy = null,
             Expression<Func<T, object>>?[]? includes = null,

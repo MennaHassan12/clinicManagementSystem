@@ -1,5 +1,4 @@
-﻿using clinicManagementSystem.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace clinicManagementSystem.Models
 {
@@ -7,12 +6,13 @@ namespace clinicManagementSystem.Models
     {
         public int ReviewId { get; set; }
 
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Please select an appointment.")]
         public int AppointmentId { get; set; }
 
-        
-
-        [Range(1, 5)]
-        public byte Rating { get; set; }
+        [Required]
+        [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5.")]
+        public int Rating { get; set; }
 
         [MaxLength(1000)]
         public string? Comment { get; set; }
@@ -20,7 +20,5 @@ namespace clinicManagementSystem.Models
         public DateTime ReviewDate { get; set; }
 
         public Appointment? Appointment { get; set; }
-
-
     }
 }

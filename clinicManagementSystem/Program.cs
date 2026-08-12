@@ -41,6 +41,7 @@ namespace clinicManagementSystem
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
