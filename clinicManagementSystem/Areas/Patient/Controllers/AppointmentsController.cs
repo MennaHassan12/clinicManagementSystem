@@ -2,8 +2,14 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
-using clinicManagementSystem.Services;
 using clinicManagementSystem.ViewModels;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using clinicManagementSystem.Utilities;
+
+using DoctorModel = clinicManagementSystem.Models.Doctor;
 
 namespace clinicManagementSystem.Areas.Patient.Controllers
 {
@@ -11,21 +17,23 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
     public class AppointmentsController : Controller
     {
         private readonly IRepository<Appointment> _appointmentRepo;
-        private readonly IRepository<clinicManagementSystem.Models.Doctor> _doctorRepo;
+        private readonly IRepository<DoctorModel> _doctorRepo;
         private readonly IRepository<DoctorSchedule> _scheduleRepo;
         private readonly IRepository<clinicManagementSystem.Models.Patient> _patientRepo;
         private readonly IRepository<Department> _departmentRepo;
         private readonly IRepository<MedicalRecord> _recordRepo;
         private readonly IEmailSender _emailSender;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public AppointmentsController(
             IRepository<Appointment> appointmentRepo,
-            IRepository<clinicManagementSystem.Models.Doctor> doctorRepo,
+            IRepository<DoctorModel> doctorRepo,
             IRepository<DoctorSchedule> scheduleRepo,
             IRepository<clinicManagementSystem.Models.Patient> patientRepo,
             IRepository<Department> departmentRepo,
             IRepository<MedicalRecord> recordRepo,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            UserManager<ApplicationUser> userManager)
         {
             _appointmentRepo = appointmentRepo;
             _doctorRepo = doctorRepo;
@@ -34,32 +42,26 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
             _departmentRepo = departmentRepo;
             _recordRepo = recordRepo;
             _emailSender = emailSender;
+            _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(int? departmentId, int? patientId)
+        public async Task<IActionResult> Index(int? departmentId)
         {
-            return await Doctors(departmentId, patientId);
+            return await Doctors(departmentId);
         }
 
-        public async Task<IActionResult> Doctors(int? departmentId, int? patientId)
+        public async Task<IActionResult> Doctors(int? departmentId)
         {
-            int targetPatientId = patientId.HasValue && patientId.Value > 0 ? patientId.Value : 1;
-            ViewBag.PatientId = targetPatientId;
-
             var doctors = await _doctorRepo.GetAsync(
                 expression: d => !departmentId.HasValue || d.DepartmentId == departmentId.Value,
                 includes: [d => d.ApplicationUser, d => d.Department]
             );
-
             ViewBag.Departments = new SelectList(await _departmentRepo.GetAsync(), "DepartmentId", "Name", departmentId);
             return View("Doctors", doctors);
         }
 
-        public async Task<IActionResult> DoctorDetails(int id, int? patientId)
+        public async Task<IActionResult> DoctorDetails(int id)
         {
-            int targetPatientId = patientId.HasValue && patientId.Value > 0 ? patientId.Value : 1;
-            ViewBag.PatientId = targetPatientId;
-
             var doctor = await _doctorRepo.GetOneAsync(
                 expression: d => d.DoctorId == id,
                 includes: [d => d.ApplicationUser, d => d.Department, d => d.DoctorSchedules]
@@ -69,27 +71,42 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
             return View(doctor);
         }
 
-        public async Task<IActionResult> MyAppointments(int? patientId)
+        public async Task<IActionResult> MyAppointments()
         {
-            int targetPatientId = patientId.HasValue && patientId.Value > 0 ? patientId.Value : 1;
-            ViewBag.PatientId = targetPatientId;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return RedirectToAction("Login", "Account", new { area = SD.IDENTITY_AREA });
 
-            var appointments = await _appointmentRepo.GetAsync(
-                expression: a => a.PatientId == targetPatientId,
-                includes: [a => a.Doctor, a => a.Doctor.ApplicationUser, a => a.Schedule]
+            var patient = await _patientRepo.GetOneAsync(
+                expression: p => p.ApplicationUserId == userId,
+                includes: [p => p.ApplicationUser]
             );
 
-            return View(appointments.OrderByDescending(a => a.AppointmentDate));
+            if (patient == null)
+            {
+                return View(new List<Appointment>());
+            }
+
+            var appointments = await _appointmentRepo.GetAsync(
+                expression: a => a.PatientId == patient.PatientId,
+                includes: [
+                    a => a.Doctor,
+                    a => a.Doctor.ApplicationUser,
+                    a => a.Schedule
+                ]
+            );
+            var resultList = appointments != null
+                            ? appointments.OrderByDescending(a => a.AppointmentDate).ThenByDescending(a => a.AppointmentTime).ToList()
+                            : new List<Appointment>();
+
+            return View(resultList);
         }
 
         [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None, Duration = 0)]
         [HttpGet]
-        public async Task<IActionResult> Book(int? doctorId, int? patientId, int? scheduleId, string? date)
+        public async Task<IActionResult> Book(int? doctorId, int? scheduleId, string? date)
         {
-            int targetPatientId = patientId.HasValue && patientId.Value > 0 ? patientId.Value : 1;
-            ViewBag.PatientId = targetPatientId;
+            DoctorModel? doctor = null;
 
-            clinicManagementSystem.Models.Doctor? doctor = null;
             if (doctorId.HasValue && doctorId.Value > 0)
             {
                 doctor = await _doctorRepo.GetOneAsync(
@@ -146,11 +163,11 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Book(
             PatientBookingVM model,
             string? appointmentDate,
             string? appointmentTime,
-            int? patientId,
             string? PatientName,
             string? PatientEmail,
             string? Notes)
@@ -161,31 +178,40 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
             ModelState.Remove("AppointmentDate");
             ModelState.Remove("AppointmentTime");
 
-            int currentPatientId = patientId.HasValue && patientId.Value > 0 ? patientId.Value : 1;
-            ViewBag.PatientId = currentPatientId;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return RedirectToAction("Login", "Account", new { area = SD.IDENTITY_AREA });
 
             try
             {
                 var patient = await _patientRepo.GetOneAsync(
-                    expression: p => p.PatientId == currentPatientId,
+                    expression: p => p.ApplicationUserId == userId,
                     includes: [p => p.ApplicationUser]
                 );
+                if (patient == null)
+                {
+                    patient = new clinicManagementSystem.Models.Patient
+                    {
+                        ApplicationUserId = userId
+                    };
+                    await _patientRepo.CreateAsync(patient);
+                    await _patientRepo.CommitAsync();
+                }
 
                 var schedule = await _scheduleRepo.GetOneAsync(expression: s => s.DoctorScheduleId == model.DoctorScheduleId);
-
                 var doctor = await _doctorRepo.GetOneAsync(
                     expression: d => d.DoctorId == model.DoctorId,
                     includes: [d => d.ApplicationUser]
                 );
 
-                if (patient != null && model.DoctorId > 0 && schedule != null)
+                if (model.DoctorId > 0 && schedule != null)
                 {
                     var rawDate = !string.IsNullOrEmpty(appointmentDate) ? appointmentDate : model.AppointmentDate;
                     var rawTime = !string.IsNullOrEmpty(appointmentTime) ? appointmentTime : model.AppointmentTime;
+
                     if (string.IsNullOrEmpty(rawDate) || string.IsNullOrEmpty(rawTime))
                     {
                         TempData["error_notification"] = "Please select a valid date and time slot.";
-                        return await ReloadBookingView(model, currentPatientId, DateOnly.FromDateTime(DateTime.Now.AddDays(1)));
+                        return await ReloadBookingView(model, DateOnly.FromDateTime(DateTime.Now.AddDays(1)));
                     }
 
                     DateOnly.TryParse(rawDate, out var parsedDate);
@@ -194,27 +220,27 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
                     if (parsedDate.DayOfWeek != schedule.DayOfWeek)
                     {
                         TempData["error_notification"] = $"The selected date ({parsedDate.DayOfWeek}) does not match the shift day ({schedule.DayOfWeek}).";
-                        return await ReloadBookingView(model, currentPatientId, GetNextDateForDayOfWeek(schedule.DayOfWeek));
+                        return await ReloadBookingView(model, GetNextDateForDayOfWeek(schedule.DayOfWeek));
                     }
 
                     var doctorAppointments = await _appointmentRepo.GetAsync(a => a.DoctorId == model.DoctorId);
-                    string targetDateStr = parsedDate.ToString("yyyy-MM-dd");
+
                     var activeAppointmentsOnDate = doctorAppointments
                         .Where(a => (a.Status == AppointmentStatus.Pending || a.Status == AppointmentStatus.Confirmed) &&
-                                    a.AppointmentDate.ToString("yyyy-MM-dd") == targetDateStr)
+                                    a.AppointmentDate == parsedDate)
                         .ToList();
 
                     if (activeAppointmentsOnDate.Count >= schedule.MaxPatients)
                     {
                         TempData["error_notification"] = "Capacity for this date is full.";
-                        return await ReloadBookingView(model, currentPatientId, parsedDate);
+                        return await ReloadBookingView(model, parsedDate);
                     }
 
                     bool isSlotTaken = activeAppointmentsOnDate.Any(a => a.AppointmentTime == parsedTime);
                     if (isSlotTaken)
                     {
                         TempData["error_notification"] = "This time slot is already booked for this specific date.";
-                        return await ReloadBookingView(model, currentPatientId, parsedDate);
+                        return await ReloadBookingView(model, parsedDate);
                     }
 
                     string name = !string.IsNullOrWhiteSpace(PatientName) ? PatientName : model.PatientName;
@@ -232,7 +258,6 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
                     {
                         formattedNotes = userNotes ?? string.Empty;
                     }
-
                     var appointment = new Appointment
                     {
                         DoctorId = model.DoctorId,
@@ -249,18 +274,20 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
                     await _appointmentRepo.CommitAsync();
 
                     string recipientEmail = !string.IsNullOrWhiteSpace(email) ? email : patient.ApplicationUser?.Email;
+
                     if (!string.IsNullOrWhiteSpace(recipientEmail))
                     {
                         try
                         {
                             string doctorName = doctor?.ApplicationUser?.FullName ?? model.DoctorName ?? "your doctor";
                             string formattedTime = DateTime.Today.Add(parsedTime.ToTimeSpan()).ToString("hh:mm tt");
+                            string displayPatientName = !string.IsNullOrWhiteSpace(name) ? name : (patient.ApplicationUser?.FullName ?? "Patient");
 
                             string subject = "Appointment Confirmation - Clinic Management System";
                             string htmlMessage = $@"
-                                <h2>Appointment Confirmation</h2>
-                                <p>Dear <b>{(!string.IsNullOrWhiteSpace(name) ? name : patient.ApplicationUser?.FullName ?? "Patient")}</b>,</p>
-                                <p>Your appointment has been successfully booked. Details of your appointment are provided below:</p>
+                                <h3>Appointment Confirmation</h3>
+                                <p>Dear {displayPatientName},</p>
+                                <p>Your appointment has been successfully booked. Details:</p>
                                 <ul>
                                     <li><b>Doctor:</b> {doctorName}</li>
                                     <li><b>Date:</b> {parsedDate:dd MMMM, yyyy} ({parsedDate.DayOfWeek})</li>
@@ -274,25 +301,89 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
                         }
                         catch (Exception ex)
                         {
-                            TempData["error_notification"] = $"Appointment booked, but email failed: {ex.Message}";
+                            TempData["success_notification"] = $"Appointment booked successfully! (Email notification failed: {ex.Message})";
                         }
                     }
                     else
                     {
-                        TempData["success_notification"] = "Appointment booked successfully! (No recipient email found)";
+                        TempData["success_notification"] = "Appointment booked successfully!";
                     }
 
-                    return RedirectToAction(nameof(MyAppointments), new { patientId = patient.PatientId });
+                    return RedirectToAction(nameof(MyAppointments));
                 }
 
-                TempData["error_notification"] = $"Failed to book appointment. PatientNull: {patient == null}, DoctorId: {model.DoctorId}, ScheduleNull: {schedule == null}";
+                TempData["error_notification"] = "Failed to book appointment. Please check selected doctor and schedule.";
             }
             catch (Exception ex)
             {
-                TempData["error_notification"] = $"An error occurred while booking the appointment: {ex.Message}";
+                var innerMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                TempData["error_notification"] = $"An error occurred: {innerMsg}";
             }
 
-            return await ReloadBookingView(model, currentPatientId, DateOnly.FromDateTime(DateTime.Now.AddDays(1)));
+            return await ReloadBookingView(model, DateOnly.FromDateTime(DateTime.Now.AddDays(1)));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cancel(int id)
+        {
+            try
+            {
+                var appointment = await _appointmentRepo.GetOneAsync(expression: a => a.AppointmentId == id);
+                if (appointment != null)
+                {
+                    appointment.Status = AppointmentStatus.Cancelled;
+                    await _appointmentRepo.CommitAsync();
+                    TempData["success_notification"] = "Appointment cancelled successfully!";
+                }
+            }
+            catch (Exception)
+            {
+                TempData["error_notification"] = "Failed to cancel the appointment.";
+            }
+
+            return RedirectToAction(nameof(MyAppointments));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var appointment = await _appointmentRepo.GetOneAsync(
+                    expression: a => a.AppointmentId == id,
+                    includes: [a => a.MedicalRecord]
+                );
+
+                if (appointment != null)
+                {
+                    if (appointment.MedicalRecord != null)
+                    {
+                        var recordWithPrescriptions = await _recordRepo.GetOneAsync(
+                            expression: r => r.MedicalRecordId == appointment.MedicalRecord.MedicalRecordId,
+                            includes: [r => r.Prescriptions]
+                        );
+
+                        if (recordWithPrescriptions != null)
+                        {
+                            _recordRepo.Delete(recordWithPrescriptions);
+                            await _recordRepo.CommitAsync();
+                        }
+                    }
+
+                    _appointmentRepo.Delete(appointment);
+                    await _appointmentRepo.CommitAsync();
+                    TempData["success_notification"] = "Appointment deleted successfully!";
+                }
+            }
+            catch (Exception ex)
+            {
+                var innerMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                TempData["error_notification"] = "Cannot delete: " + innerMessage;
+            }
+
+            return RedirectToAction(nameof(MyAppointments));
         }
 
         private List<SelectListItem> GetAllScheduleSlots(DoctorSchedule? schedule)
@@ -326,18 +417,18 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
             return DateOnly.FromDateTime(start);
         }
 
-        private async Task<IActionResult> ReloadBookingView(PatientBookingVM model, int patientId, DateOnly date)
+        private async Task<IActionResult> ReloadBookingView(PatientBookingVM model, DateOnly date)
         {
             var doctor = await _doctorRepo.GetOneAsync(
                 expression: d => d.DoctorId == model.DoctorId,
                 includes: [d => d.ApplicationUser, d => d.DoctorSchedules]
             );
+
             var doctors = await _doctorRepo.GetAsync(includes: [d => d.ApplicationUser]);
             var schedule = doctor?.DoctorSchedules?.FirstOrDefault(s => s.DoctorScheduleId == model.DoctorScheduleId);
 
             ViewBag.SelectedDayOfWeek = (int)(schedule?.DayOfWeek ?? DayOfWeek.Monday);
             ViewBag.TimeSlots = GetAllScheduleSlots(schedule);
-
             model.DoctorName = doctor?.ApplicationUser?.FullName;
             model.AppointmentDate = date.ToString("yyyy-MM-dd");
             model.AvailableSchedules = doctor?.DoctorSchedules?.Where(s => s.IsAvailable).ToList() ?? new List<DoctorSchedule>();
@@ -349,69 +440,6 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
             }).ToList();
 
             return View("Book", model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Cancel(int id, int? patientId)
-        {
-            try
-            {
-                var appointment = await _appointmentRepo.GetOneAsync(expression: a => a.AppointmentId == id);
-                if (appointment != null)
-                {
-                    appointment.Status = AppointmentStatus.Cancelled;
-                    await _appointmentRepo.CommitAsync();
-
-                    TempData["success_notification"] = "Appointment cancelled successfully!";
-                }
-            }
-            catch (Exception)
-            {
-                TempData["error_notification"] = "Failed to cancel the appointment.";
-            }
-
-            return RedirectToAction(nameof(MyAppointments), new { patientId = patientId });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Delete(int id, int? patientId)
-        {
-            try
-            {
-                var appointment = await _appointmentRepo.GetOneAsync(
-                    expression: a => a.AppointmentId == id,
-                    includes: [a => a.MedicalRecord]
-                );
-
-                if (appointment != null)
-                {
-                    if (appointment.MedicalRecord != null)
-                    {
-                        var recordWithPrescriptions = await _recordRepo.GetOneAsync(
-                            expression: r => r.MedicalRecordId == appointment.MedicalRecord.MedicalRecordId,
-                            includes: [r => r.Prescriptions]
-                        );
-
-                        if (recordWithPrescriptions != null)
-                        {
-                            _recordRepo.Delete(recordWithPrescriptions);
-                            await _recordRepo.CommitAsync();
-                        }
-                    }
-
-                    _appointmentRepo.Delete(appointment);
-                    await _appointmentRepo.CommitAsync();
-
-                    TempData["success_notification"] = "Appointment deleted successfully!";
-                }
-            }
-            catch (Exception ex)
-            {
-                var innerMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                TempData["error_notification"] = "Cannot delete: " + innerMessage;
-            }
-
-            return RedirectToAction(nameof(MyAppointments), new { patientId = patientId });
         }
     }
 }

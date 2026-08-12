@@ -1,4 +1,4 @@
-﻿@model clinicManagementSystem.ViewModels.DoctorFormVM
+﻿@model clinicManagementSystem.ViewModel.DoctorFormVM
 
 @{
     ViewData["Title"] = "Add Doctor";
@@ -12,12 +12,18 @@
         </div>
         <div class="card-body p-4">
             <form asp-area="Admin" asp-controller="Doctors" asp-action="Create" method="post" enctype="multipart/form-data">
-                <div asp-validation-summary="All" class="text-danger"></div>
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Doctor Name</label>
                         <input asp-for="Name" class="form-control" placeholder="Enter doctor full name" />
                         <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Email Address (For Login)</label>
+                        <input asp-for="Email" class="form-control" placeholder="doctor@example.com" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
                     </div>
 
                     <div class="col-md-6">
@@ -59,16 +65,22 @@
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label fw-semibold">Doctor Image</label>
+<label class="form-label fw-semibold">Doctor Image</label>
                         <input type="file" asp-for="Photo" class="form-control" accept="image/*" />
                         <span asp-validation-for="Photo" class="text-danger small"></span>
                     </div>
+
+                    <div class="col-12">
+                        <div class="alert alert-info py-2 mb-0 small">
+                            <i class="bi bi-info-circle me-1"></i> A random password will be generated and sent automatically to the doctor's email for login.
+                        </div>
+                    </div>
+
                     <div class="col-12 mt-4 d-flex gap-2">
                         <button type="submit" class="btn btn-success px-4 fw-bold">Save Doctor</button>
                         <a asp-area="Admin" asp-controller="Doctors" asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
                     </div>
                 </div>
-
             </form>
         </div>
     </div>

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
-using clinicManagementSystem.ViewModels;
+using clinicManagementSystem.ViewModel;
 using DoctorModel = clinicManagementSystem.Models.Doctor;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
@@ -14,18 +16,21 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
     {
         private readonly IRepository<DoctorModel> _doctorRepo;
         private readonly IRepository<Department> _departmentRepo;
-        private readonly IRepository<ApplicationUser> _userRepo;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSender _emailSender;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
         public DoctorsController(
             IRepository<DoctorModel> doctorRepo,
             IRepository<Department> departmentRepo,
-            IRepository<ApplicationUser> userRepo,
+            UserManager<ApplicationUser> userManager,
+            IEmailSender emailSender,
             IWebHostEnvironment webHostEnvironment)
         {
             _doctorRepo = doctorRepo;
             _departmentRepo = departmentRepo;
-            _userRepo = userRepo;
+            _userManager = userManager;
+            _emailSender = emailSender;
             _webHostEnvironment = webHostEnvironment;
         }
 
@@ -52,8 +57,8 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                 expression: d => d.DoctorId == id,
                 includes: [
                     d => d.Department,
-            d => d.ApplicationUser,
-            d => d.DoctorSchedules 
+                    d => d.ApplicationUser,
+                    d => d.DoctorSchedules
                 ]
             );
 
@@ -61,6 +66,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
 
             return View(doctor);
         }
+
         public async Task<IActionResult> Create()
         {
             var departments = await _departmentRepo.GetAsync();
@@ -89,36 +95,63 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                 {
                     var user = new ApplicationUser
                     {
-                        UserName = model.Phone ?? Guid.NewGuid().ToString(),
+                        UserName = model.Email,
+                        Email = model.Email,
                         FullName = model.Name,
-                        PhoneNumber = model.Phone
+                        PhoneNumber = model.Phone,
+                        EmailConfirmed = true
                     };
 
-                    await _userRepo.CreateAsync(user);
-                    await _userRepo.CommitAsync();
+                    string temporaryPassword = GenerateRandomPassword();
 
-                    string? uniqueFileName = null;
-                    if (model.Photo != null)
+                    var result = await _userManager.CreateAsync(user, temporaryPassword);
+
+                    if (result.Succeeded)
                     {
-                        uniqueFileName = UploadFile(model.Photo); //Upload file method is in the end of the code & delete file also
+                        string? uniqueFileName = null;
+                        if (model.Photo != null)
+                        {
+                            uniqueFileName = UploadFile(model.Photo);
+                        }
+
+                        var doctor = new DoctorModel
+                        {
+                            ApplicationUserId = user.Id,
+                            LicenseNumber = model.LicenseNumber,
+                            ConsultationFee = model.ConsultationFee,
+                            YearsOfExperience = model.YearsOfExperience,
+                            Bio = model.Bio,
+                            DepartmentId = model.DepartmentId ?? 1,
+                            Image = uniqueFileName
+                        };
+
+                        await _doctorRepo.CreateAsync(doctor);
+                        await _doctorRepo.CommitAsync();
+
+                        string emailSubject = "Clinic System - Your Account Details";
+                        string emailBody = $@"
+                            <h3>Welcome Dr. {model.Name},</h3>
+                            <p>Your doctor account has been created by administration.</p>
+                            <p><b>Login Email:</b> {model.Email}</p>
+                            <p><b>Temporary Password:</b> <code>{temporaryPassword}</code></p>
+                            <p>Please log in and update your password.</p>";
+
+                        try
+                        {
+                            await _emailSender.SendEmailAsync(model.Email, emailSubject, emailBody);
+                        }
+                        catch
+                        {
+                        }
+
+                        TempData["success_notification"] = $"Doctor created successfully and credentials have been sent to the email.";
+                        return RedirectToAction(nameof(Index));
                     }
 
-                    var doctor = new DoctorModel
+                    foreach (var error in result.Errors)
                     {
-                        ApplicationUserId = user.Id,
-                        LicenseNumber = model.LicenseNumber,
-                        ConsultationFee = model.ConsultationFee,
-                        YearsOfExperience = model.YearsOfExperience,
-                        Bio = model.Bio,
-                        DepartmentId = model.DepartmentId ?? 1,
-                        Image = uniqueFileName
-                    };
-
-                    await _doctorRepo.CreateAsync(doctor);
-                    await _doctorRepo.CommitAsync();
-
-                    TempData["success_notification"] = "Doctor created successfully!";
-                    return RedirectToAction(nameof(Index));
+                        ModelState.AddModelError("", error.Description);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -156,8 +189,9 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             var viewModel = new DoctorFormVM
             {
                 DoctorId = doctor.DoctorId,
-                Name = doctor.ApplicationUser?.FullName,
-                Phone = doctor.ApplicationUser?.PhoneNumber,
+                Name = doctor.ApplicationUser?.FullName ?? string.Empty,
+                Email = doctor.ApplicationUser?.Email ?? string.Empty,
+                Phone = doctor.ApplicationUser?.PhoneNumber ?? string.Empty,
                 ConsultationFee = doctor.ConsultationFee,
                 YearsOfExperience = doctor.YearsOfExperience,
                 Bio = doctor.Bio,
@@ -196,8 +230,10 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                     {
                         doctor.ApplicationUser.FullName = model.Name;
                         doctor.ApplicationUser.PhoneNumber = model.Phone;
-                        _userRepo.Update(doctor.ApplicationUser);
-                        await _userRepo.CommitAsync();
+                        doctor.ApplicationUser.Email = model.Email;
+                        doctor.ApplicationUser.UserName = model.Email;
+
+                        await _userManager.UpdateAsync(doctor.ApplicationUser);
                     }
 
                     if (model.Photo != null)
@@ -264,11 +300,9 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
 
                     _doctorRepo.Delete(doctor);
                     await _doctorRepo.CommitAsync();
-
                     if (linkedUser != null)
                     {
-                        _userRepo.Delete(linkedUser);
-                        await _userRepo.CommitAsync();
+                        await _userManager.DeleteAsync(linkedUser);
                     }
 
                     TempData["success_notification"] = "Doctor and associated user deleted successfully!";
@@ -286,6 +320,14 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        private string GenerateRandomPassword()
+        {
+            const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%^&*";
+            var random = new Random();
+            return new string(Enumerable.Repeat(chars, 8).Select(s => s[random.Next(s.Length)]).ToArray()) + "aA1!";
+        }
+
         private string UploadFile(IFormFile file)
         {
             string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "doctors");
