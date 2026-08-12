@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
-using clinicManagementSystem.Services; 
-using System.Text.RegularExpressions; 
+using Microsoft.AspNetCore.Identity.UI.Services; 
+using System.Text.RegularExpressions;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
@@ -12,11 +12,11 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
     {
         private readonly IRepository<Appointment> _appointmentRepo;
         private readonly IRepository<clinicManagementSystem.Models.Doctor> _doctorRepo;
-       // private readonly IRepository<clinicManagementSystem.Models.Patient> _patientRepo;
+        // private readonly IRepository<clinicManagementSystem.Models.Patient> _patientRepo;
         private readonly IRepository<Department> _departmentRepo;
-       // private readonly IRepository<DoctorSchedule> _scheduleRepo;
+        // private readonly IRepository<DoctorSchedule> _scheduleRepo;
         private readonly IRepository<MedicalRecord> _recordRepo;
-        private readonly IEmailSender _emailSender; 
+        private readonly IEmailSender _emailSender;
 
         public AppointmentsController(
             IRepository<Appointment> appointmentRepo,
@@ -164,7 +164,6 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                             expression: r => r.MedicalRecordId == appointment.MedicalRecord.MedicalRecordId,
                             includes: [r => r.Prescriptions]
                         );
-
                         if (recordWithPrescriptions != null)
                         {
                             _recordRepo.Delete(recordWithPrescriptions);

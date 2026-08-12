@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Book Appointment";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int currentPatientId = ViewBag.PatientId ?? 1;
     var timeSlots = ViewBag.TimeSlots as List<SelectListItem> ?? new List<SelectListItem>();
     int selectedDayOfWeek = ViewBag.SelectedDayOfWeek ?? 1;
 }
@@ -19,24 +18,19 @@
                     <div class="alert alert-danger mb-3">@TempData["error_notification"]</div>
                 }
 
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <form asp-area="Patient" asp-controller="Appointments" asp-action="Book" method="post" onsubmit="return validateForm()">
+                    @Html.AntiForgeryToken()
 
-                <form action="/Patient/Appointments/Book" method="post" onsubmit="return validateForm()">
-
-                    <input type="hidden" name="patientId" value="@currentPatientId" />
-                    <input type="hidden" name="DoctorId" value="@Model.DoctorId" />
-                    <input type="hidden" name="DoctorName" value="@Model.DoctorName" />
-
+                    <input type="hidden" id="DoctorId" name="DoctorId" value="@Model?.DoctorId" />
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Doctor</label>
-                        <input type="text" class="form-control bg-light fw-bold text-primary" value="@Model.DoctorName" readonly />
+                        <input type="text" class="form-control bg-light fw-bold text-primary" value="@Model?.DoctorName" readonly />
                     </div>
-
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Select Working Shift / Day</label>
-                        @if (Model.AvailableSchedules != null && Model.AvailableSchedules.Any())
+                        @if (Model?.AvailableSchedules != null && Model.AvailableSchedules.Any())
                         {
                             <select id="DoctorScheduleId" name="DoctorScheduleId" class="form-select" onchange="updateShiftAndReload()" required>
                                 @foreach (var schedule in Model.AvailableSchedules)
@@ -54,30 +48,25 @@
                         }
                     </div>
 
-
                     <div class="mb-3">
                         <label class="form-label fw-bold">Patient Name</label>
-                        <input type="text" name="PatientName" id="PatientName" class="form-control" value="@Model.PatientName" placeholder="Enter patient full name" required />
+                        <input type="text" name="PatientName" id="PatientName" class="form-control" value="@Model?.PatientName" placeholder="Enter patient full name" required />
                     </div>
-
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Email Address</label>
-                        <input type="email" name="PatientEmail" id="PatientEmail" class="form-control" value="@Model.PatientEmail" placeholder="example@domain.com" required />
+                        <input type="email" name="PatientEmail" id="PatientEmail" class="form-control" value="@Model?.PatientEmail" placeholder="example@domain.com" required />
                     </div>
-
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Select Date</label>
-<input type="date" name="appointmentDate" id="appointmentDate" class="form-control" value="@Model.AppointmentDate" onchange="validateAndReloadDate()" required />
-                        <small id="dateHelp" class="text-danger d-none mt-1">Date must match the chosen shift day!</small>
+                        <input type="date" name="appointmentDate" id="appointmentDate" class="form-control" value="@Model?.AppointmentDate" onchange="validateAndReloadDate()" required />
                     </div>
-
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Select Time Slot</label>
                         @if (timeSlots.Any())
-                        {
+{
                             <select name="appointmentTime" class="form-select" required>
                                 <option value="">-- Choose Time Slot --</option>
                                 @foreach (var slot in timeSlots)
@@ -94,20 +83,19 @@
                         }
                     </div>
 
-
                     <div class="mb-4">
                         <label class="form-label fw-bold">Notes / Symptoms (Optional)</label>
-                        <textarea name="Notes" id="Notes" class="form-control" rows="3" placeholder="Describe your symptoms...">@Model.Notes</textarea>
+                        <textarea name="Notes" id="Notes" class="form-control" rows="3" placeholder="Describe your symptoms...">@Model?.Notes</textarea>
                     </div>
-
 
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm" @(timeSlots.Any() ? "" : "disabled")>
                             Confirm & Book
                         </button>
-                        <a href="/Patient/Appointments/Doctors?patientId=@currentPatientId" class="btn btn-outline-secondary px-4 py-2 fw-semibold">
-                            Cancel
-                        </a>
+                        <a href="@Url.Action("Doctors", "Appointments", new { area = "Patient" })"
+   class="btn btn-outline-secondary px-4 py-2 fw-semibold">
+    Cancel
+</a>
                     </div>
                 </form>
             </div>
@@ -119,43 +107,42 @@
     var targetDayOfWeek = @selectedDayOfWeek;
 
     function updateShiftAndReload() {
-        var doctorId = "@Model.DoctorId";
-        var patientId = "@currentPatientId";
+        var doctorId = document.getElementById('DoctorId').value;
         var scheduleId = document.getElementById('DoctorScheduleId').value;
         var timeStamp = new Date().getTime();
 
-        window.location.href = /Patient/Appointments/Book?doctorId=${doctorId}&patientId=${patientId}&scheduleId=${scheduleId}&_=${timeStamp};
+        window.location.href = /Patient/Appointments/Book?doctorId=${doctorId}&scheduleId=${scheduleId}&_=${timeStamp};
     }
 
     function validateAndReloadDate() {
         var dateInput = document.getElementById('appointmentDate');
-        var helpText = document.getElementById('dateHelp');
-        var selectedDate = new Date(dateInput.value);
 
-        if (!isNaN(selectedDate.getTime())) {
-            var day = selectedDate.getUTCDay();
+        if (dateInput.value) {
+            var parts = dateInput.value.split('-');
+            var selectedDate = new Date(parts[0], parts[1] - 1, parts[2]);
+            var day = selectedDate.getDay();
+
             if (day !== targetDayOfWeek) {
-                helpText.classList.remove('d-none');
                 alert("The selected date does not match the shift day. Please choose a valid date for this shift.");
-                dateInput.value = "@Model.AppointmentDate";
+                dateInput.value = "@Model?.AppointmentDate";
                 return;
             }
         }
 
-        helpText.classList.add('d-none');
-        var doctorId = "@Model.DoctorId";
-        var patientId = "@currentPatientId";
+        var doctorId = document.getElementById('DoctorId').value;
         var scheduleId = document.getElementById('DoctorScheduleId').value;
         var date = dateInput.value;
         var timeStamp = new Date().getTime();
 
-        window.location.href = /Patient/Appointments/Book?doctorId=${doctorId}&patientId=${patientId}&scheduleId=${scheduleId}&date=${date}&_=${timeStamp};
+        window.location.href = /Patient/Appointments/Book?doctorId=${doctorId}&scheduleId=${scheduleId}&date=${date}&_=${timeStamp};
     }
-function validateForm() {
+
+    function validateForm() {
         var dateInput = document.getElementById('appointmentDate');
-        var selectedDate = new Date(dateInput.value);
-        if (!isNaN(selectedDate.getTime())) {
-            var day = selectedDate.getUTCDay();
+        if (dateInput.value) {
+            var parts = dateInput.value.split('-');
+            var selectedDate = new Date(parts[0], parts[1] - 1, parts[2]);
+            var day = selectedDate.getDay();
             if (day !== targetDayOfWeek) {
                 alert("Date day does not match shift day!");
                 return false;

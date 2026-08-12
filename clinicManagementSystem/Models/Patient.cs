@@ -21,13 +21,13 @@ namespace clinicManagementSystem.Models
 
 
         [MaxLength(5)]
-        public string BloodType { get; set; } = null!;
+        public string? BloodType { get; set; } = null!;
 
         public Gender Gender { get; set; }
 
         [MaxLength(250)]
-        public string Address { get; set; } = null!;
-
+        public string? Address { get; set; } = null!;
+        
         public string? EmergencyContactName { get; set; }
 
         public string? EmergencyContactPhone { get; set; }

@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Doctors";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int currentPatientId = ViewBag.PatientId ?? 1;
 }
 
 <div class="container py-4">
@@ -12,16 +11,14 @@
             <h2 class="fw-bold text-primary mb-1">Doctors Directory</h2>
             <p class="text-muted mb-0">Choose a specialist to book an appointment</p>
         </div>
-        <a href="/Patient/Appointments/MyAppointments?patientId=@currentPatientId" class="btn btn-outline-primary rounded-3 fw-semibold px-4 py-2 shadow-sm">
+        <a href="/Patient/Appointments/MyAppointments" class="btn btn-outline-primary rounded-3 fw-semibold px-4 py-2 shadow-sm">
             📋 My Appointments
         </a>
     </div>
 
-
     <div class="row mb-4">
         <div class="col-md-4">
             <form method="get" action="/Patient/Appointments/Doctors">
-                <input type="hidden" name="patientId" value="@currentPatientId" />
                 <label class="form-label fw-bold small text-muted">Filter by Department:</label>
                 <select name="departmentId" class="form-select" onchange="this.form.submit()">
                     <option value="">All Departments</option>
@@ -71,13 +68,13 @@
                             </div>
 
                             <div class="pt-3 border-top d-flex flex-column gap-2 mt-auto">
-                                <a href="/Patient/Appointments/DoctorDetails/@doctor.DoctorId?patientId=@currentPatientId" class="btn btn-light w-100 fw-semibold border">
+                                <a href="/Patient/Appointments/DoctorDetails/@doctor.DoctorId" class="btn btn-light w-100 fw-semibold border">
                                     Details
                                 </a>
-                                <a href="/Patient/Appointments/Book?doctorId=@doctor.DoctorId&patientId=@currentPatientId" class="btn btn-primary w-100 fw-semibold shadow-sm">
+                                <a href="/Patient/Appointments/Book?doctorId=@doctor.DoctorId" class="btn btn-primary w-100 fw-semibold shadow-sm">
                                     Book Now
                                 </a>
-                            </div>
+</div>
                         </div>
                     </div>
                 </div>

@@ -1,12 +1,9 @@
-using clinicManagementSystem.Data;
+﻿using clinicManagementSystem.Data;
 using clinicManagementSystem.Models;
-using clinicManagementSystem.Services;
-using clinicManagementSystem.Services.IServices;
-using clinicManagementSystem.Utilities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using clinicManagementSystem.Repositories;
 using clinicManagementSystem.Repositories.IRepositories;
+using clinicManagementSystem.Services; 
+using clinicManagementSystem.Services.IServices; 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,9 +13,7 @@ namespace clinicManagementSystem
     {
         public static void Main(string[] args)
         {
-            
             var builder = WebApplication.CreateBuilder(args);
-
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -27,26 +22,27 @@ namespace clinicManagementSystem
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.User.AllowedUserNameCharacters =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.Password.RequiredLength = 8;
                 options.User.RequireUniqueEmail = true;
                 options.SignIn.RequireConfirmedEmail = true;
                 options.Lockout.MaxFailedAccessAttempts = 6;
             })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
-            builder.Services
-    .AddAuthentication()
-    .AddGoogle(options =>
-    {
-        options.ClientId =
-            builder.Configuration["Authentication:Google:ClientId"];
+            var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
+            var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 
-        options.ClientSecret =
-            builder.Configuration["Authentication:Google:ClientSecret"];
-    });
-
+            if (!string.IsNullOrEmpty(googleClientId) && !string.IsNullOrEmpty(googleClientSecret))
+            {
+                builder.Services.AddAuthentication()
+                    .AddGoogle(options =>
+                    {
+                        options.ClientId = googleClientId;
+                        options.ClientSecret = googleClientSecret;
+                    });
+            }
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
@@ -55,30 +51,22 @@ namespace clinicManagementSystem
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
 
-            // builder.Services.AddTransient<IEmailSender, EmailSender>();
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-            // Add services to the container.
+            builder.Services.AddScoped<IAccountService, AccountService>();
+
+            builder.Services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, clinicManagementSystem.Utilities.EmailSender>();
+
             builder.Services.AddControllersWithViews();
-            builder.Services.Configure();
-            builder.Services.AddTransient<IEmailSender, EmailSender>();
             builder.Services.AddRazorPages();
-            builder.Services.AddControllersWithViews();
 
             builder.Services.AddAntiforgery(options =>
             {
                 options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             });
-            builder.Services.AddControllersWithViews();
-            builder.Services.Configure();
-            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
 
-            builder.Services.AddTransient<clinicManagementSystem.Services.IEmailSender, clinicManagementSystem.Services.EmailSender>();
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
@@ -86,24 +74,13 @@ namespace clinicManagementSystem
             }
 
             app.UseHttpsRedirection();
-
-
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseAuthentication();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "areas",
-                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            app.MapRazorPages();
             var defaultCulture = new System.Globalization.CultureInfo("en-US");
             var localizationOptions = new RequestLocalizationOptions
             {
@@ -111,9 +88,16 @@ namespace clinicManagementSystem
                 SupportedCultures = new[] { defaultCulture },
                 SupportedUICultures = new[] { defaultCulture }
             };
-
             app.UseRequestLocalization(localizationOptions);
 
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+                            name: "default",
+                            pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapRazorPages();
             app.Run();
         }
     }

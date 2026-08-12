@@ -1,9 +1,12 @@
 ﻿using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
 using clinicManagementSystem.ViewModels;
-using clinicManagementSystem.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Text.RegularExpressions;
+using clinicManagementSystem.Utilities;
 
 namespace clinicManagementSystem.Areas.Doctor.Controllers
 {
@@ -13,23 +16,32 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
         private readonly IRepository<MedicalRecord> _recordRepo;
         private readonly IRepository<Prescription> _prescriptionRepo;
         private readonly IRepository<Appointment> _appointmentRepo;
+        private readonly IRepository<clinicManagementSystem.Models.Doctor> _doctorRepo;
         private readonly IEmailSender _emailSender;
 
         public MedicalRecordsController(
             IRepository<MedicalRecord> recordRepo,
             IRepository<Prescription> prescriptionRepo,
             IRepository<Appointment> appointmentRepo,
+            IRepository<clinicManagementSystem.Models.Doctor> doctorRepo,
             IEmailSender emailSender)
         {
             _recordRepo = recordRepo;
             _prescriptionRepo = prescriptionRepo;
             _appointmentRepo = appointmentRepo;
+            _doctorRepo = doctorRepo;
             _emailSender = emailSender;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create(int appointmentId, int? doctorId)
+        public async Task<IActionResult> Create(int appointmentId)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return RedirectToAction("Login", "Account", new { area = SD.IDENTITY_AREA });
+
+            var doctor = await _doctorRepo.GetOneAsync(d => d.ApplicationUserId == userId);
+            if (doctor == null) return NotFound("Doctor profile not found.");
+
             var appointment = await _appointmentRepo.GetOneAsync(
                 expression: a => a.AppointmentId == appointmentId,
                 includes: [
@@ -41,6 +53,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             );
 
             if (appointment == null) return NotFound();
+
+            if (appointment.DoctorId != doctor.DoctorId) return Forbid();
 
             string patientDisplayName = "";
 
@@ -71,7 +85,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             var viewModel = new CreateMedicalRecordVM
             {
                 AppointmentId = appointmentId,
-                DoctorId = doctorId ?? appointment.DoctorId,
+                DoctorId = doctor.DoctorId,
                 PatientName = patientDisplayName,
                 DoctorName = appointment.Doctor?.ApplicationUser?.FullName ?? $"Doctor #{appointment.DoctorId}",
                 Prescriptions = new List<PrescriptionItemVM> { new PrescriptionItemVM() }
@@ -81,6 +95,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
         }
 
         [HttpPost]
+        [IgnoreAntiforgeryToken] 
         public async Task<IActionResult> Create(CreateMedicalRecordVM model)
         {
             try
@@ -132,15 +147,20 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                     appointment.Status = AppointmentStatus.Completed;
                     await _appointmentRepo.CommitAsync();
 
-                    string? patientEmail = appointment.Patient?.ApplicationUser?.Email;
+                    string? patientEmail = null;
 
-                    if (string.IsNullOrWhiteSpace(patientEmail) && !string.IsNullOrWhiteSpace(appointment.Notes))
+                    if (!string.IsNullOrWhiteSpace(appointment.Notes))
                     {
-                        var match = Regex.Match(appointment.Notes, @"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b");
+                        var match = Regex.Match(appointment.Notes, @"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}");
                         if (match.Success)
                         {
                             patientEmail = match.Value;
                         }
+                    }
+
+                    if (string.IsNullOrWhiteSpace(patientEmail))
+                    {
+                        patientEmail = appointment.Patient?.ApplicationUser?.Email;
                     }
 
                     if (!string.IsNullOrEmpty(patientEmail))
@@ -149,13 +169,15 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                         var patientName = !string.IsNullOrWhiteSpace(model.PatientName) ? model.PatientName : appointment.Patient?.ApplicationUser?.FullName ?? "Patient";
 
                         string emailBody = $@"
-                            <h2>Visit Completed & Prescription Ready</h2>
-                            <p>Dear <b>{patientName}</b>,</p>
-                            <p>Your appointment with <b>{doctorName}</b> has been marked as <b>Completed</b>.</p>
-                            <p>Your medical record and prescription are now available on your patient portal.</p>
-                            <p><b>Diagnosis:</b> {record.Diagnosis}</p>
-                            <br/>
-                            <p>Thank you for choosing Clinic Management System.</p>";
+                            <div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;'>
+                                <h2 style='color: #0d6efd;'>Visit Completed & Prescription Ready</h2>
+                                <p>Dear <b>{patientName}</b>,</p>
+                                <p>Your appointment with <b>{doctorName}</b> has been marked as <b>Completed</b>.</p>
+                                <p>Your medical record and prescription are now available on your patient portal.</p>
+<p><b>Diagnosis:</b> {record.Diagnosis}</p>
+                                <br/>
+                                <p style='color: #6c757d; font-size: 12px;'>Thank you for choosing Clinic Management System.</p>
+                            </div>";
 
                         try
                         {
@@ -178,7 +200,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 TempData["error_notification"] = $"Failed to create medical record: {ex.Message}";
             }
 
-            return RedirectToAction("Index", "Appointments", new { area = "Doctor", doctorId = model.DoctorId });
+            return RedirectToAction("Index", "Appointments", new { area = "Doctor" });
         }
 
         [HttpGet]
