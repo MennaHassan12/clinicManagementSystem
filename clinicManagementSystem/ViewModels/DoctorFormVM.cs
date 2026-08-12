@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
-namespace clinicManagementSystem.ViewModel
+namespace clinicManagementSystem.ViewModels
 {
     public class DoctorFormVM
     {

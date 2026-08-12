@@ -5,7 +5,7 @@ using clinicManagementSystem.Repositories.IRepositories;
 using clinicManagementSystem.ViewModels;
 using PatientModel = clinicManagementSystem.Models.Patient;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using clinicManagementSystem.ViewModel;
+using clinicManagementSystem.ViewModels;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
