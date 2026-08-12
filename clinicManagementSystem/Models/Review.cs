@@ -19,8 +19,8 @@ namespace clinicManagementSystem.Models
 
         public DateTime ReviewDate { get; set; }
 
-        public Appointment Appointment { get; set; } = null!;
+        public Appointment? Appointment { get; set; }
 
-        
+
     }
 }

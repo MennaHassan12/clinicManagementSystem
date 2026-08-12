@@ -1,0 +1,132 @@
+﻿@model clinicManagementSystem.Models.Review
+
+@{
+    ViewData["Title"] = "Delete Review";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-danger mb-1">
+                Delete Review
+            </h2>
+
+            <p class="text-muted mb-0">
+                Confirm deleting this review
+            </p>
+        </div>
+
+        <a asp-area="Admin"
+           asp-controller="Reviews"
+           asp-action="Index"
+           class="btn btn-outline-secondary rounded-3">
+
+            <i class="fas fa-arrow-left me-1"></i>
+            Back to Reviews
+
+        </a>
+
+    </div>
+
+
+    <div class="card shadow-sm border-0 rounded-3">
+
+        <div class="card-body p-4">
+
+            <div class="alert alert-warning">
+
+                <i class="fas fa-exclamation-triangle me-2"></i>
+
+                Are you sure you want to delete this review?
+
+            </div>
+
+
+            <dl class="row">
+
+                <dt class="col-sm-3">
+                    Review ID
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model.ReviewId
+                </dd>
+
+
+                <dt class="col-sm-3">
+                    Appointment
+                </dt>
+
+                <dd class="col-sm-9">
+                    Appointment #@Model.AppointmentId
+                </dd>
+
+
+                <dt class="col-sm-3">
+                    Rating
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model.Rating / 5
+                </dd>
+
+
+                <dt class="col-sm-3">
+                    Comment
+                </dt>
+
+                <dd class="col-sm-9">
+                    @(Model.Comment ?? "No comment")
+                </dd>
+
+
+                <dt class="col-sm-3">
+                    Review Date
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model.ReviewDate.ToString("dd MMM yyyy")
+                </dd>
+
+            </dl>
+
+
+            <form asp-area="Admin"
+                  asp-controller="Reviews"
+                  asp-action="Delete"
+                  asp-route-id="@Model.ReviewId"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-area="Admin"
+                       asp-controller="Reviews"
+                       asp-action="Index"
+                       class="btn btn-secondary px-4">
+
+                        Cancel
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-danger px-4">
+
+                        <i class="fas fa-trash me-1"></i>
+                        Delete Review
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

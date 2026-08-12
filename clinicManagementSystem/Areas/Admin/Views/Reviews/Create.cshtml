@@ -1,0 +1,157 @@
+﻿@model clinicManagementSystem.Models.Review
+
+@{
+    ViewData["Title"] = "Create Review";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var appointments = ViewBag.Appointments
+        as IEnumerable<clinicManagementSystem.Models.Appointment>;
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-primary mb-1">Create Review</h2>
+            <p class="text-muted mb-0">
+                Add a review for an appointment
+            </p>
+        </div>
+
+        <a asp-area="Admin"
+           asp-controller="Reviews"
+           asp-action="Index"
+           class="btn btn-outline-secondary rounded-3">
+            <i class="fas fa-arrow-left me-1"></i>
+            Back to Reviews
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4">
+
+            <form asp-area="Admin"
+                  asp-controller="Reviews"
+                  asp-action="Create"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger">
+                </div>
+
+                <!-- Appointment -->
+
+                <div class="mb-4">
+                    <label asp-for="AppointmentId"
+                           class="form-label fw-semibold">
+                        Appointment
+                    </label>
+
+                    <select asp-for="AppointmentId"
+                            class="form-select">
+
+                        <option value="0">
+                            -- Select Appointment --
+                        </option>
+
+                        @if (appointments != null)
+                        {
+                            foreach (var appointment in appointments)
+                            {
+                                <option value="@appointment.AppointmentId">
+                                    Appointment #@appointment.AppointmentId
+                                    - @appointment.AppointmentDate
+                                    @appointment.AppointmentTime
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                    <span asp-validation-for="AppointmentId"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <!-- Rating -->
+
+                <div class="mb-4">
+                    <label asp-for="Rating"
+                           class="form-label fw-semibold">
+                        Rating
+                    </label>
+
+                    <select asp-for="Rating"
+                            class="form-select">
+
+                        <option value="0">
+                            -- Select Rating --
+                        </option>
+
+                        <option value="1">1 - Very Poor</option>
+                        <option value="2">2 - Poor</option>
+                        <option value="3">3 - Average</option>
+                        <option value="4">4 - Good</option>
+                        <option value="5">5 - Excellent</option>
+
+                    </select>
+
+                    <span asp-validation-for="Rating"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <!-- Comment -->
+
+                <div class="mb-4">
+                    <label asp-for="Comment"
+                           class="form-label fw-semibold">
+                        Comment
+                    </label>
+
+                    <textarea asp-for="Comment"
+                              class="form-control"
+                              rows="5"
+                              maxlength="1000"
+                              placeholder="Write your review..."></textarea>
+
+                    <span asp-validation-for="Comment"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <!-- Review Date -->
+
+                
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-area="Admin"
+                       asp-controller="Reviews"
+                       asp-action="Index"
+                       class="btn btn-secondary px-4">
+                        Cancel
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary px-4">
+                        <i class="fas fa-save me-1"></i>
+                        Create Review
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

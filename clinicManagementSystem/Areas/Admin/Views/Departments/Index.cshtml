@@ -1,0 +1,246 @@
+﻿@model IEnumerable<clinicManagementSystem.Models.Department>
+
+@{
+    ViewData["Title"] = "Departments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-primary mb-1">
+                Departments
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage and organize clinic departments
+            </p>
+        </div>
+
+        <a asp-area="Admin"
+           asp-controller="Departments"
+           asp-action="Create"
+           class="btn btn-primary px-4 py-2 rounded-3 fw-semibold shadow-sm">
+            <i class="fas fa-plus me-1"></i>
+            Add New Department
+        </a>
+    </div>
+
+
+    <!-- Success Message -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show shadow-sm rounded-3"
+             role="alert">
+
+            <i class="fas fa-check-circle me-2"></i>
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+
+    <!-- Error Message -->
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm rounded-3"
+             role="alert">
+
+            <i class="fas fa-exclamation-circle me-2"></i>
+            @TempData["Error"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+
+    <!-- Departments Card -->
+    <div class="card shadow-sm border-0 rounded-3">
+
+        <div class="card-header bg-white border-0 pt-4 px-4">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+                    <h5 class="fw-bold mb-1">
+                        All Departments
+                    </h5>
+
+                    <small class="text-muted">
+                        Clinic departments and their descriptions
+                    </small>
+                </div>
+
+                <span class="badge bg-primary rounded-pill px-3 py-2">
+                    @Model.Count() Departments
+                </span>
+
+            </div>
+        </div>
+
+
+        <div class="card-body p-0">
+
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+
+                    <div class="mb-3">
+                        <i class="fas fa-hospital fa-3x text-muted"></i>
+                    </div>
+
+                    <h5 class="fw-bold">
+                        No Departments Found
+                    </h5>
+
+                    <p class="text-muted">
+                        Start by adding a new department.
+                    </p>
+
+                    <a asp-area="Admin"
+                       asp-controller="Departments"
+                       asp-action="Create"
+                       class="btn btn-primary rounded-3 px-4">
+                        <i class="fas fa-plus me-1"></i>
+                        Add Department
+                    </a>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+                            <tr class="text-secondary small text-uppercase fw-bold">
+
+                                <th class="ps-4 py-3">
+                                    #
+                                </th>
+
+                                <th>
+                                    Department
+                                </th>
+
+                                <th>
+                                    Description
+                                </th>
+
+                                <th class="text-end pe-4">
+                                    Actions
+                                </th>
+
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+
+                            @{
+                                int counter = 1;
+                            }
+
+                            @foreach (var department in Model)
+                            {
+                                <tr>
+
+                                    <td class="ps-4 fw-semibold text-muted">
+                                        @counter
+                                    </td>
+
+
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+
+                                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+                                                 style="width:45px;height:45px;">
+
+                                                <i class="fas fa-hospital"></i>
+
+                                            </div>
+
+                                            <div>
+                                                <div class="fw-bold text-dark">
+                                                    @department.Name
+                                                </div>
+
+                                                <small class="text-muted">
+                                                    Department ID: #@department.DepartmentId
+                                                </small>
+                                            </div>
+
+                                        </div>
+                                    </td>
+
+
+                                    <td>
+                                        @if (!string.IsNullOrWhiteSpace(department.Description))
+                                        {
+                                            <span class="text-muted">
+                                                @department.Description
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted fst-italic">
+                                                No description
+                                            </span>
+                                        }
+                                    </td>
+
+
+                                    <td class="text-end pe-4">
+
+                                        <div class="btn-group">
+
+                                            <!-- Edit -->
+                                            <a asp-area="Admin"
+                                               asp-controller="Departments"
+                                               asp-action="Edit"
+                                               asp-route-id="@department.DepartmentId"
+                                               class="btn btn-sm btn-outline-warning">
+                                                <i class="fas fa-edit me-1"></i>
+                                                Edit
+                                            </a>
+
+
+                                            <!-- Delete -->
+                                            <a asp-area="Admin"
+                                               asp-controller="Departments"
+                                               asp-action="Delete"
+                                               asp-route-id="@department.DepartmentId"
+                                               class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-trash me-1"></i>
+                                                Delete
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                                counter++;
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>
