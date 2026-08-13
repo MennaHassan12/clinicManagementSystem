@@ -1,0 +1,140 @@
+﻿@model IEnumerable<clinicManagementSystem.Models.Review>
+
+@{
+    ViewData["Title"] = "Reviews";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">Reviews</h2>
+            <p class="text-muted mb-0">
+                View and manage patient reviews
+            </p>
+        </div>
+
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="card shadow-sm border-0">
+            <div class="card-body text-center py-5">
+
+                <h5>No Reviews Found</h5>
+
+                <p class="text-muted mb-0">
+                    There are no patient reviews yet.
+                </p>
+
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Appointment</th>
+                                <th>Rating</th>
+                                <th>Comment</th>
+                                <th>Review Date</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var review in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <span class="fw-semibold">
+                                            #@review.ReviewId
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        #@review.AppointmentId
+                                    </td>
+
+                                    <td>
+
+                                        <span class="fw-semibold me-2">
+                                            @review.Rating / 5
+                                        </span>
+
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= review.Rating)
+                                            {
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-star text-muted"></i>
+                                            }
+                                        }
+
+                                    </td>
+
+                                    <td>
+                                        @(string.IsNullOrWhiteSpace(review.Comment)
+                                            ? "No comment"
+                                            : review.Comment)
+                                    </td>
+
+                                    <td>
+                                        @review.ReviewDate.ToString("dd/MM/yyyy")
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <a asp-area="Admin"
+                                           asp-controller="Reviews"
+                                           asp-action="Delete"
+                                           asp-route-id="@review.ReviewId"
+                                           class="btn btn-danger btn-sm rounded-3">
+
+                                            <i class="bi bi-trash"></i>
+                                            Delete
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>

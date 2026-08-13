@@ -1,0 +1,143 @@
+﻿@model IEnumerable<clinicManagementSystem.Models.MedicalFile>
+
+@{
+    ViewData["Title"] = "Medical Files";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-primary mb-1">
+                Medical Files
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage patient medical files
+            </p>
+        </div>
+
+        <a asp-area="Admin"
+           asp-controller="MedicalFiles"
+           asp-action="Create"
+           class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>
+            Add Medical File
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle me-2"></i>
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-file-medical fa-3x text-muted mb-3"></i>
+
+                    <h5 class="text-muted">
+                        No medical files found.
+                    </h5>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Medical Record</th>
+                                <th>File Name</th>
+                                <th>File Type</th>
+                                <th>Upload Date</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var file in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @file.MedicalFileId
+                                    </td>
+
+                                    <td>
+                                        <span class="badge bg-info">
+                                            Record #@file.MedicalRecordId
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <i class="fas fa-file me-2 text-primary"></i>
+                                        @file.FileName
+                                    </td>
+
+                                    <td>
+                                        @file.FileType
+                                    </td>
+
+                                    <td>
+                                        @file.UploadDate.ToString("dd/MM/yyyy")
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <a asp-area="Admin"
+                                           asp-controller="MedicalFiles"
+                                           asp-action="Edit"
+                                           asp-route-id="@file.MedicalFileId"
+                                           class="btn btn-sm btn-outline-warning rounded-2 me-1"
+                                           title="Edit">
+
+                                            <i class="fas fa-pen"></i>
+                                        </a>
+
+                                        <a asp-area="Admin"
+                                           asp-controller="MedicalFiles"
+                                           asp-action="Delete"
+                                           asp-route-id="@file.MedicalFileId"
+                                           class="btn btn-sm btn-outline-danger rounded-2"
+                                           title="Delete">
+
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,110 @@
+﻿@model IEnumerable<clinicManagementSystem.Models.Review>
+
+@{
+    ViewData["Title"] = "Patient Reviews";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">Patient Reviews</h2>
+        <p class="text-muted">
+            Reviews from your patients
+        </p>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body text-center py-5">
+
+                <h5>No Reviews Yet</h5>
+
+                <p class="text-muted">
+                    You don't have any patient reviews yet.
+                </p>
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0">
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+                                <th>Appointment</th>
+                                <th>Rating</th>
+                                <th>Comment</th>
+                                <th>Review Date</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var review in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <span class="fw-semibold">
+                                            #@review.AppointmentId
+                                        </span>
+                                    </td>
+
+                                    <td>
+
+                                        <span class="fw-semibold me-2">
+                                            @review.Rating / 5
+                                        </span>
+
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= review.Rating)
+                                            {
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-star text-muted"></i>
+                                            }
+                                        }
+
+                                    </td>
+
+                                    <td>
+                                        @(string.IsNullOrWhiteSpace(review.Comment)
+                                            ? "No comment"
+                                            : review.Comment)
+                                    </td>
+
+                                    <td>
+                                        @review.ReviewDate.ToString("dd/MM/yyyy")
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>

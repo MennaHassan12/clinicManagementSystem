@@ -1,0 +1,192 @@
+﻿@model IEnumerable<clinicManagementSystem.Models.MedicalFile>
+
+@{
+    ViewData["Title"] = "My Medical Files";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int patientId = ViewBag.PatientId ?? 1;
+}
+
+<div class="container-fluid py-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-primary mb-1">
+                My Medical Files
+            </h2>
+
+            <p class="text-muted mb-0">
+                View your medical files and documents
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- SUCCESS MESSAGE -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+
+            <i class="fas fa-check-circle me-2"></i>
+
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- FILES CARD -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body">
+
+            @if (Model == null || !Model.Any())
+            {
+                <div class="text-center py-5">
+
+                    <i class="fas fa-file-medical fa-3x text-muted mb-3"></i>
+
+                    <h5 class="text-muted">
+                        No medical files found.
+                    </h5>
+
+                    <p class="text-muted">
+                        Your medical documents will appear here after your doctor uploads them.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th>
+                                    File
+                                </th>
+
+                                <th>
+                                    Medical Record
+                                </th>
+
+                                <th>
+                                    File Type
+                                </th>
+
+                                <th>
+                                    Upload Date
+                                </th>
+
+                                <th class="text-center">
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var file in Model)
+                            {
+                                <tr>
+
+                                    <!-- FILE NAME -->
+                                    <td>
+
+                                        <i class="fas fa-file-medical text-primary me-2"></i>
+
+                                        <span class="fw-semibold">
+                                            @file.FileName
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- MEDICAL RECORD -->
+                                    <td>
+
+                                        <span class="badge bg-info">
+                                            Record #@file.MedicalRecordId
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- FILE TYPE -->
+                                    <td>
+
+                                        @if (file.FileType == ".pdf")
+                                        {
+                                            <span class="badge bg-danger">
+                                                PDF
+                                            </span>
+                                        }
+                                        else if (
+                                        file.FileType == ".jpg" ||
+                                        file.FileType == ".jpeg" ||
+                                        file.FileType == ".png")
+                                        {
+                                            <span class="badge bg-success">
+                                                Image
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                @file.FileType
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- DATE -->
+                                    <td>
+
+                                        @file.UploadDate.ToString("dd/MM/yyyy")
+
+                                    </td>
+
+
+                                    <!-- ACTION -->
+                                    <td class="text-center">
+
+                                        <a href="@Url.Content(file.FilePath)"
+                                           target="_blank"
+                                           class="btn btn-sm btn-outline-primary rounded-3 px-3">
+                                            <i class="fas fa-eye me-1"></i>
+                                            View File
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

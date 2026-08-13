@@ -1,0 +1,189 @@
+﻿@model clinicManagementSystem.Models.MedicalFile
+
+@{
+    ViewData["Title"] = "Edit Medical File";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-primary mb-1">
+                Edit Medical File
+            </h2>
+
+            <p class="text-muted mb-0">
+                Update the medical record, date, or replace the file
+            </p>
+        </div>
+
+        <a href="@Url.Action("Index", "MedicalFiles", new { area = "Doctor" })"
+           class="btn btn-outline-secondary rounded-3">
+
+            <i class="fas fa-arrow-left me-1"></i>
+            Back to Medical Files
+
+        </a>
+
+    </div>
+
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+
+            <i class="fas fa-exclamation-circle me-2"></i>
+
+            @TempData["Error"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <div class="card shadow-sm border-0 rounded-3">
+
+        <div class="card-body p-4">
+
+            <form method="post"
+                  action="@Url.Action("Edit", "MedicalFiles", new { area = "Doctor", id = Model.MedicalFileId })"
+                  enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="MedicalFileId"
+                       value="@Model.MedicalFileId" />
+
+
+                <!-- Medical Record -->
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+                        Medical Record
+                    </label>
+
+                    <select name="MedicalRecordId"
+                            class="form-select">
+
+                        <option value="">
+                            -- Select Medical Record --
+                        </option>
+
+                        @if (ViewBag.MedicalRecords != null)
+                        {
+                            foreach (var record in ViewBag.MedicalRecords)
+                            {
+                                <option value="@record.Id"
+                                        selected="@(Model.MedicalRecordId == record.Id ? "selected" : null)">
+                                    @record.Display
+                                </option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- Current File -->
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+                        Current File
+                    </label>
+
+                    <div class="p-3 bg-light rounded-3">
+
+                        <i class="fas fa-file-medical text-primary me-2"></i>
+
+                        <span>
+                            @Model.FileName
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Replace File -->
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+                        Replace File
+                    </label>
+
+                    <input type="file"
+                           id="uploadedFile"
+                           name="uploadedFile"
+                           class="form-control"
+                           accept=".pdf,.jpg,.jpeg,.png" />
+
+                    <div class="form-text mt-2">
+
+                        <i class="fas fa-info-circle me-1"></i>
+
+                        Leave empty to keep the current file.
+                        Allowed files: PDF, JPG, JPEG and PNG.
+                        Maximum size: 10 MB.
+
+                    </div>
+
+                </div>
+
+
+                <!-- Upload Date -->
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+                        Upload Date
+                    </label>
+
+                    <input type="date"
+                           name="UploadDate"
+                           value="@Model.UploadDate.ToString("yyyy-MM-dd")"
+                           class="form-control" />
+
+                </div>
+
+
+                <!-- Buttons -->
+
+                <div class="d-flex gap-2">
+
+                    <a href="@Url.Action("Index", "MedicalFiles", new { area = "Doctor" })"
+                       class="btn btn-secondary">
+
+                        <i class="fas fa-times me-1"></i>
+                        Cancel
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="fas fa-save me-1"></i>
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
