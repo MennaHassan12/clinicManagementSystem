@@ -95,7 +95,6 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
         }
 
         [HttpPost]
-        [IgnoreAntiforgeryToken] 
         public async Task<IActionResult> Create(CreateMedicalRecordVM model)
         {
             try
