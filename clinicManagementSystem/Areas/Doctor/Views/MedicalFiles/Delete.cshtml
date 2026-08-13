@@ -1,0 +1,158 @@
+﻿@model clinicManagementSystem.Models.MedicalFile
+
+@{
+    ViewData["Title"] = "Delete Medical File";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-danger mb-1">
+                Delete Medical File
+            </h2>
+
+            <p class="text-muted mb-0">
+                Confirm deletion of this medical file
+            </p>
+        </div>
+
+        <a asp-area="Doctor"
+           asp-controller="MedicalFiles"
+           asp-action="Index"
+           class="btn btn-outline-secondary rounded-3">
+
+            <i class="fas fa-arrow-left me-1"></i>
+            Back to Medical Files
+
+        </a>
+
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3">
+
+        <div class="card-body p-4">
+
+            <div class="alert alert-warning">
+
+                <i class="fas fa-exclamation-triangle me-2"></i>
+
+                Are you sure you want to delete this medical file?
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="fw-semibold text-muted">
+                        Medical File ID
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @Model.MedicalFileId
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="fw-semibold text-muted">
+                        Medical Record ID
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @Model.MedicalRecordId
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="fw-semibold text-muted">
+                        File Name
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @Model.FileName
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="fw-semibold text-muted">
+                        File Type
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @Model.FileType
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="fw-semibold text-muted">
+                        Upload Date
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @Model.UploadDate.ToString("dd/MM/yyyy")
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="fw-semibold text-muted">
+                        File Path
+                    </label>
+
+                    <div class="form-control bg-light">
+                        @Model.FilePath
+                    </div>
+
+                </div>
+
+            </div>
+
+            <form asp-area="Admin"
+                  asp-controller="MedicalFiles"
+                  asp-action="Delete"
+                  asp-route-id="@Model.MedicalFileId"
+                  method="post"
+                  class="mt-4">
+
+                @Html.AntiForgeryToken()
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a asp-area="Doctor"
+                       asp-controller="MedicalFiles"
+                       asp-action="Index"
+                       class="btn btn-secondary px-4">
+
+                        Cancel
+
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-danger px-4">
+
+                        <i class="fas fa-trash me-1"></i>
+                        Delete Medical File
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

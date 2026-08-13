@@ -1,0 +1,180 @@
+﻿@model IEnumerable<clinicManagementSystem.Models.MedicalFile>
+
+@{
+    ViewData["Title"] = "Medical Files";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold text-primary mb-1">
+                Medical Files
+            </h2>
+
+            <p class="text-muted mb-0">
+                Manage patient medical files
+            </p>
+        </div>
+
+        <a href="@Url.Action("Create", "MedicalFiles", new { area = "Doctor" })"
+           class="btn btn-primary rounded-3 px-3">
+
+            <i class="fas fa-plus me-1"></i>
+            Add Medical File
+
+        </a>
+
+    </div>
+
+
+    <!-- Success Message -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+
+            <i class="fas fa-check-circle me-2"></i>
+
+            @TempData["Success"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- Medical Files Table -->
+    <div class="card shadow-sm border-0 rounded-3">
+
+        <div class="card-body">
+
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+
+                    <i class="fas fa-file-medical fa-3x text-muted mb-3"></i>
+
+                    <h5 class="text-muted">
+                        No medical files found.
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        Start by adding a medical file.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead class="table-light">
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Medical Record</th>
+                                <th>File Name</th>
+                                <th>File Type</th>
+                                <th>Upload Date</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var file in Model)
+                            {
+                                <tr>
+
+                                    <!-- ID -->
+                                    <td>
+                                        <span class="fw-semibold">
+                                            @file.MedicalFileId
+                                        </span>
+                                    </td>
+
+
+                                    <!-- Medical Record -->
+                                    <td>
+
+                                        <span class="badge bg-info">
+                                            Record #@file.MedicalRecordId
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- File Name -->
+                                    <td>
+
+                                        <i class="fas fa-file-medical
+                                                  me-2 text-primary">
+                                        </i>
+
+                                        @file.FileName
+
+                                    </td>
+
+
+                                    <!-- File Type -->
+                                    <td>
+
+                                        <span class="badge bg-secondary">
+                                            @file.FileType
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- Upload Date -->
+                                    <td>
+
+                                        @file.UploadDate.ToString("dd/MM/yyyy")
+
+                                    </td>
+
+
+                                    <!-- Actions -->
+                                    <td class="text-center">
+
+                                        <a href="@Url.Action(
+                                                    "Edit",
+                                                    "MedicalFiles",
+                                                    new
+                                                    {
+                                                        area = "Doctor",
+                                                        id = file.MedicalFileId
+                                                    })"
+                                           class="btn btn-sm btn-outline-primary rounded-3 px-3">
+
+                                            <i class="fas fa-edit me-1"></i>
+                                            Edit
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
