@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
-using clinicManagementSystem.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Security.Claims;
+using clinicManagementSystem.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 
 namespace clinicManagementSystem.Areas.Doctor.Controllers
@@ -23,14 +26,22 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             _emailSender = emailSender;
         }
 
-        public async Task<IActionResult> Index(int? doctorId, string? searchString)
+        [HttpGet]
+        public async Task<IActionResult> Index(string? searchString)
         {
-            int currentDoctorId = doctorId.HasValue && doctorId.Value > 0 ? doctorId.Value : 1;
-            ViewBag.DoctorId = currentDoctorId;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return RedirectToAction("Login", "Account", new { area = SD.IDENTITY_AREA });
+
+            var doctor = await _doctorRepo.GetOneAsync(d => d.ApplicationUserId == userId);
+            if (doctor == null)
+                return NotFound("Doctor profile not found for the logged-in user.");
+
             ViewBag.SearchString = searchString;
+            ViewBag.DoctorId = doctor.DoctorId;
 
             var appointments = await _appointmentRepo.GetAsync(
-                expression: a => a.DoctorId == currentDoctorId,
+                expression: a => a.DoctorId == doctor.DoctorId,
                 includes: [a => a.Patient, a => a.Patient.ApplicationUser, a => a.Schedule]
             );
 
@@ -47,71 +58,85 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangeStatus(int id, AppointmentStatus status, int? doctorId)
+        public async Task<IActionResult> ChangeStatus(int id, AppointmentStatus status)
         {
             try
             {
-                var appointment = await _appointmentRepo.GetOneAsync(
+                var fullAppointment = await _appointmentRepo.GetOneAsync(
                     expression: a => a.AppointmentId == id,
-                    includes: [
-                        a => a.Patient,
-                        a => a.Patient.ApplicationUser,
-                        a => a.Doctor,
-                        a => a.Doctor.ApplicationUser
-                    ]
+                    includes: [a => a.Patient, a => a.Patient.ApplicationUser, a => a.Doctor, a => a.Doctor.ApplicationUser]
                 );
 
-                if (appointment != null)
+                if (fullAppointment == null)
                 {
-                    appointment.Status = status;
-                    await _appointmentRepo.CommitAsync();
+                    TempData["error_notification"] = "Appointment not found!";
+                    return RedirectToAction(nameof(Index));
+                }
 
-                    string? patientEmail = appointment.Patient?.ApplicationUser?.Email;
+                fullAppointment.Status = status;
+                try { _appointmentRepo.Update(fullAppointment); } catch { }
+                await _appointmentRepo.CommitAsync();
 
-                    if (string.IsNullOrWhiteSpace(patientEmail) && !string.IsNullOrWhiteSpace(appointment.Notes))
+                string? targetEmail = null;
+
+                if (!string.IsNullOrWhiteSpace(fullAppointment.Notes))
+                {
+                    var match = Regex.Match(
+                        fullAppointment.Notes,
+                        @"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                    );
+
+                    if (match.Success)
                     {
-                        var match = Regex.Match(appointment.Notes, @"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b");
-                        if (match.Success)
-                        {
-                            patientEmail = match.Value;
-                        }
+                        targetEmail = match.Value;
                     }
+                }
+                if (string.IsNullOrWhiteSpace(targetEmail))
+                {
+                    targetEmail = fullAppointment.Patient?.ApplicationUser?.Email;
+                }
 
-                    if (!string.IsNullOrEmpty(patientEmail))
+                if (!string.IsNullOrEmpty(targetEmail))
+                {
+                    try
                     {
-                        var doctorName = appointment.Doctor?.ApplicationUser?.FullName ?? "your doctor";
-                        var patientName = appointment.Patient?.ApplicationUser?.FullName ?? "Patient";
+                        var doctorName = fullAppointment.Doctor?.ApplicationUser?.FullName ?? "your doctor";
+                        var patientName = fullAppointment.Patient?.ApplicationUser?.FullName ?? "Patient";
+
                         string emailBody = $@"
-                            <h2>Appointment Status Update</h2>
-                            <p>Dear <b>{patientName}</b>,</p>
-                            <p>Your appointment status with <b>{doctorName}</b> has been updated to: <b style='color: blue;'>{status}</b>.</p>
-                            <p><b>Appointment Date:</b> {appointment.AppointmentDate:dd MMMM, yyyy}</p>
-                            <br/>
-                            <p>Thank you for choosing Clinic Management System.</p>";
+                            <div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;'>
+                                <h2 style='color: #0d6efd;'>Appointment Status Update</h2>
+                                <p>Dear <b>{patientName}</b>,</p>
+                                <p>Your appointment status with <b>{doctorName}</b> has been updated to: <b style='color: #198754; font-size: 16px;'>{status}</b>.</p>
+                                <p><b>Appointment Date:</b> {fullAppointment.AppointmentDate:dd MMMM, yyyy}</p>
+                                <p><b>Appointment Time:</b> {fullAppointment.AppointmentTime}</p>
+                                <br/>
+                                <p style='color: #6c757d; font-size: 12px;'>Thank you for choosing Clinic Management System.</p>
+                            </div>";
 
-                        await _emailSender.SendEmailAsync(patientEmail, $"Appointment Update - {status}", emailBody);
-                        TempData["success_notification"] = $"Appointment status updated to {status} and notification email sent to {patientEmail}!";
+                        await _emailSender.SendEmailAsync(targetEmail, $"Appointment Update - {status}", emailBody);
+                        TempData["success_notification"] = $"Appointment status updated to {status} and email sent successfully!";
                     }
-                    else
+                    catch
                     {
-                        TempData["success_notification"] = $"Status updated to {status}, but patient email was not found.";
+                        TempData["success_notification"] = $"Appointment status updated to {status}, but email failed to send.";
                     }
                 }
                 else
                 {
-                    TempData["error_notification"] = "Appointment not found!";
+                    TempData["success_notification"] = $"Appointment status updated to {status} successfully!";
                 }
             }
             catch (Exception ex)
             {
-                TempData["error_notification"] = $"Status updated, but email sending failed: {ex.Message}";
+                TempData["error_notification"] = $"Error updating status: {ex.Message}";
             }
 
-            return RedirectToAction(nameof(Index), new { doctorId = doctorId });
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int id, int? doctorId)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
@@ -132,7 +157,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 TempData["error_notification"] = "Cannot delete appointment due to related records.";
             }
 
-            return RedirectToAction(nameof(Index), new { doctorId = doctorId });
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -1,43 +1,55 @@
 ﻿@model clinicManagementSystem.ViewModels.PatientFormVM
 
 @{
-    ViewData["Title"] = "Add New Patient";
+    ViewData["Title"] = "Add New Patient & Book Appointment";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container py-4">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-primary text-white py-3">
-            <h4 class="mb-0 fw-bold">Add New Patient</h4>
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-header bg-primary text-white py-3 rounded-top-4">
+            <h4 class="mb-0 fw-bold"><i class="bi bi-person-plus-fill me-2"></i>Add New Patient & Book Appointment</h4>
         </div>
         <div class="card-body p-4">
             <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
                 <div class="row g-3">
-                    <div class="col-md-6">
+                    <div class="col-12">
+                        <h6 class="fw-bold text-primary border-bottom pb-2 mb-3"><i class="bi bi-person-vcard me-1"></i> Patient Personal Information</h6>
+                    </div>
+
+                    <div class="col-md-4">
                         <label class="form-label fw-semibold">Patient Name *</label>
-                        <input asp-for="Name" class="form-control" />
+                        <input asp-for="Name" class="form-control" placeholder="Full Name" />
                         <span asp-validation-for="Name" class="text-danger small"></span>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label fw-semibold">Phone Number *</label>
-                        <input asp-for="Phone" class="form-control" />
+                        <input asp-for="Phone" class="form-control" placeholder="01xxxxxxxxx" />
                         <span asp-validation-for="Phone" class="text-danger small"></span>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Email Address</label>
+                        <input asp-for="Email" class="form-control" placeholder="example@mail.com" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-4">
                         <label class="form-label fw-semibold">Birth Date *</label>
                         <input asp-for="BirthDate" type="date" class="form-control" />
                         <span asp-validation-for="BirthDate" class="text-danger small"></span>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label class="form-label fw-semibold">Gender *</label>
                         <select asp-for="Gender" asp-items="Html.GetEnumSelectList<clinicManagementSystem.Models.Gender>()" class="form-select"></select>
                         <span asp-validation-for="Gender" class="text-danger small"></span>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label class="form-label fw-semibold">Blood Type</label>
                         <input asp-for="BloodType" class="form-control" placeholder="e.g. O+, A-" />
                         <span asp-validation-for="BloodType" class="text-danger small"></span>
@@ -45,12 +57,51 @@
 
                     <div class="col-12">
                         <label class="form-label fw-semibold">Full Address</label>
-                        <input asp-for="Address" class="form-control" />
+                        <input asp-for="Address" class="form-control" placeholder="City, Street address..." />
                         <span asp-validation-for="Address" class="text-danger small"></span>
                     </div>
 
                     <div class="col-12 mt-4">
-                        <h6 class="fw-bold text-secondary border-bottom pb-2">Emergency Contact Details</h6>
+                        <h6 class="fw-bold text-success border-bottom pb-2 mb-3"><i class="bi bi-calendar-check me-1"></i> Direct Appointment Details</h6>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Select Doctor *</label>
+                        <select asp-for="DoctorId" asp-items="Model.Doctors" class="form-select" id="DoctorId">
+<option value="">-- Choose Doctor --</option>
+                        </select>
+                        <span asp-validation-for="DoctorId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Select Shift *</label>
+                        <select asp-for="DoctorScheduleId" class="form-select" id="DoctorScheduleId">
+                            <option value="">-- Choose Doctor First --</option>
+                        </select>
+                        <span asp-validation-for="DoctorScheduleId" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Appointment Date *</label>
+                        <input asp-for="AppointmentDate" type="date" class="form-control" />
+                        <span asp-validation-for="AppointmentDate" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Appointment Time *</label>
+                        <select asp-for="AppointmentTime" class="form-select" id="AppointmentTime">
+                            <option value="">-- Select Shift First --</option>
+                        </select>
+                        <span asp-validation-for="AppointmentTime" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Appointment Notes</label>
+                        <textarea asp-for="Notes" class="form-control" rows="2" placeholder="Add any initial medical notes or symptoms..."></textarea>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <h6 class="fw-bold text-secondary border-bottom pb-2 mb-3"><i class="bi bi-telephone-plus me-1"></i> Emergency Contact Details</h6>
                     </div>
 
                     <div class="col-md-4">
@@ -67,7 +118,7 @@
                     </div>
 
                     <div class="col-12 mt-4 d-flex gap-2">
-                        <button type="submit" class="btn btn-primary px-4 fw-bold">Save Patient</button>
+                        <button type="submit" class="btn btn-primary px-4 fw-bold">Save Patient & Confirm Booking</button>
                         <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
                     </div>
                 </div>
@@ -78,4 +129,53 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            $('#DoctorId').change(function () {
+                var doctorId = $(this).val();
+                var scheduleSelect = $('#DoctorScheduleId');
+                var timeSelect = $('#AppointmentTime');
+                
+                scheduleSelect.empty().append('<option value="">-- Loading Shifts... --</option>');
+                timeSelect.empty().append('<option value="">-- Select Shift First --</option>');
+if (doctorId) {
+                    $.getJSON('@Url.Action("GetDoctorSchedules", "Patients", new { area = "Admin" })', { doctorId: doctorId }, function (data) {
+                        scheduleSelect.empty().append('<option value="">-- Select Shift --</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, item) {
+                                scheduleSelect.append($('<option>', { value: item.id, text: item.text }));
+                            });
+                        } else {
+                            scheduleSelect.empty().append('<option value="">-- No Shifts Found --</option>');
+                        }
+                    });
+                } else {
+                    scheduleSelect.empty().append('<option value="">-- Choose Doctor First --</option>');
+                }
+            });
+
+            $('#DoctorScheduleId').change(function () {
+                var scheduleId = $(this).val();
+                var timeSelect = $('#AppointmentTime');
+
+                timeSelect.empty().append('<option value="">-- Loading Times... --</option>');
+
+                if (scheduleId) {
+                    $.getJSON('@Url.Action("GetAvailableTimeSlots", "Patients", new { area = "Admin" })', { scheduleId: scheduleId }, function (data) {
+                        timeSelect.empty().append('<option value="">-- Choose Time --</option>');
+                        if (data.length > 0) {
+                            $.each(data, function (i, item) {
+                                timeSelect.append($('<option>', { value: item.value, text: item.text }));
+                            });
+                        } else {
+                            timeSelect.empty().append('<option value="">-- No Slots Available --</option>');
+                        }
+                    });
+                } else {
+                    timeSelect.empty().append('<option value="">-- Select Shift First --</option>');
+                }
+            });
+        });
+    </script>
 }

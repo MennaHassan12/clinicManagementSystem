@@ -12,6 +12,10 @@ namespace clinicManagementSystem.ViewModels
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Name must be at least 3 characters.")]
         public string Name { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Email address is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email address format.")]
+        public string Email { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "Phone number is required.")]
         [Phone(ErrorMessage = "Invalid phone number.")]
         public string Phone { get; set; } = string.Empty;
@@ -20,7 +24,6 @@ namespace clinicManagementSystem.ViewModels
         [Range(1, int.MaxValue, ErrorMessage = "License number must be a positive number.")]
         public int LicenseNumber { get; set; }
 
-        //[Required(ErrorMessage = "Please select a department.")]
         public int? DepartmentId { get; set; }
 
         [Required(ErrorMessage = "Consultation fee is required.")]

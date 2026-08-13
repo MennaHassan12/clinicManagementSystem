@@ -4,6 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>bbfb5ee3-005f-4499-b247-7ccc13edb274</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -18,9 +19,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.29" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.10" />
-		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.29" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="10.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
+	 
 		<PackageReference Include="Scalar.AspNetCore" Version="2.16.2" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.1" />
 		<PackageReference Include="Mapster" Version="10.0.7" />
@@ -33,5 +35,6 @@
 		</PackageReference>
 		<PackageReference Include="Stripe.net" Version="51.1.0" />
 	</ItemGroup>
+	
 
 </Project>

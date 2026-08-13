@@ -26,6 +26,7 @@ namespace clinicManagementSystem.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<DoctorSchedule> DoctorSchedules { get; set; }
         public DbSet<Prescription> Prescriptions { get; set; }
+        public DbSet<ApplicationUserOTP> ApplicationUserOTPs { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
