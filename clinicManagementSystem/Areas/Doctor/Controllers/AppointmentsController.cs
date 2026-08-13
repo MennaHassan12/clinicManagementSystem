@@ -58,7 +58,6 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
         }
 
         [HttpPost]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> ChangeStatus(int id, AppointmentStatus status)
         {
             try
@@ -137,7 +136,6 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
         }
 
         [HttpPost]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
             try
