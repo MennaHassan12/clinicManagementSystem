@@ -142,11 +142,28 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
             }
 
             TempData["success_notification"] = $"Welcome Back {user.FullName}";
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles.Contains("SuperAdmin") || roles.Contains("Admin"))
+            {
+                return RedirectToAction(nameof(DashboardController.Index), "Dashboard",
+                    new { area = SD.ADMIN_AREA });
+            }
+
+            if (roles.Contains("Doctor"))
+            {
+                return RedirectToAction("Index", "Dashboard", new { area = "Doctor" });
+            }
+
+            if (roles.Contains("Patient"))
+            {
+                return RedirectToAction("Doctors", "Appointments", new { area = "Patient" });
+            }
 
             if (!string.IsNullOrEmpty(loginVM.ReturnUrl) && Url.IsLocalUrl(loginVM.ReturnUrl))
                 return Redirect(loginVM.ReturnUrl);
 
-            return RedirectToAction(nameof(DashboardController.Index), "Dashboard", new { area = SD.ADMIN_AREA });
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         [HttpGet]
