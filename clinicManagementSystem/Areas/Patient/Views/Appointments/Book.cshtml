@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Book Appointment";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
     var timeSlots = ViewBag.TimeSlots as List<SelectListItem> ?? new List<SelectListItem>();
     int selectedDayOfWeek = ViewBag.SelectedDayOfWeek ?? 1;
 }
@@ -92,7 +92,7 @@
                         <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm" @(timeSlots.Any() ? "" : "disabled")>
                             Confirm & Book
                         </button>
-                        <a href="@Url.Action("Doctors", "Appointments", new { area = "Patient" })"
+                        <a href="@Url.Action("Index", "Home", new { area = "Patient" })"
    class="btn btn-outline-secondary px-4 py-2 fw-semibold">
     Cancel
 </a>

@@ -1,222 +1,204 @@
-﻿<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
+﻿@using Microsoft.AspNetCore.Identity
+@using clinicManagementSystem.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@ViewData["Title"] - Clinic Management System</title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HealthCare Portal</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
 </head>
-<body class="hold-transition sidebar-mini">
-    <div class="wrapper">
+<body class="d-flex flex-column min-vh-100 bg-light">
 
-        <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Top Bar -->
+    <div class="bg-light border-bottom py-2 text-muted fs-7 d-none d-lg-block">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-4">
+                <span><i class="bi bi-geo-alt-fill text-primary me-1"></i> 123 Health Street, Cairo, Egypt</span>
+                <span><i class="bi bi-envelope-fill text-primary me-1"></i> support@healthcareportal.com</span>
+            </div>
+            <div>
+                <a class="text-decoration-none text-secondary fw-semibold" href="?culture=ar">
+                    <i class="bi bi-globe me-1"></i> عربي
+                </a>
+            </div>
+        </div>
+    </div>
 
-            <!-- Left -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button">
-                        <i class="fas fa-bars"></i>
-                    </a>
-                </li>
-
-                <li class="nav-item d-none d-sm-inline-block">
-                    <span class="nav-link font-weight-bold text-primary">
-                        Clinic Management System
-                    </span>
-                </li>
-            </ul>
-
-            <!-- Right -->
-            <ul class="navbar-nav ml-auto">
-
-                <li class="nav-item">
-                    <span class="nav-link">
-                        <i class="fas fa-user-shield mr-1"></i>
-                        Patient
-                    </span>
-                </li>
-
-                <li class="nav-item">
-                    <a href="#" class="nav-link text-danger">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </a>
-                </li>
-
-            </ul>
-
-        </nav>
-        <!-- /.navbar -->
-        <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
-                <img src="~/dist/img/AdminLTELogo.png" alt="Clinic Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">Clinic Management System</span>
+    <!-- Main Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-3 text-primary" href="/Patient/Home/Index">
+                <i class="bi bi-heart-pulse-fill fs-2"></i>
+                <span class="tracking-wide">HealthCare</span>
             </a>
 
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="~/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-                    </div>
-                    <div class="info">
-                        <a href="#" class="d-block">Patient</a>
-                    </div>
-                </div>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <!-- SidebarSearch Form -->
-                <div class="form-inline">
-                    <div class="input-group" data-widget="sidebar-search">
-                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-sidebar">
-                                <i class="fas fa-search fa-fw"></i>
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-semibold text-uppercase fs-7 gap-lg-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark active" href="/Patient/Home/Index">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" href="#" id="pagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Pages
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow-lg rounded-3 py-2" aria-labelledby="pagesDropdown">
+                            <li><a class="dropdown-item py-2" href="/Patient/Home/AllDoctors"><i class="bi bi-person-badge me-2 text-primary"></i>Doctors</a></li>
+                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#departments"><i class="bi bi-hospital me-2 text-primary"></i>Departments</a></li>
+                            <li><a class="dropdown-item py-2" href="/Patient/Home/Services"><i class="bi bi-gear-wide-connected me-2 text-primary"></i>Services</a></li>
+                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#about"><i class="bi bi-info-circle me-2 text-primary"></i>About Us</a></li>
+                            <li><a class="dropdown-item py-2" href="/Patient/Blog/Index"><i class="bi bi-newspaper me-2 text-primary"></i>Blog</a></li>
+                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#contact"><i class="bi bi-envelope me-2 text-primary"></i>Contact Us</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="/Patient/Home/Index#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="/Patient/Home/Services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="/Patient/Blog/Index">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="/Patient/Home/Index#contact">Contact</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-2">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary rounded-pill px-4 dropdown-toggle fw-semibold" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-1"></i> @User.Identity?.Name
                             </button>
+                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 p-2 mt-2" aria-labelledby="userMenu" style="min-width: 200px;">
+                                <li>
+                                    <a class="dropdown-item py-2 rounded-3 text-secondary" href="/Identity/Profile/Index">
+                                        <i class="bi bi-gear me-2"></i>Profile Settings
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column"
-                        data-widget="treeview"
-                        role="menu"
-                        data-accordion="false">
-
-                        <li class="nav-item">
-                            <a asp-area="Patient"
-                               asp-controller="Patient Dashboard"
-                               asp-action="Index"
-                               class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>Patient Dashboard</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-calendar-check"></i>
-                                <p>My Appointments</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-folder-open"></i>
-                                <p>Medical File</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-prescription-bottle-alt"></i>
-                                <p>Prescriptions</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-star"></i>
-                                <p>Reviews</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-user"></i>
-                                <p>Profile</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item mt-3">
-                            <a href="#" class="nav-link text-danger">
-                                <i class="nav-icon fas fa-sign-out-alt"></i>
-                                <p>Logout</p>
-                            </a>
-                        </li>
-
-                    </ul>
-                </nav>
-                <!-- /.sidebar-menu -->
-            </div>
-            <!-- /.sidebar -->
-        </aside>
-
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Patient Portal</h1>
-                        </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Patient Portal</li>
-                            </ol>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </div>
-            <!-- /.content-header -->
-            <!-- Main content -->
-
-            <div class="content">
-                <div class="container-fluid">
-                    @RenderBody()
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-primary rounded-pill px-4 fw-semibold" href="/Identity/Account/Login">Log In</a>
+                        <a class="btn btn-primary rounded-pill px-4 fw-semibold shadow-sm" href="/Identity/Account/Register">Register</a>
+                    }
                 </div>
             </div>
-
-            <!-- /.content -->
         </div>
-        <!-- /.content-wrapper -->
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-            <div class="p-3">
-                <h5>Title</h5>
-                <p>Sidebar content</p>
+    </nav>
+
+    <!-- Main Content -->
+    <main role="main" class="flex-shrink-0">
+        @RenderBody()
+    </main>
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <!-- Floating Button -->
+        <button class="btn btn-primary py-3 px-2 shadow side-toggle-btn d-flex flex-column align-items-center gap-1" type="button" id="patientPortalToggle" title="Patient Portal">
+            <i class="bi bi-person-badge fs-5"></i>
+            <i class="bi bi-grid-fill small"></i>
+        </button>
+
+        <!-- Compact Menu -->
+        <div class="card shadow-lg border-0 rounded-4 p-2" id="patientFloatingMenu">
+            <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pb-1 pt-2">
+                <h6 class="card-title fw-bold mb-0 text-primary fs-7">
+                    <i class="bi bi-grid-fill me-1"></i>Patient Portal
+                </h6>
+                <button type="button" class="btn-close small" id="closeFloatingMenu" aria-label="Close"></button>
             </div>
-        </aside>
-        <!-- /.control-sidebar -->
-        <!-- Main Footer -->
-        <footer class="main-footer">
-
-            <strong>
-                © 2026 Clinic Management System
-            </strong>
-
-            <div class="float-right d-none d-sm-inline">
-                Developed by FCAI Team
+            <div class="card-body p-2 d-flex flex-column gap-2">
+                <a href="/Patient/Appointments/MyAppointments" class="d-flex align-items-center gap-3 p-2 rounded-3 text-decoration-none text-dark floating-menu-item bg-light bg-opacity-50">
+                    <div class="bg-primary bg-opacity-10 p-2 rounded-3 text-primary">
+                        <i class="bi bi-calendar-check-fill fs-6"></i>
+                    </div>
+                    <div>
+                        <div class="fw-semibold fs-7 mb-0">Appointments</div>
+                        <small class="text-muted fs-8">Manage bookings</small>
+                    </div>
+                </a>
+                <a href="/Patient/MedicalFiles/Index" class="d-flex align-items-center gap-3 p-2 rounded-3 text-decoration-none text-dark floating-menu-item bg-light bg-opacity-50">
+                    <div class="bg-info bg-opacity-10 p-2 rounded-3 text-info">
+                        <i class="bi bi-file-earmark-medical-fill fs-6"></i>
+                    </div>
+                    <div>
+                        <div class="fw-semibold fs-7 mb-0">Medical Files</div>
+                        <small class="text-muted fs-8">Records & history</small>
+                    </div>
+                </a>
             </div>
+        </div>
+    }
 
-        </footer>
-    </div>
-    <!-- ./wrapper -->
-    <!-- REQUIRED SCRIPTS -->
-    <!-- jQuery -->
-    <script src="~/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="~/dist/js/adminlte.min.js"></script>
+    <!-- Footer -->
+    <footer class="footer-with-bg text-white py-5 mt-auto">
+        <div class="footer-overlay"></div>
+
+        <div class="container text-center text-md-start position-relative" style="z-index: 2;">
+            <div class="row g-4 mb-4">
+                <!--  About -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="fw-bold text-primary mb-3"><i class="bi bi-heart-pulse-fill me-2"></i>HealthCare</h5>
+                    <p class="text-light opacity-75 fs-7">Providing trusted healthcare services, easy online appointment bookings, and comprehensive medical record management.</p>
+                </div>
+
+                <!--  Opening Hours -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="fw-bold text-white mb-3"><i class="bi bi-clock me-2 text-primary"></i>Opening Hours</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2 text-light opacity-75 fs-7">
+                        <li class="d-flex justify-content-between"><span>Mon - Wed:</span> <span>8.00 - 18.00</span></li>
+                        <li class="d-flex justify-content-between"><span>Thu - Fri:</span> <span>8.00 - 17.00</span></li>
+                        <li class="d-flex justify-content-between"><span>Sat - Sun:</span> <span>9.00 - 15.00</span></li>
+                        <li class="d-flex justify-content-between text-warning"><span>Holidays:</span> <span>Closed</span></li>
+                    </ul>
+                </div>
+
+                <!--  Quick Links -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="fw-bold text-white mb-3">Quick Links</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2 fs-7">
+                        <li><a href="/Patient/Home/Index#about" class="text-light opacity-75 text-decoration-none">About Us</a></li>
+                        <li><a href="/Patient/Home/Services" class="text-light opacity-75 text-decoration-none">Services</a></li>
+                        <li><a href="/Patient/Blog/Index" class="text-light opacity-75 text-decoration-none">Blog</a></li>
+                        <li><a href="/Patient/Home/Index#contact" class="text-light opacity-75 text-decoration-none">Contact Us</a></li>
+                        <li><a href="/Patient/Home/AllDoctors" class="text-light opacity-75 text-decoration-none">Our Doctors</a></li>
+                    </ul>
+                </div>
+
+                <!--  Contact Info -->
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="fw-bold text-white mb-3">Contact Info</h5>
+                    <p class="text-light opacity-75 mb-2 fs-7"><i class="bi bi-geo-alt me-2 text-primary"></i>123 Health Street, Cairo, Egypt</p>
+                    <p class="text-light opacity-75 mb-2 fs-7"><i class="bi bi-telephone me-2 text-primary"></i>+20 123 456 7890</p>
+                    <p class="text-light opacity-75 fs-7"><i class="bi bi-envelope me-2 text-primary"></i>support@healthcareportal.com</p>
+                </div>
+            </div>
+            <hr class="border-secondary opacity-25">
+            <div class="text-center pt-2">
+                <small class="text-light opacity-50">&copy; @DateTime.Now.Year HealthCare Portal. All Rights Reserved.</small>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/home.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>
