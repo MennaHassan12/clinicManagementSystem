@@ -1,0 +1,81 @@
+﻿@model IEnumerable<clinicManagementSystem.Models.Doctor>
+@{
+    Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Home - Healthcare Portal";
+}
+
+<div id="heroCarousel" class="carousel slide carousel-fade shadow-sm position-relative overflow-hidden" data-bs-ride="carousel" data-bs-interval="5000">
+
+    <div class="carousel-indicators" style="z-index: 3;">
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    </div>
+
+    <div class="carousel-inner">
+        <!-- Slide 1 -->
+        <div class="carousel-item active" style="min-height: 80vh; background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;">
+            <div class="container h-100 d-flex align-items-center position-relative" style="min-height: 80vh; z-index: 2;">
+                <div class="row w-100">
+                    <div class="col-lg-8 text-white">
+                        <span class="badge bg-primary rounded-pill px-3 py-2 text-uppercase fw-semibold mb-3 tracking-wide">
+                            World-Class Care
+                        </span>
+                        <h1 class="display-3 fw-bold mb-3">Your Health Is Our Top Priority</h1>
+                        <p class="lead fs-4 text-light opacity-90 mb-4">
+                            Discover expert physicians, schedule hassle-free appointments, and manage your medical records seamlessly in one place.
+                        </p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <a href="/Patient/Home/AllDoctors" class="btn btn-primary rounded-pill px-4 py-3 fw-semibold shadow-lg">
+                                Book Appointment Now
+                            </a>
+                            <a href="#contact" class="btn btn-outline-light rounded-pill px-4 py-3 fw-semibold">
+                                Contact Us
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-item" style="min-height: 80vh; background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;">
+            <div class="container h-100 d-flex align-items-center position-relative" style="min-height: 80vh; z-index: 2;">
+                <div class="row w-100">
+                    <div class="col-lg-8 text-white">
+                        <span class="badge bg-info rounded-pill px-3 py-2 text-uppercase fw-semibold mb-3 tracking-wide">
+                            Modern Facilities
+                        </span>
+                        <h1 class="display-3 fw-bold mb-3">Health Care For Whole Family</h1>
+                        <p class="lead fs-4 text-light opacity-90 mb-4">
+                            Providing exceptional healthcare service excellence through qualified physicians and state-of-the-art technology.
+                        </p>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <a href="/Patient/Home/AllDoctors" class="btn btn-primary rounded-pill px-4 py-3 fw-semibold shadow-lg">
+                                Book Appointment Now
+                            </a>
+                            <a href="#contact" class="btn btn-outline-light rounded-pill px-4 py-3 fw-semibold">
+                                Contact Us
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        var heroCarousel = new bootstrap.Carousel(document.getElementById('heroCarousel'), {
+                            interval: 5000,
+                            ride: 'carousel',
+                            pause: false
+                        });
+
+                        
+                        }
+                    });
+    </script>
+}

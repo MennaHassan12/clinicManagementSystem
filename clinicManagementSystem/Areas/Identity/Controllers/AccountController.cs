@@ -157,7 +157,7 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
 
             if (roles.Contains("Patient"))
             {
-                return RedirectToAction("Doctors", "Appointments", new { area = "Patient" });
+                return RedirectToAction("Index", "Home", new { area = "Patient" });
             }
 
             if (!string.IsNullOrEmpty(loginVM.ReturnUrl) && Url.IsLocalUrl(loginVM.ReturnUrl))
@@ -357,6 +357,7 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(Login));
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

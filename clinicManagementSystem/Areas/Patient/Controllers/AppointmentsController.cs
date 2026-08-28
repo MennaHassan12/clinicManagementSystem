@@ -105,6 +105,13 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         [HttpGet]
         public async Task<IActionResult> Book(int? doctorId, int? scheduleId, string? date)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return RedirectToAction("Login", "Account", new { area = SD.IDENTITY_AREA });
+
+            var patient = await _patientRepo.GetOneAsync(
+                expression: p => p.ApplicationUserId == userId,
+                includes: [p => p.ApplicationUser]
+            );
             DoctorModel? doctor = null;
 
             if (doctorId.HasValue && doctorId.Value > 0)
