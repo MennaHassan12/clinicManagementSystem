@@ -1,12 +1,14 @@
 ﻿using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
+using clinicManagementSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
-using clinicManagementSystem.ViewModels;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Policy = "RequireAdminOrSuperAdmin")]
     public class MedicalFilesController : Controller
     {
         private readonly IRepository<MedicalFile> _medicalFileRepository;

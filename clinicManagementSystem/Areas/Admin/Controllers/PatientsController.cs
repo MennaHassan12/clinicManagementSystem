@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using clinicManagementSystem.Models;
+﻿using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
 using clinicManagementSystem.ViewModels;
-using PatientModel = clinicManagementSystem.Models.Patient;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using clinicManagementSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using PatientModel = clinicManagementSystem.Models.Patient;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Policy = "RequireAdminOrSuperAdmin")]
     public class PatientsController : Controller
     {
         private readonly IRepository<PatientModel> _patientRepo;

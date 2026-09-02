@@ -14,6 +14,7 @@ using clinicManagementSystem.Utilities;
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Policy = "RequireAdminOrSuperAdmin")]
     public class DoctorsController : Controller
     {
         private readonly IRepository<DoctorModel> _doctorRepo;

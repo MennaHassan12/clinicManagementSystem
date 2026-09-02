@@ -1,5 +1,6 @@
-﻿
+﻿ 
 using clinicManagementSystem.Areas.Admin.Controllers;
+using clinicManagementSystem.Areas.Patient.Controllers;
 using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
 using clinicManagementSystem.Services;
@@ -12,7 +13,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-
 namespace clinicManagementSystem.Areas.Identity.Controllers
 {
     [Area(SD.IDENTITY_AREA)]
@@ -42,10 +42,10 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            //if (_accountService.IsLogined(User))
-            //{
-            //    return RedirectToAction(nameof(DashboardController.Index), "Dashboard", new { area = SD.ADMIN_AREA });
-            //}
+            if (_accountService.IsLogined(User))
+            {
+                return RedirectToAction("Index", "Home", new  { area = SD.PATIENT_AREA });
+            }
             return View();
         }
 
@@ -102,10 +102,11 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
-            //if (_accountService.IsLogined(User))
-            //{
-            //    return RedirectToAction(nameof(DashboardController.Index), "Dashboard", new { area = SD.ADMIN_AREA });
-            //}
+
+            if (_accountService.IsLogined(User))
+            {
+                return RedirectToAction("Index", "Home", new { area = SD.PATIENT_AREA });
+            }
             return View(new LoginVM { ReturnUrl = returnUrl });
         }
 
@@ -146,24 +147,24 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
 
             if (roles.Contains("SuperAdmin") || roles.Contains("Admin"))
             {
-                return RedirectToAction(nameof(DashboardController.Index), "Dashboard",
+                return RedirectToAction("Index", "Dashboard",
                     new { area = SD.ADMIN_AREA });
             }
 
             if (roles.Contains("Doctor"))
             {
-                return RedirectToAction("Index", "Dashboard", new { area = "Doctor" });
+                return RedirectToAction("Index", "Dashboard", new { area = SD.DOCTOR_AREA });
             }
 
             if (roles.Contains("Patient"))
             {
-                return RedirectToAction("Index", "Home", new { area = "Patient" });
+                return RedirectToAction("Index", "Home", new { area = SD.PATIENT_AREA});
             }
 
             if (!string.IsNullOrEmpty(loginVM.ReturnUrl) && Url.IsLocalUrl(loginVM.ReturnUrl))
                 return Redirect(loginVM.ReturnUrl);
 
-            return RedirectToAction("Index", "Home", new { area = "" });
+            return RedirectToAction("Index", "Home", new { area = SD.PATIENT_AREA });
         }
 
         [HttpGet]
@@ -356,6 +357,11 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(Login));
+        }
+                [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
 

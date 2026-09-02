@@ -14,6 +14,7 @@ using DoctorModel = clinicManagementSystem.Models.Doctor;
 namespace clinicManagementSystem.Areas.Patient.Controllers
 {
     [Area("Patient")]
+    [Authorize(Policy = "RequirePatient")]
     public class AppointmentsController : Controller
     {
         private readonly IRepository<Appointment> _appointmentRepo;
@@ -44,12 +45,12 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
             _emailSender = emailSender;
             _userManager = userManager;
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> Index(int? departmentId)
         {
             return await Doctors(departmentId);
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> Doctors(int? departmentId)
         {
             var doctors = await _doctorRepo.GetAsync(
@@ -59,7 +60,7 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
             ViewBag.Departments = new SelectList(await _departmentRepo.GetAsync(), "DepartmentId", "Name", departmentId);
             return View("Doctors", doctors);
         }
-
+        [AllowAnonymous]
         public async Task<IActionResult> DoctorDetails(int id)
         {
             var doctor = await _doctorRepo.GetOneAsync(

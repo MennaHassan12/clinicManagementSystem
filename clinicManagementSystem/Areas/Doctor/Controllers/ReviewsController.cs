@@ -1,11 +1,13 @@
 ﻿using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
 namespace clinicManagementSystem.Areas.Doctor.Controllers
 {
     [Area("Doctor")]
+    [Authorize(Policy = "RequireDoctor")]
     public class ReviewsController : Controller
     {
         private readonly IRepository<Review> _reviewRepository;

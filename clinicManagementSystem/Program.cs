@@ -51,6 +51,14 @@ namespace clinicManagementSystem
                 options.LogoutPath = $"/Identity/Account/Logout";
                 options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
             });
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdminOrSuperAdmin", policy => policy.RequireRole("Admin", "SuperAdmin"));
+                options.AddPolicy("RequireSuperAdminRole", policy => policy.RequireRole("SuperAdmin"));
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("RequireDoctorRole", policy => policy.RequireRole("Doctor"));
+                options.AddPolicy("RequirePatientRole", policy => policy.RequireRole("Patient"));
+            });
 
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
