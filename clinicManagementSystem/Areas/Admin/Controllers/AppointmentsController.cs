@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using clinicManagementSystem.Models;
+﻿using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services; 
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text.RegularExpressions;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Policy = "RequireAdminOrSuperAdmin")]
     public class AppointmentsController : Controller
     {
         private readonly IRepository<Appointment> _appointmentRepo;
