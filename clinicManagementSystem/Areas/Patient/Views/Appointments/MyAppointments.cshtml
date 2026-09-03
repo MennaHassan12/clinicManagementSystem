@@ -11,7 +11,7 @@
             <h2 class="fw-bold text-primary">My Booked Appointments</h2>
             <p class="text-muted">Track and manage your medical appointments</p>
         </div>
-        <a href="/Patient/Home/Index" class="btn btn-primary shadow-sm rounded-pill px-4">
+        <a href="/Patient/Home/AllDoctors" class="btn btn-primary shadow-sm rounded-pill px-4">
             👨‍⚕️ Browse Doctors
         </a>
     </div>
@@ -30,7 +30,7 @@
                 <tbody>
                     @if (Model != null && Model.Any())
                     {
-                        @foreach (var item in Model.OrderByDescending(a => a.AppointmentDate).ThenByDescending(a => a.AppointmentTime))
+                        @foreach (var item in Model)
                         {
                             <tr>
                                 <td class="px-4 fw-bold text-dark">
@@ -61,15 +61,17 @@
                                 <td class="px-4 text-end">
                                     @if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Pending)
                                     {
-                                        <form action="/Patient/Appointments/Cancel/@item.AppointmentId" method="post" class="d-inline">
+                                        <form asp-area="Patient" asp-controller="Appointments" asp-action="Cancel" asp-route-id="@item.AppointmentId" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
                                             <button type="submit" class="btn btn-outline-danger btn-sm px-3 rounded-pill" onclick="return confirm('Are you sure you want to cancel the appointment?');">
-Cancel
+                                                Cancel
                                             </button>
                                         </form>
                                     }
                                     else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Cancelled)
                                     {
-                                        <form action="/Patient/Appointments/Delete/@item.AppointmentId" method="post" class="d-inline">
+                                        <form asp-area="Patient" asp-controller="Appointments" asp-action="Delete" asp-route-id="@item.AppointmentId" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
                                             <button type="submit" class="btn btn-danger btn-sm px-3 rounded-pill" onclick="return confirm('Are you sure you want to delete the appointment?');">
                                                 Delete
                                             </button>

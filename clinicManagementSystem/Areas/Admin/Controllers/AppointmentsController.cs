@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using clinicManagementSystem.Models;
+using clinicManagementSystem.ViewModels;
 using clinicManagementSystem.Repositories.IRepositories;
-using Microsoft.AspNetCore.Identity.UI.Services; 
+using clinicManagementSystem.Services.IServices;
+using Microsoft.AspNetCore.Identity;
 using System.Text.RegularExpressions;
+
+using PatientModel = clinicManagementSystem.Models.Patient;
+using DoctorModel = clinicManagementSystem.Models.Doctor;
+using clinicManagementSystem.Models;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
@@ -11,29 +16,32 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
     public class AppointmentsController : Controller
     {
         private readonly IRepository<Appointment> _appointmentRepo;
-        private readonly IRepository<clinicManagementSystem.Models.Doctor> _doctorRepo;
-        // private readonly IRepository<clinicManagementSystem.Models.Patient> _patientRepo;
+        private readonly IRepository<DoctorModel> _doctorRepo;
+        private readonly IRepository<PatientModel> _patientRepo;
         private readonly IRepository<Department> _departmentRepo;
-        // private readonly IRepository<DoctorSchedule> _scheduleRepo;
+        private readonly IRepository<DoctorSchedule> _scheduleRepo;
         private readonly IRepository<MedicalRecord> _recordRepo;
-        private readonly IEmailSender _emailSender;
+        private readonly IAppointmentService _appointmentService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public AppointmentsController(
             IRepository<Appointment> appointmentRepo,
-            IRepository<clinicManagementSystem.Models.Doctor> doctorRepo,
-            //IRepository<clinicManagementSystem.Models.Patient> patientRepo,
+            IRepository<DoctorModel> doctorRepo,
+            IRepository<PatientModel> patientRepo,
             IRepository<Department> departmentRepo,
-            //IRepository<DoctorSchedule> scheduleRepo,
+            IRepository<DoctorSchedule> scheduleRepo,
             IRepository<MedicalRecord> recordRepo,
-            IEmailSender emailSender)
+            IAppointmentService appointmentService,
+            UserManager<ApplicationUser> userManager)
         {
             _appointmentRepo = appointmentRepo;
             _doctorRepo = doctorRepo;
-            //_patientRepo = patientRepo;
+            _patientRepo = patientRepo;
             _departmentRepo = departmentRepo;
-            //_scheduleRepo = scheduleRepo;
+            _scheduleRepo = scheduleRepo;
             _recordRepo = recordRepo;
-            _emailSender = emailSender;
+            _appointmentService = appointmentService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(int? doctorId, int? departmentId, AppointmentStatus? status, string? searchString)
@@ -57,8 +65,6 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             if (status.HasValue)
                 appointments = appointments.Where(a => a.Status == status.Value);
 
-            //Searching
-
             if (!string.IsNullOrWhiteSpace(searchString))
             {
                 searchString = searchString.Trim().ToLower();
@@ -73,6 +79,191 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             ViewBag.Departments = new SelectList(await _departmentRepo.GetAsync(), "DepartmentId", "Name", departmentId);
 
             return View(appointments.OrderByDescending(a => a.AppointmentDate).ThenByDescending(a => a.AppointmentTime));
+        }
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            var model = new PatientBookingVM();
+            var doctors = await _doctorRepo.GetAsync(includes: [d => d.ApplicationUser]);
+
+            model.Doctors = doctors.Select(d => new SelectListItem
+            {
+                Value = d.DoctorId.ToString(),
+                Text = d.ApplicationUser?.FullName ?? $"Doctor #{d.DoctorId}"
+            }).ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(PatientBookingVM model)
+        {
+            ModelState.Remove("DoctorName");
+            ModelState.Remove("Doctors");
+            ModelState.Remove("AvailableSchedules");
+
+            if (!ModelState.IsValid)
+            {
+                return await ReloadPatientBookingView(model);
+            }
+
+            DateOnly appointmentDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
+            if (DateOnly.TryParse(model.AppointmentDate, out var parsedDate))
+            {
+                appointmentDate = parsedDate;
+            }
+
+            var schedule = await _scheduleRepo.GetOneAsync(s => s.DoctorScheduleId == model.DoctorScheduleId);
+            if (schedule != null)
+            {
+                if (appointmentDate.DayOfWeek != schedule.DayOfWeek)
+                {
+                    ModelState.AddModelError("", $"The selected date does not fall on a {schedule.DayOfWeek}. Please pick a date on {schedule.DayOfWeek}.");
+                    return await ReloadPatientBookingView(model);
+                }
+
+                var existingCount = (await _appointmentRepo.GetAsync(a =>
+                    a.DoctorId == model.DoctorId &&
+                    a.AppointmentDate == appointmentDate &&
+                    (a.Status == AppointmentStatus.Pending || a.Status == AppointmentStatus.Confirmed)
+                )).Count();
+
+                if (schedule.MaxPatients > 0 && existingCount >= schedule.MaxPatients)
+                {
+                    ModelState.AddModelError("", "Sorry, this doctor has reached the maximum number of appointments for this day.");
+                    return await ReloadPatientBookingView(model);
+                }
+            }
+
+            var existingUser = await _userManager.FindByEmailAsync(model.PatientEmail);
+            PatientModel? patient = null;
+            string? setPasswordLink = null;
+
+            if (existingUser != null)
+            {
+                patient = await _patientRepo.GetOneAsync(p => p.ApplicationUserId == existingUser.Id);
+            }
+
+            if (patient == null)
+            {
+                var newUser = new ApplicationUser
+                {
+                    UserName = model.PatientEmail,
+                    Email = model.PatientEmail,
+                    FullName = model.PatientName,
+                    PhoneNumber = model.PatientPhone,
+                    EmailConfirmed = true
+                };
+
+                var result = await _userManager.CreateAsync(newUser);
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return await ReloadPatientBookingView(model);
+                }
+
+                await _userManager.AddToRoleAsync(newUser, "Patient");
+                DateOnly.TryParse(model.BirthDate, out var parsedDob);
+
+                patient = new PatientModel
+                {
+                    ApplicationUserId = newUser.Id,
+                    BirthDate = parsedDob.ToDateTime(TimeOnly.MinValue)
+                };
+                await _patientRepo.CreateAsync(patient);
+                await _patientRepo.CommitAsync();
+
+                var token = await _userManager.GeneratePasswordResetTokenAsync(newUser);
+                setPasswordLink = Url.Action(
+                    action: "ResetPassword",
+                    controller: "Account",
+                    values: new { area = "Identity", code = token, email = newUser.Email },
+                    protocol: Request.Scheme
+                );
+            }
+
+            TimeOnly appointmentTime = TimeOnly.FromDateTime(DateTime.Now);
+            if (TimeOnly.TryParse(model.AppointmentTime, out var parsedTime))
+            {
+                appointmentTime = parsedTime;
+            }
+
+            string formattedNotes = string.Empty;
+            if (!string.IsNullOrWhiteSpace(model.PatientName))
+            {
+                formattedNotes = $"Patient: {model.PatientName}";
+                if (!string.IsNullOrWhiteSpace(model.PatientEmail)) formattedNotes += $" | Email: {model.PatientEmail}";
+                if (!string.IsNullOrWhiteSpace(model.PatientPhone)) formattedNotes += $" | Phone: {model.PatientPhone}";
+                if (!string.IsNullOrWhiteSpace(model.BirthDate)) formattedNotes += $" | DOB: {model.BirthDate}";
+                if (!string.IsNullOrWhiteSpace(model.Notes)) formattedNotes += $" | Notes: {model.Notes}";
+            }
+            else
+            {
+                formattedNotes = model.Notes ?? string.Empty;
+            }
+
+            var appointment = new Appointment
+            {
+                PatientId = patient.PatientId,
+                DoctorId = model.DoctorId,
+                DoctorScheduleId = model.DoctorScheduleId,
+                AppointmentDate = appointmentDate,
+                AppointmentTime = appointmentTime,
+                Status = AppointmentStatus.Pending,
+                Notes = formattedNotes,
+                CreatedAt = DateTime.Now
+            };
+
+            await _appointmentRepo.CreateAsync(appointment);
+            await _appointmentRepo.CommitAsync();
+
+            var doctor = await _doctorRepo.GetOneAsync(d => d.DoctorId == model.DoctorId, includes: [d => d.ApplicationUser]);
+            string doctorName = doctor?.ApplicationUser?.FullName ?? "Selected Doctor";
+
+            try
+            {
+                await _appointmentService.SendAppointmentConfirmationAsync(
+                    model.PatientEmail,
+                    model.PatientName,
+                    doctorName,
+                    appointmentDate,
+                    appointmentTime,
+                    setPasswordLink
+                );
+            }
+            catch { }
+
+            TempData["success_notification"] = "Appointment booked successfully!";
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDoctorSchedules(int doctorId)
+        {
+            var schedules = await _scheduleRepo.GetAsync(s => s.DoctorId == doctorId && s.IsAvailable);
+            var result = schedules.Select(s => new
+            {
+                scheduleId = s.DoctorScheduleId,
+                dayOfWeek = s.DayOfWeek.ToString(),
+                timeText = $"{DateTime.Today.Add(s.StartTime):hh:mm tt} - {DateTime.Today.Add(s.EndTime):hh:mm tt}"
+            });
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAvailableSlots(int doctorId, int scheduleId, string date)
+        {
+            if (DateOnly.TryParse(date, out var bookingDate))
+            {
+                var slots = await GetScheduleSlotsAsync(doctorId, scheduleId, bookingDate);
+                return Json(slots);
+            }
+            return Json(new List<SelectListItem>());
         }
 
         [HttpPost]
@@ -94,35 +285,59 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                 {
                     appointment.Status = status;
                     await _appointmentRepo.CommitAsync();
+                    string? targetEmail = null;
+                    string? targetPatientName = null;
 
-                    string? patientEmail = appointment.Patient?.ApplicationUser?.Email;
-
-                    if (string.IsNullOrWhiteSpace(patientEmail) && !string.IsNullOrWhiteSpace(appointment.Notes))
+                    if (!string.IsNullOrWhiteSpace(appointment.Notes))
                     {
                         var match = Regex.Match(appointment.Notes, @"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b");
                         if (match.Success)
                         {
-                            patientEmail = match.Value;
+                            targetEmail = match.Value;
+                        }
+
+                        if (appointment.Notes.StartsWith("Patient:"))
+                        {
+                            var parts = appointment.Notes.Split('-');
+                            var namePart = parts[0].Replace("Patient:", "").Trim();
+
+                            if (namePart.Contains('|'))
+                            {
+                                namePart = namePart.Split('|')[0].Trim();
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(namePart))
+                            {
+                                targetPatientName = namePart;
+                            }
                         }
                     }
 
-                    if (!string.IsNullOrEmpty(patientEmail))
+                    if (string.IsNullOrWhiteSpace(targetEmail))
+                    {
+                        targetEmail = appointment.Patient?.ApplicationUser?.Email;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(targetPatientName))
+                    {
+                        targetPatientName = appointment.Patient?.ApplicationUser?.FullName ?? "Patient";
+                    }
+
+                    if (!string.IsNullOrEmpty(targetEmail))
                     {
                         var doctorName = appointment.Doctor?.ApplicationUser?.FullName ?? "your doctor";
-                        var patientName = appointment.Patient?.ApplicationUser?.FullName ?? "Patient";
-
-                        string emailBody = $@"
-                            <h2>Appointment Status Update</h2>
-                            <p>Dear <b>{patientName}</b>,</p>
-                            <p>Your appointment status with Dr. <b>{doctorName}</b> has been updated by Admin to: <b style='color: #0d6efd;'>{status}</b>.</p>
-                            <p><b>Appointment Date:</b> {appointment.AppointmentDate:dd MMMM, yyyy}</p>
-                            <br/>
-                            <p>Thank you for choosing Clinic Management System.</p>";
 
                         try
                         {
-                            await _emailSender.SendEmailAsync(patientEmail, $"Appointment Status Update - {status}", emailBody);
-                            TempData["success_notification"] = $"Appointment status updated to {status} and email sent to {patientEmail}!";
+                            await _appointmentService.SendAppointmentStatusUpdateAsync(
+                                targetEmail,
+                                targetPatientName,
+                                doctorName,
+                                appointment.AppointmentDate,
+                                status
+                            );
+
+                            TempData["success_notification"] = $"Appointment status updated to {status} and email notification sent!";
                         }
                         catch (Exception ex)
                         {
@@ -174,7 +389,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                     _appointmentRepo.Delete(appointment);
                     await _appointmentRepo.CommitAsync();
 
-                    TempData["success_notification"] = "Appointment deleted successfully by Admin!";
+                    TempData["success_notification"] = "Appointment deleted successfully!";
                 }
                 else
                 {
@@ -184,10 +399,81 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 var innerMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                TempData["error_notification"] = "Cannot delete: " + innerMessage;
+                TempData["error_notification"] = "Cannot delete appointment: " + innerMessage;
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private async Task<List<SelectListItem>> GetScheduleSlotsAsync(int doctorId, int scheduleId, DateOnly bookingDate)
+        {
+            var slots = new List<SelectListItem>();
+            var schedule = await _scheduleRepo.GetOneAsync(s => s.DoctorScheduleId == scheduleId);
+            if (schedule == null) return slots;
+
+            if (bookingDate.DayOfWeek != schedule.DayOfWeek)
+            {
+                slots.Add(new SelectListItem
+                {
+                    Value = "",
+                    Text = $"Selected date must be a {schedule.DayOfWeek}",
+                    Disabled = true,
+                    Selected = true
+                });
+                return slots;
+            }
+
+            var existingAppointments = await _appointmentRepo.GetAsync(a =>
+                a.DoctorId == doctorId &&
+                a.AppointmentDate == bookingDate &&
+                (a.Status == AppointmentStatus.Pending || a.Status == AppointmentStatus.Confirmed)
+            );
+
+            if (schedule.MaxPatients > 0 && existingAppointments.Count() >= schedule.MaxPatients)
+            {
+                slots.Add(new SelectListItem
+                {
+                    Value = "",
+                    Text = "Fully Booked for this day",
+                    Disabled = true,
+                    Selected = true
+                });
+                return slots;
+            }
+
+            var bookedTimes = existingAppointments.Select(a => a.AppointmentTime).ToList();
+            TimeOnly current = TimeOnly.FromTimeSpan(schedule.StartTime);
+            TimeOnly end = TimeOnly.FromTimeSpan(schedule.EndTime);
+
+            while (current < end)
+            {
+                bool isBooked = bookedTimes.Contains(current);
+                slots.Add(new SelectListItem
+                {
+                    Value = current.ToString("HH:mm"),
+                    Text = isBooked
+                        ? $"{DateTime.Today.Add(current.ToTimeSpan()):hh:mm tt} (Booked)"
+                        : DateTime.Today.Add(current.ToTimeSpan()).ToString("hh:mm tt"),
+                    Disabled = isBooked
+                });
+
+                current = current.AddMinutes(30);
+            }
+
+            return slots;
+        }
+
+        private async Task<IActionResult> ReloadPatientBookingView(PatientBookingVM model)
+        {
+            var doctors = await _doctorRepo.GetAsync(includes: [d => d.ApplicationUser]);
+            model.Doctors = doctors.Select(d => new SelectListItem
+            {
+                Value = d.DoctorId.ToString(),
+                Text = d.ApplicationUser?.FullName ?? $"Doctor #{d.DoctorId}",
+                Selected = d.DoctorId == model.DoctorId
+            }).ToList();
+
+            return View("Create", model);
         }
     }
 }

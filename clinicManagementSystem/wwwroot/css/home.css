@@ -45,11 +45,11 @@
 /* Footer with Background Image */
 .footer-with-bg {
     position: relative;
-    background-image: url('/images/footer-bg.jpg');
+    background-image: url('/images/home/footer-bg.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed; 
+    background-attachment: fixed;
     overflow: hidden;
 }
 
@@ -65,4 +65,113 @@
 .footer-with-bg .bi {
     color: #38bdf8 !important; 
     font-size: 1.1rem; 
+}
+#departments {
+    background-color: #f8fafc !important; 
+}
+
+.department-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important; /* ظل خفيف بيحدد الأبعاد */
+    transition: all 0.3s ease-in-out;
+}
+
+    .department-card:hover {
+        transform: translateY(-6px);
+        border-color: #0d6efd !important; 
+        box-shadow: 0 20px 25px -5px rgba(13, 110, 253, 0.15), 0 10px 10px -5px rgba(13, 110, 253, 0.04) !important;
+    }
+
+.dept-icon-box {
+    width: 65px;
+    height: 65px;
+    transition: all 0.3s ease;
+}
+
+.department-card:hover .dept-icon-box {
+    background-color: #0d6efd !important;
+    color: #ffffff !important;
+}
+.service-card {
+    border: 1px solid #e2e8f0 !important;
+    transition: all 0.3s ease-in-out;
+}
+
+    .service-card:hover {
+        transform: translateY(-5px);
+        border-color: #0d6efd !important;
+        box-shadow: 0 15px 30px rgba(13, 110, 253, 0.12) !important;
+    }
+
+        .service-card:hover .service-icon {
+            background-color: #0d6efd !important;
+            color: #ffffff !important;
+        }
+
+.service-icon {
+    transition: all 0.3s ease;
+}
+.custom-services-tabs .nav-link {
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0 !important;
+}
+
+    .custom-services-tabs .nav-link:hover {
+        transform: translateX(5px);
+    }
+
+    .custom-services-tabs .nav-link.active {
+        background-color: #ffffff !important;
+        border-color: #0d6efd !important;
+        box-shadow: 0 10px 25px rgba(13, 110, 253, 0.12) !important;
+    }
+
+        .custom-services-tabs .nav-link.active .icon-box {
+            background-color: #0d6efd !important;
+            color: #ffffff !important;
+        }
+
+.custom-services-tabs .icon-box {
+    transition: all 0.3s ease;
+}
+
+.carousel-item .hero-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: none;
+}
+
+.carousel-item.active .hero-animate {
+    animation: fadeInUp 0.8s ease-out 0.2s forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#blog .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    #blog .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+
+.btn-animate-arrow .btn-arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.btn-animate-arrow:hover .btn-arrow {
+    transform: translateX(6px);
 }

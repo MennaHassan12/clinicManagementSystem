@@ -1,8 +1,8 @@
 ﻿using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
+using clinicManagementSystem.Services.IServices;
 using clinicManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -17,20 +17,20 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
         private readonly IRepository<Prescription> _prescriptionRepo;
         private readonly IRepository<Appointment> _appointmentRepo;
         private readonly IRepository<clinicManagementSystem.Models.Doctor> _doctorRepo;
-        private readonly IEmailSender _emailSender;
+        private readonly IAppointmentService _appointmentService;
 
         public MedicalRecordsController(
             IRepository<MedicalRecord> recordRepo,
             IRepository<Prescription> prescriptionRepo,
             IRepository<Appointment> appointmentRepo,
             IRepository<clinicManagementSystem.Models.Doctor> doctorRepo,
-            IEmailSender emailSender)
+            IAppointmentService appointmentService)
         {
             _recordRepo = recordRepo;
             _prescriptionRepo = prescriptionRepo;
             _appointmentRepo = appointmentRepo;
             _doctorRepo = doctorRepo;
-            _emailSender = emailSender;
+            _appointmentService = appointmentService;
         }
 
         [HttpGet]
@@ -56,31 +56,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
             if (appointment.DoctorId != doctor.DoctorId) return Forbid();
 
-            string patientDisplayName = "";
-
-            if (!string.IsNullOrWhiteSpace(appointment.Notes) && appointment.Notes.StartsWith("Patient:"))
-            {
-                var parts = appointment.Notes.Split('-');
-                var namePart = parts[0].Replace("Patient:", "").Trim();
-                if (namePart.Contains('('))
-                {
-                    namePart = namePart.Split('(')[0].Trim();
-                }
-                if (!string.IsNullOrWhiteSpace(namePart))
-                {
-                    patientDisplayName = namePart;
-                }
-            }
-
-            if (string.IsNullOrWhiteSpace(patientDisplayName))
-            {
-                patientDisplayName = appointment.Patient?.ApplicationUser?.FullName;
-            }
-
-            if (string.IsNullOrWhiteSpace(patientDisplayName))
-            {
-                patientDisplayName = $"Patient #{appointment.PatientId}";
-            }
+            string patientDisplayName = GetPatientDisplayName(appointment);
 
             var viewModel = new CreateMedicalRecordVM
             {
@@ -164,23 +140,18 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
                     if (!string.IsNullOrEmpty(patientEmail))
                     {
-                        var doctorName = appointment.Doctor?.ApplicationUser?.FullName ?? "your doctor";
-                        var patientName = !string.IsNullOrWhiteSpace(model.PatientName) ? model.PatientName : appointment.Patient?.ApplicationUser?.FullName ?? "Patient";
-
-                        string emailBody = $@"
-                            <div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;'>
-                                <h2 style='color: #0d6efd;'>Visit Completed & Prescription Ready</h2>
-                                <p>Dear <b>{patientName}</b>,</p>
-                                <p>Your appointment with <b>{doctorName}</b> has been marked as <b>Completed</b>.</p>
-                                <p>Your medical record and prescription are now available on your patient portal.</p>
-<p><b>Diagnosis:</b> {record.Diagnosis}</p>
-                                <br/>
-                                <p style='color: #6c757d; font-size: 12px;'>Thank you for choosing Clinic Management System.</p>
-                            </div>";
+                        var doctorName = appointment.Doctor?.ApplicationUser?.FullName ?? "Doctor";
+                        var patientName = !string.IsNullOrWhiteSpace(model.PatientName) ? model.PatientName : GetPatientDisplayName(appointment);
 
                         try
                         {
-                            await _emailSender.SendEmailAsync(patientEmail, "Appointment Completed - Medical Record Ready", emailBody);
+                            await _appointmentService.SendMedicalRecordReadyEmailAsync(
+                                toEmail: patientEmail,
+                                patientName: patientName,
+                                doctorName: doctorName,
+                                diagnosis: record.Diagnosis
+                            );
+
                             TempData["success_notification"] = $"Medical record created and confirmation email sent to {patientEmail}!";
                         }
                         catch (Exception ex)
@@ -207,12 +178,49 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
         {
             var record = await _recordRepo.GetOneAsync(
                 expression: r => r.AppointmentId == appointmentId,
-                includes: [r => r.Prescriptions]
+includes: [
+                    r => r.Prescriptions,
+                    r => r.Appointment,
+                    r => r.Appointment.Patient,
+                    r => r.Appointment.Patient.ApplicationUser,
+                    r => r.Appointment.Doctor,
+                    r => r.Appointment.Doctor.ApplicationUser
+                ]
             );
 
             if (record == null) return NotFound();
 
+            ViewBag.PatientDisplayName = GetPatientDisplayName(record.Appointment);
+
             return View(record);
+        }
+
+        private string GetPatientDisplayName(Appointment? appointment)
+        {
+            if (appointment == null) return "Patient";
+
+            if (!string.IsNullOrWhiteSpace(appointment.Notes) && appointment.Notes.StartsWith("Patient:"))
+            {
+                var parts = appointment.Notes.Split('-');
+                var namePart = parts[0].Replace("Patient:", "").Trim();
+
+                if (namePart.Contains('|'))
+                {
+                    namePart = namePart.Split('|')[0].Trim();
+                }
+
+                if (namePart.Contains('('))
+                {
+                    namePart = namePart.Split('(')[0].Trim();
+                }
+
+                if (!string.IsNullOrWhiteSpace(namePart))
+                {
+                    return namePart;
+                }
+            }
+
+            return appointment.Patient?.ApplicationUser?.FullName ?? $"Patient #{appointment.PatientId}";
         }
     }
 }
