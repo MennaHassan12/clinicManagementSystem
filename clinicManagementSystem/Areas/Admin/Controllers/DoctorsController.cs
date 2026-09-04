@@ -8,6 +8,7 @@ using clinicManagementSystem.Repositories.IRepositories;
 using clinicManagementSystem.Services.IServices;
 using clinicManagementSystem.ViewModels;
 using DoctorModel = clinicManagementSystem.Models.Doctor;
+using Microsoft.AspNetCore.Authorization;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
