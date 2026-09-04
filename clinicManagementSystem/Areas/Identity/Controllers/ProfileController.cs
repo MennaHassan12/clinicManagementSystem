@@ -1,4 +1,5 @@
-﻿using clinicManagementSystem.Models;
+﻿
+using clinicManagementSystem.Models;
 using clinicManagementSystem.Utilities;
 using clinicManagementSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -23,12 +24,21 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user is null) return NotFound();
 
+            var roles = await _userManager.GetRolesAsync(user);
+            var mainRole = roles.Contains("SuperAdmin") ? "Super Admin"
+                          : roles.Contains("Admin") ? "Admin"
+                          : roles.Contains("Doctor") ? "Doctor"
+                          : roles.Contains("Patient") ? "Patient"
+                          : "Member";
+
             ApplicationUserVM applicationUserVM = new()
             {
                 Id = user.Id,
                 FullName = user.FullName,
                 Email = user.Email,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                Role = mainRole,
+                CreatedAt = user.CreatedAt
             };
 
             return View(applicationUserVM);
@@ -56,7 +66,6 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
             }
 
             TempData["success_notification"] = "Profile updated successfully";
-
             return RedirectToAction(nameof(Index));
         }
     }

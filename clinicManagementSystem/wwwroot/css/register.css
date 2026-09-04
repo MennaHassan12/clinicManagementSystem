@@ -441,6 +441,182 @@ body {
     color: #6d7aa3 !important;
     cursor: not-allowed;
 }
+/* ===== Profile meta (role + member since) ===== */
+.profile-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+.role-badge {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    color: #ffffff;
+    display: inline-block;
+}
+
+    .role-badge.role-patient {
+        background: linear-gradient(135deg, #4d7dff, #2140b4);
+    }
+
+    .role-badge.role-doctor {
+        background: linear-gradient(135deg, #24c48a, #0e8f63);
+    }
+
+    .role-badge.role-admin,
+    .role-badge.role-super-admin {
+        background: linear-gradient(135deg, #b06dff, #6a2fc7);
+    }
+
+    .role-badge.role-member {
+        background: linear-gradient(135deg, #6d7aa3, #4a5578);
+    }
+
+.member-since-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #a9b6de;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 4px 12px;
+}
+
+    .member-since-badge .icon {
+        width: 11px;
+        height: 11px;
+        background-color: #a9b6de;
+    }
+
+/* ===== Avatar per-role glow ===== */
+.profile-avatar {
+    position: relative;
+}
+
+.avatar-ring {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    pointer-events: none;
+}
+
+.avatar-role-doctor .avatar-ring {
+    border-color: rgba(36, 196, 138, 0.55);
+}
+
+.avatar-role-patient .avatar-ring {
+    border-color: rgba(77, 125, 255, 0.55);
+}
+
+.avatar-role-admin .avatar-ring,
+.avatar-role-super-admin .avatar-ring {
+    border-color: rgba(176, 109, 255, 0.55);
+}
+
+.avatar-role-doctor {
+    background: linear-gradient(135deg, #24c48a, #0e8f63);
+}
+
+.avatar-role-admin, .avatar-role-super-admin {
+    background: linear-gradient(135deg, #b06dff, #6a2fc7);
+}
+
+/* ===== Doctor stat-style link cards ===== */
+.doctor-links-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    margin: 16px 0 20px;
+}
+
+.doctor-stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 18px 10px;
+    text-decoration: none;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+    .doctor-stat-card:hover {
+        background: rgba(255, 255, 255, 0.09);
+        transform: translateY(-2px);
+    }
+
+    .doctor-stat-card .icon {
+        width: 24px;
+        height: 24px;
+    }
+
+.doctor-stat-shifts .icon {
+    background-color: #24c48a;
+}
+
+.doctor-stat-appts .icon {
+    background-color: #4d7dff;
+}
+
+.doctor-stat-title {
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+}
+
+.doctor-stat-subtitle {
+    color: #8fa0cf;
+    font-size: 10.5px;
+    text-align: center;
+    line-height: 1.3;
+}
+
+/* ===== Edit mode ===== */
+.input-field.editing {
+    box-shadow: 0 0 0 3px rgba(59, 109, 240, 0.55);
+}
+
+.profile-editable[readonly] {
+    color: #6d7aa3;
+    cursor: default;
+}
+
+.icon-edit {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z'/%3E%3C/svg%3E");
+    width: 14px;
+    height: 14px;
+    background-color: currentColor;
+    margin-inline-end: 6px;
+    vertical-align: -2px;
+}
+
+.icon-calendar {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11z'/%3E%3C/svg%3E");
+}
+
+.icon-appointments {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-6h2zm0-8h-2V7h2z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-6h2zm0-8h-2V7h2z'/%3E%3C/svg%3E");
+}}
  
     
 

@@ -11,7 +11,7 @@ using clinicManagementSystem.Utilities;
 namespace clinicManagementSystem.Areas.Doctor.Controllers
 {
     [Area("Doctor")]
-    [Authorize(Policy = "RequireDoctor")]
+    [Authorize(Policy = "RequireDoctorRole")]
     public class MedicalRecordsController : Controller
     {
         private readonly IRepository<MedicalRecord> _recordRepo;

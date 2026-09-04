@@ -9,7 +9,7 @@ using PatientModel = clinicManagementSystem.Models.Patient;
 namespace clinicManagementSystem.Areas.Patient.Controllers
 {
     [Area("Patient")]
-    [Authorize(Policy = "RequirePatient")]
+    [Authorize(Policy = "RequirePatientRole")]
     public class MedicalFilesController : Controller
     {
         private readonly IRepository<MedicalFile> _medicalFileRepository;

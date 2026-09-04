@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 namespace clinicManagementSystem.Areas.Patient.Controllers
 {
     [Area("Patient")]
-    [Authorize(Policy = "RequirePatient")]
+    [Authorize(Policy = "RequirePatientRole")]
     public class ReviewsController : Controller
     {
         private readonly IRepository<Review> _reviewRepository;

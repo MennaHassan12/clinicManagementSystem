@@ -74,6 +74,7 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
                 }
                 return View(registerVM);
             }
+            await _userManager.AddToRoleAsync(user, "Patient");
 
             await _accountService.SendMailAsync(user, Url, Request, EmailType.Register);
 

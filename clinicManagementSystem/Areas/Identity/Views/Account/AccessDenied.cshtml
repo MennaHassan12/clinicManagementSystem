@@ -26,7 +26,10 @@
 
 <div class="switch-link">
     Want to use another account?
-    <a asp-action="Logout" asp-controller="Account">Logout</a>
+    <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="logout-link-button">Logout</button>
+    </form>
 </div>
 
 <style>
@@ -36,5 +39,20 @@
         text-align: center;
         line-height: 1.7;
         margin-bottom: 20px;
+    }
+
+    .logout-link-button {
+        background: none;
+        border: none;
+        padding: 0;
+        color: #6f9bff;
+        font-weight: 700;
+        font-size: 12px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .logout-link-button:hover {
+        text-decoration: underline;
     }
 </style>

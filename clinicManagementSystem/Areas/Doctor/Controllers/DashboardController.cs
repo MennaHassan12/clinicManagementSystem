@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace clinicManagementSystem.Areas.Doctor.Controllers
 {
     [Area("Doctor")]
-    [Authorize(Policy = "RequireDoctor")]
+    [Authorize(Policy = "RequireDoctorRole")]
     public class DashboardController : Controller
     {
         public IActionResult Index()
