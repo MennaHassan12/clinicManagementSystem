@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 namespace clinicManagementSystem.Areas.Doctor.Controllers
 {
     [Area("Doctor")]
-    [Authorize(Policy = "RequireDoctor")]
+    [Authorize(Policy = "RequireDoctorRole")]
     public class AppointmentsController : Controller
     {
         private readonly IRepository<Appointment> _appointmentRepo;

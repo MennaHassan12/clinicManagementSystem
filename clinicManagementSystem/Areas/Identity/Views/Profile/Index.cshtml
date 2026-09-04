@@ -1,12 +1,15 @@
-﻿@model clinicManagementSystem.ViewModels.ApplicationUserVM
+﻿
+@model clinicManagementSystem.ViewModels.ApplicationUserVM
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "My Profile";
     Layout = "_MainLayout";
+
+    var roleClass = Model.Role.ToLower().Replace(" ", "-"); // super-admin / admin / doctor / patient / member
 }
 
 <div class="profile-avatar-wrap">
-    <div class="profile-avatar">
+    <div class="profile-avatar avatar-role-@roleClass">
         @{
             var initials = string.IsNullOrWhiteSpace(Model.FullName)
                 ? "?"
@@ -15,24 +18,52 @@
                     .Select(w => char.ToUpper(w[0])));
         }
         @initials
+        <span class="avatar-ring"></span>
     </div>
 </div>
 
 <h2>@(string.IsNullOrWhiteSpace(Model.FullName) ? "My Profile" : Model.FullName)</h2>
+
+<div class="profile-meta">
+    <span class="role-badge role-@roleClass">@Model.Role</span>
+    <span class="member-since-badge">
+        <span class="icon icon-calendar"></span>
+        Member since @Model.CreatedAt.ToString("MMMM yyyy")
+    </span>
+</div>
+
 <p class="subtitle">View and update your account information</p>
 
-<form asp-action="SaveProfile" asp-controller="Profile" method="post">
+@if (Model.Role == "Doctor")
+{
+    <div class="doctor-links-grid">
+        <a asp-area="Doctor" asp-controller="Schedule" asp-action="Index" class="doctor-stat-card doctor-stat-shifts">
+            <span class="icon icon-calendar"></span>
+            <span class="doctor-stat-title">My Shifts</span>
+            <span class="doctor-stat-subtitle">Weekly schedule</span>
+        </a>
+        <a asp-area="Doctor" asp-controller="Appointments" asp-action="Index" class="doctor-stat-card doctor-stat-appts">
+            <span class="icon icon-appointments"></span>
+            <span class="doctor-stat-title">Appointments</span>
+            <span class="doctor-stat-subtitle">Manage bookings</span>
+        </a>
+    </div>
+}
+
+<form asp-action="SaveProfile" asp-controller="Profile" method="post" id="profileForm">
     @Html.AntiForgeryToken()
 
     <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
 
     <input asp-for="Id" type="hidden" />
+    <input asp-for="Role" type="hidden" />
+    <input asp-for="CreatedAt" type="hidden" />
 
     <div class="form-group">
         <label asp-for="FullName">Full Name</label>
         <div class="input-field">
             <span class="icon icon-user"></span>
-            <input asp-for="FullName" placeholder="Enter your full name" autocomplete="name" />
+            <input asp-for="FullName" placeholder="Enter your full name" autocomplete="name" readonly class="profile-editable" />
         </div>
         <span asp-validation-for="FullName" class="field-error"></span>
     </div>
@@ -50,17 +81,22 @@
         <label asp-for="PhoneNumber">Phone Number</label>
         <div class="input-field">
             <span class="icon icon-phone"></span>
-            <input asp-for="PhoneNumber" type="tel" placeholder="Enter your phone number" autocomplete="tel" />
+            <input asp-for="PhoneNumber" type="tel" placeholder="Enter your phone number" autocomplete="tel" readonly class="profile-editable" />
         </div>
         <span asp-validation-for="PhoneNumber" class="field-error"></span>
     </div>
 
-    <div class="profile-actions">
-        <button type="submit" class="btn-primary">SAVE PROFILE</button>
-
+    <div class="profile-actions" id="viewActions">
+        <button type="button" id="editProfileBtn" class="btn-primary">
+            <span class="icon icon-edit"></span> EDIT PROFILE
+        </button>
         <a asp-action="ChangePassword" asp-controller="Account" class="btn-secondary" style="text-align:center; text-decoration:none; display:block;">CHANGE PASSWORD</a>
-
         <button type="submit" form="logoutForm" class="btn-danger">LOG OUT</button>
+    </div>
+
+    <div class="profile-actions" id="editActions" style="display:none;">
+        <button type="submit" class="btn-primary">SAVE PROFILE</button>
+        <button type="button" id="cancelEditBtn" class="btn-secondary">CANCEL</button>
     </div>
 </form>
 
@@ -73,4 +109,35 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <partial name="_NotificationPartial" />
+    <script>
+        (function() {
+            const editableInputs = document.querySelectorAll(".profile-editable");
+            const editBtn = document.getElementById("editProfileBtn");
+            const cancelBtn = document.getElementById("cancelEditBtn");
+            const viewActions = document.getElementById("viewActions");
+            const editActions = document.getElementById("editActions");
+            let originalValues = [];
+
+            editBtn.addEventListener("click", function() {
+                originalValues = Array.from(editableInputs).map(i => i.value);
+                editableInputs.forEach(i => {
+                    i.readOnly = false;
+                    i.closest(".input-field").classList.add("editing");
+                });
+                viewActions.style.display = "none";
+                editActions.style.display = "flex";
+                editableInputs[0]?.focus();
+            });
+
+            cancelBtn.addEventListener("click", function() {
+                editableInputs.forEach((i, idx) => {
+                    i.value = originalValues[idx];
+                    i.readOnly = true;
+                    i.closest(".input-field").classList.remove("editing");
+                });
+                viewActions.style.display = "flex";
+                editActions.style.display = "none";
+            });
+        })();
+    </script>
 }

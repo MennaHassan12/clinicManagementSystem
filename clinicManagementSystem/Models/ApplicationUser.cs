@@ -13,6 +13,7 @@ namespace clinicManagementSystem.Models
         public string? Image {  get; set; }
         public Doctor? Doctor { get; set; }
         public Patient? Patient { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     }
 }

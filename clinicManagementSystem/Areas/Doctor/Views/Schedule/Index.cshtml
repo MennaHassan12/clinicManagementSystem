@@ -1,0 +1,67 @@
+﻿@model List<clinicManagementSystem.Models.DoctorSchedule>
+
+@{
+    ViewData["Title"] = "My Schedule";
+    Layout = "~/Areas/Doctor/Views/Shared/_DoctorLayout.cshtml";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-primary mb-1">My Schedule</h2>
+            <p class="text-muted mb-0">@ViewBag.DoctorName — your weekly working hours and patient capacity</p>
+        </div>
+        <a asp-area="Identity" asp-controller="Profile" asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Profile
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="card shadow-sm border-0 rounded-3 text-center py-5">
+            <div class="card-body">
+                <p class="text-muted mb-0 fs-5">You don't have any schedule assigned yet. Please contact the admin.</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-3">
+            @foreach (var schedule in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card shadow-sm border-0 h-100 rounded-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 fs-6">
+                                    @schedule.DayOfWeek
+                                </span>
+                                @if (schedule.IsAvailable)
+                                {
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">
+                                        ● Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2 rounded-pill">
+                                        ● Inactive
+                                    </span>
+                                }
+                            </div>
+                            <p class="mb-1 fw-semibold text-dark">
+                                <i class="bi bi-clock text-primary me-1"></i>
+                                @DateTime.Today.Add(schedule.StartTime).ToString("hh:mm tt") -
+                                @DateTime.Today.Add(schedule.EndTime).ToString("hh:mm tt")
+                            </p>
+                            <p class="mb-0 text-muted">
+                                <i class="bi bi-people text-primary me-1"></i>
+                                Max patients: @schedule.MaxPatients
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
