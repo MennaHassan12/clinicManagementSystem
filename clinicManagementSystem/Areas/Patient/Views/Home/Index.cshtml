@@ -4,19 +4,21 @@
     ViewData["Title"] = "Home - Healthcare Portal";
 }
 
-<div id="heroCarousel" class="carousel slide carousel-fade shadow-sm position-relative overflow-hidden" data-bs-ride="carousel" data-bs-interval="5000">
 
-    <div class="carousel-indicators" style="z-index: 3;">
+<!-- Hero Carousel Section -->
+<div id="heroCarousel" class="carousel slide carousel-fade shadow-sm" data-bs-ride="carousel" data-bs-interval="5000">
+
+    <div class="carousel-indicators">
         <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
         <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
     </div>
 
     <div class="carousel-inner">
         <!-- Slide 1 -->
-        <div class="carousel-item active" style="min-height: 80vh; background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;">
-            <div class="container h-100 d-flex align-items-center position-relative" style="min-height: 80vh; z-index: 2;">
+        <div class="carousel-item active" style="min-height: 85vh; background: linear-gradient(90deg, rgba(15, 23, 42, 0.60) 0%, rgba(15, 23, 42, 0.15) 100%), url('/images/home/hero2.jpg') 85% 25% / cover no-repeat;">
+            <div class="container h-100 d-flex align-items-center" style="min-height: 85vh;">
                 <div class="row w-100">
-                    <div class="col-lg-8 text-white">
+                    <div class="col-lg-8 text-white hero-animate">
                         <span class="badge bg-primary rounded-pill px-3 py-2 text-uppercase fw-semibold mb-3 tracking-wide">
                             World-Class Care
                         </span>
@@ -38,10 +40,10 @@
         </div>
 
         <!-- Slide 2 -->
-        <div class="carousel-item" style="min-height: 80vh; background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;">
-            <div class="container h-100 d-flex align-items-center position-relative" style="min-height: 80vh; z-index: 2;">
+        <div class="carousel-item" style="min-height: 85vh; background: linear-gradient(90deg, rgba(15, 23, 42, 0.60) 0%, rgba(15, 23, 42, 0.15) 100%), url('/images/home/hero1.jpg') center 30% / cover no-repeat;">
+            <div class="container h-100 d-flex align-items-center" style="min-height: 85vh;">
                 <div class="row w-100">
-                    <div class="col-lg-8 text-white">
+                    <div class="col-lg-8 text-white hero-animate">
                         <span class="badge bg-info rounded-pill px-3 py-2 text-uppercase fw-semibold mb-3 tracking-wide">
                             Modern Facilities
                         </span>
@@ -62,19 +64,552 @@
             </div>
         </div>
     </div>
-</div>
+        </div>
+<!-- About Us Section -->
+<section id="about" class="py-5 bg-light">
+    <div class="container py-4">
 
+        <!-- Section Header -->
+        <div class="text-center mx-auto mb-5" style="max-width: 650px;">
+            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-semibold text-uppercase mb-2">
+                About Us
+            </span>
+            <h2 class="fw-bold text-dark display-6">Knowing More About Our Healthcare</h2>
+            <p class="text-muted mb-0">Dedicated to providing compassionate care and expert medical services to support your health journey.</p>
+        </div>
+
+        <!-- Content Row -->
+        <div class="row align-items-center g-4 g-lg-5">
+
+            
+            <div class="col-lg-6 position-relative">
+                <div class="row g-3 align-items-center">
+
+                    <!-- First Image -->
+                    <div class="col-6">
+                        <div class="rounded-5 overflow-hidden shadow-sm border" style="height: 400px;">
+                            <img src="~/images/home/about-1.jpg" class="w-100 h-100 object-fit-cover" alt="Medical Facility">
+                        </div>
+                    </div>
+
+                    <!-- Second Image -->
+                    <div class="col-6">
+                        <div class="rounded-5 overflow-hidden shadow-sm border" style="height: 400px;">
+                            <img src="~/images/home/about-2.jpg" class="w-100 h-100 object-fit-cover" alt="Doctor Consultation">
+                        </div>
+                    </div>
+
+                </div>
+
+<div class="position-absolute bottom-0 start-0 m-3 bg-white p-3 px-3.5 rounded-4 shadow-sm border d-flex align-items-center gap-3" style="z-index: 10;">
+    
+    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-award-fill" viewBox="0 0 16 16">
+            <path d="m8 0 1.669.864 1.858.282.842 1.68 1.337 1.32L13.4 6l.306 1.854-1.337 1.32-.842 1.68-1.858.282L8 12l-1.669-.864-1.858-.282-.842-1.68-1.337-1.32L2.6 6l-.306-1.854 1.337-1.32.842-1.68 1.337-.282z"/>
+            <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126l-1.982-.982z"/>
+        </svg>
+    </div>
+
+    <div>
+        <h3 class="fw-bold text-dark mb-0 lh-1 fs-4"><span id="yearsCounter" data-target="15">0</span>+</h3>
+        <small class="text-muted fw-semibold text-uppercase fs-8" style="letter-spacing: 0.5px;">Years Experience</small>
+    </div>
+
+</div>
+            </div>
+
+            <div class="col-lg-6">
+
+                <h3 class="fw-bold text-dark mb-3">
+                    Best Care For Your <span class="text-primary">Good Health</span>
+                </h3>
+
+                <p class="text-muted mb-4 fs-6 lh-base">
+                    Our clinic is built on the foundation of compassionate care, advanced medical technology, and qualified expertise. We strive to offer personalized healthcare solutions to meet all your medical needs under one roof.
+                </p>
+
+                <div class="d-flex flex-column gap-3 mb-4" style="max-width: 480px;">
+
+                    <div class="p-3 bg-white rounded-4 border d-flex align-items-center gap-3 shadow-sm">
+                        <div class="bg-primary text-white rounded-3 p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 46px; height: 46px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-person-check" viewBox="0 0 16 16">
+                                <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.75.75 0 0 1 1.06-1.06l.367.367 1.002-1.67a.75.75 0 1 1 1.254.816" />
+                                <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 4" />
+                                <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C8.844 9.02 8.434 9 8 9c-5 0-6 3-6 4s1 1 1 1z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0 fs-6">Certified Specialists</h6>
+                            <small class="text-muted">Top Tier Doctors</small>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-white rounded-4 border d-flex align-items-center gap-3 shadow-sm">
+                        <div class="bg-primary text-white rounded-3 p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 46px; height: 46px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-building-check" viewBox="0 0 16 16">
+                                <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.75.75 0 0 1 1.06-1.06l.367.367 1.002-1.67a.75.75 0 1 1 1.254.816" />
+                                <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6.5a4.5 4.5 0 0 0-1 0V1H3v14h3v-2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2h1.071c.108.361.265.7.468 1H3a1 1 0 0 1-1-1z" />
+                                <path d="M4.5 3h1v1h-1zM7 3h1v1H7zM4.5 6h1v1h-1zM7 6h1v1H7zM4.5 9h1v1h-1zM7 9h1v1H7zM4.5 12h1v1h-1zM7 12h1v1H7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0 fs-6">Modern Facilities</h6>
+                            <small class="text-muted">Latest Equipment</small>
+                        </div>
+                    </div>
+
+                </div>
+
+                <a href="#services" class="btn btn-primary rounded-pill px-4 py-2.5 fw-semibold shadow-sm">
+                    Discover More
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+    <section id="services" class="py-5 bg-light">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-semibold text-uppercase">Portal Features</span>
+                <h2 class="fw-bold text-dark mt-2 display-6">Our Core Services</h2>
+                <p class="text-muted mx-auto" style="max-width: 600px;">Explore how our healthcare portal helps patients connect with qualified doctors and manage records effortlessly.</p>
+            </div>
+
+            <div class="row g-4 align-items-center">
+
+                <div class="col-lg-5">
+                    <div class="nav flex-column nav-pills custom-services-tabs gap-2" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+                        <!-- 1. Easy Doctor Booking -->
+                        <button class="nav-link active p-2 px-3 rounded-4 text-start d-flex align-items-center gap-3 border bg-white shadow-sm" id="v-pills-booking-tab" data-bs-toggle="pill" data-bs-target="#v-pills-booking" type="button" role="tab">
+                            <div class="icon-box rounded-3 bg-primary bg-opacity-10 text-primary p-2">
+                                <i class="bi bi-calendar2-check fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark fs-6">Easy Doctor Booking</h6>
+                                <small class="text-muted fs-7">Instant appointment scheduling</small>
+                            </div>
+                        </button>
+
+                        <!-- 2. Multi-Specialty Care -->
+                        <button class="nav-link p-2 px-3 rounded-4 text-start d-flex align-items-center gap-3 border bg-white shadow-sm" id="v-pills-specialties-tab" data-bs-toggle="pill" data-bs-target="#v-pills-specialties" type="button" role="tab">
+                            <div class="icon-box rounded-3 bg-primary bg-opacity-10 text-primary p-2">
+                                <i class="bi bi-hospital fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark fs-6">Medical Departments</h6>
+                                <small class="text-muted fs-7">Explore doctors by specialty</small>
+                            </div>
+                        </button>
+
+                        <!-- 3. Digital Medical Records -->
+                        <button class="nav-link p-2 px-3 rounded-4 text-start d-flex align-items-center gap-3 border bg-white shadow-sm" id="v-pills-records-tab" data-bs-toggle="pill" data-bs-target="#v-pills-records" type="button" role="tab">
+                            <div class="icon-box rounded-3 bg-primary bg-opacity-10 text-primary p-2">
+                                <i class="bi bi-file-earmark-medical fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark fs-6">Digital Medical Records</h6>
+                                <small class="text-muted fs-7">Access your history & diagnoses</small>
+                            </div>
+                        </button>
+
+                        <!-- 4. Verified Doctor Profiles -->
+                        <button class="nav-link p-2 px-3 rounded-4 text-start d-flex align-items-center gap-3 border bg-white shadow-sm" id="v-pills-doctors-tab" data-bs-toggle="pill" data-bs-target="#v-pills-doctors" type="button" role="tab">
+                            <div class="icon-box rounded-3 bg-primary bg-opacity-10 text-primary p-2">
+                                <i class="bi bi-person-badge fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark fs-6">Verified Doctor Profiles</h6>
+                                <small class="text-muted fs-7">Explore qualifications & experience</small>
+                            </div>
+                        </button>
+                        <!-- 5. Appointment Tracking -->
+                        <button class="nav-link p-2 px-3 rounded-4 text-start d-flex align-items-center gap-3 border bg-white shadow-sm" id="v-pills-tracking-tab" data-bs-toggle="pill" data-bs-target="#v-pills-tracking" type="button" role="tab">
+                            <div class="icon-box rounded-3 bg-primary bg-opacity-10 text-primary p-2">
+                                <i class="bi bi-journal-check fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark fs-6">Appointment Status</h6>
+                                <small class="text-muted fs-7">Track & manage active bookings</small>
+                            </div>
+                        </button>
+
+                        <!-- 6. Direct Contact & Support -->
+                        <button class="nav-link p-2 px-3 rounded-4 text-start d-flex align-items-center gap-3 border bg-white shadow-sm" id="v-pills-support-tab" data-bs-toggle="pill" data-bs-target="#v-pills-support" type="button" role="tab">
+                            <div class="icon-box rounded-3 bg-primary bg-opacity-10 text-primary p-2">
+                                <i class="bi bi-headset fs-5"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-dark fs-6">Patient Assistance</h6>
+                                <small class="text-muted fs-7">Send inquiries to administration</small>
+                            </div>
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="tab-content p-4 p-md-5 bg-white rounded-4 shadow-sm border" id="v-pills-tabContent" style="min-height: 400px;">
+
+                        <!-- Tab 1: Easy Doctor Booking -->
+                        <div class="tab-pane fade show active" id="v-pills-booking" role="tabpanel">
+                            <div class="row align-items-center g-4">
+                                <div class="col-md-7">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Feature 01</span>
+                                    <h3 class="fw-bold text-dark mb-3">Book Appointments in Seconds</h3>
+                                    <p class="text-muted mb-4 fs-7">Select your desired doctor, choose available date and time slots, and confirm your booking instantly through the portal.</p>
+                                    <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-7">
+                                        <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary"></i> Real-time slot reservation</li>
+                                        <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary"></i> Choose preferred specialists easily</li>
+                                    </ul>
+                                    <a href="/Patient/Home/AllDoctors" class="btn btn-primary rounded-pill px-4">Find a Specialist</a>
+                                </div>
+                                <div class="col-md-5 d-none d-md-block text-center">
+                                    <img src="~/images/services/booking.jpg" class="img-fluid rounded-4 object-fit-contain" style="max-height: 260px; width: 100%;" alt="Easy Doctor Booking">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2: Medical Departments -->
+                        <div class="tab-pane fade" id="v-pills-specialties" role="tabpanel">
+                            <div class="row align-items-center g-4">
+                                <div class="col-md-7">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Feature 02</span>
+                                    <h3 class="fw-bold text-dark mb-3">Explore Various Departments</h3>
+                                    <p class="text-muted mb-4 fs-7">Browse through clinical specialties including Cardiology, Ophthalmology, Pediatrics, Neurology, and more.</p>
+                                    <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-7">
+                                        <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary"></i> Categorized doctor profiles</li>
+                                        <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary"></i> Detailed department summaries</li>
+                                    </ul>
+                                    <a href="#departments" class="btn btn-primary rounded-pill px-4">View Departments</a>
+                                </div>
+                                <div class="col-md-5 d-none d-md-block text-center">
+                                    <img src="~/images/services/departments.jpg" class="img-fluid rounded-4 object-fit-contain" style="max-height: 260px; width: 100%;" alt="Medical Departments">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 3: Digital Medical Records -->
+                        <div class="tab-pane fade" id="v-pills-records" role="tabpanel">
+                            <div class="row align-items-center g-4">
+                                <div class="col-md-7">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Feature 03</span>
+                                    <h3 class="fw-bold text-dark mb-3">Secure Patient Records</h3>
+                                    <p class="text-muted mb-4 fs-7">Access your clinical consultations, diagnoses history, and assigned medical records seamlessly from your dashboard.</p>
+                                    <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-7">
+                                        <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary"></i> Structured patient data</li>
+                                        <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary"></i> Fast and organized lookup</li>
+                                    </ul>
+                                    <a href="#contact" class="btn btn-primary rounded-pill px-4">Learn More</a>
+                                </div>
+                                <div class="col-md-5 d-none d-md-block text-center">
+                                    <img src="~/images/services/records.jpg" class="img-fluid rounded-4 object-fit-contain" style="max-height: 260px; width: 100%;" alt="Digital Medical Records">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 4: Verified Doctor Profiles -->
+                        <div class="tab-pane fade" id="v-pills-doctors" role="tabpanel">
+                            <div class="row align-items-center g-4">
+                                <div class="col-md-7">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Feature 04</span>
+                                    <h3 class="fw-bold text-dark mb-3">Qualified Medical Experts</h3>
+                                    <p class="text-muted mb-4 fs-7">View detailed doctor profiles, academic qualifications, sub-specialties, and consultation details before making a choice.</p>
+                                    <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-7">
+                                        <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary"></i> Verified credentials & backgrounds</li>
+                                        <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary"></i> Transparent consultation details</li>
+                                    </ul>
+                                    <a href="/Patient/Home/AllDoctors" class="btn btn-primary rounded-pill px-4">Browse Doctors</a>
+                                </div>
+                                <div class="col-md-5 d-none d-md-block text-center">
+                                    <img src="~/images/services/doctors.jpg" class="img-fluid rounded-4 object-fit-contain" style="max-height: 260px; width: 100%;" alt="Doctor Profiles">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 5: Appointment Status -->
+                        <div class="tab-pane fade" id="v-pills-tracking" role="tabpanel">
+                            <div class="row align-items-center g-4">
+                                <div class="col-md-7">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Feature 05</span>
+                                    <h3 class="fw-bold text-dark mb-3">Track Appointment Status</h3>
+                                    <p class="text-muted mb-4 fs-7">View all your upcoming and past clinic visits with real-time status updates (Pending, Confirmed, Cancelled).</p>
+                                    <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-7">
+                                        <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary"></i> Clear status indicators</li>
+                                        <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary"></i> Comprehensive visit log</li>
+                                    </ul>
+                                    <a href="#contact" class="btn btn-primary rounded-pill px-4">Manage Bookings</a>
+                                </div>
+                                <div class="col-md-5 d-none d-md-block text-center">
+                                    <img src="~/images/services/tracking.jpg" class="img-fluid rounded-4 object-fit-contain" style="max-height: 260px; width: 100%;" alt="Tracking">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 6: Patient Assistance -->
+                        <div class="tab-pane fade" id="v-pills-support" role="tabpanel">
+                            <div class="row align-items-center g-4">
+                                <div class="col-md-7">
+                                    <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Feature 06</span>
+                                    <h3 class="fw-bold text-dark mb-3">Get Help & Support</h3>
+                                    <p class="text-muted mb-4 fs-7">Have inquiries or encounter technical issues? Reach out directly to clinic support using our contact channel.</p>
+                                    <ul class="list-unstyled d-flex flex-column gap-2 mb-4 fs-7">
+                                        <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary"></i> Fast response times</li>
+                                        <li class="d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill text-primary"></i> Direct message submission</li>
+                                    </ul>
+                                    <a href="#contact" class="btn btn-primary rounded-pill px-4">Contact Us</a>
+                                </div>
+                                <div class="col-md-5 d-none d-md-block text-center">
+                                    <img src="~/images/services/support.jpg" class="img-fluid rounded-4 object-fit-contain" style="max-height: 260px; width: 100%;" alt="Support">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Departments Section -->
+    <section id="departments" class="py-5 bg-white">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-semibold text-uppercase tracking-wide">Specialties</span>
+                <h2 class="fw-bold text-dark mt-2 display-6">Our Medical Departments</h2>
+                <p class="text-muted mx-auto" style="max-width: 600px;">Providing specialized care across various medical fields with state-of-the-art facilities.</p>
+            </div>
+
+            @if (ViewBag.Departments != null)
+            {
+                <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-4 justify-content-center">
+                    @foreach (var dept in ViewBag.Departments)
+                    {
+                        string iconClass = "bi-hospital";
+                        string deptName = dept.Name?.ToString().ToLower() ?? "";
+
+                        if (deptName.Contains("eye") || deptName.Contains("ophthalm")) { iconClass = "bi-eye"; }
+                        else if (deptName.Contains("heart") || deptName.Contains("cardio")) { iconClass = "bi-heart-pulse"; }
+                        else if (deptName.Contains("dental") || deptName.Contains("teeth")) { iconClass = "bi-person-badge"; }
+                        else if (deptName.Contains("bone") || deptName.Contains("ortho")) { iconClass = "bi-body-text"; }
+                        else if (deptName.Contains("brain") || deptName.Contains("neuro")) { iconClass = "bi-activity"; }
+                        else if (deptName.Contains("pediatric") || deptName.Contains("child")) { iconClass = "bi-emoji-smile"; }
+                        else { iconClass = "bi-capsule"; }
+
+                        <div class="col">
+                            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center department-card bg-white">
+
+                                <div class="dept-icon-box mx-auto mb-3 rounded-circle d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary">
+                                    <i class="bi @iconClass fs-2"></i>
+                                </div>
+
+
+                                <h5 class="fw-bold text-dark mb-2">@dept.Name</h5>
+                                <p class="text-muted fs-7 mb-0">
+                                    @(string.IsNullOrEmpty(dept.Description) ? "Specialized medical treatments with advanced equipment." : dept.Description)
+                                </p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </section>
+
+<!-- 4. Doctors Section -->
+<section class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+            <div>
+                <h2 class="display-6 fw-bold text-dark mt-1 mb-0">Meet Our Leading Specialists</h2>
+            </div>
+            <a href="/Patient/Home/AllDoctors" class="btn btn-outline-primary rounded-pill px-4 fw-semibold">
+                Show All Doctors <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        @await Html.PartialAsync("_DoctorListPartial", Model)
+    </div>
+</section>
+<!-- Blog Section -->
+<section class="py-5 bg-light" id="blog">
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
+            <div>
+                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-semibold text-uppercase mb-2">
+                    Latest News & Articles
+                </span>
+                <h2 class="fw-bold display-6 mb-0">Our Health Blog</h2>
+            </div>
+
+            <a href="@Url.Action("Index", "Blog", new { area = "Patient" })" class="btn btn-outline-primary rounded-pill px-4 fw-semibold">
+                Show All Articles <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            @if (ViewBag.LatestBlogs != null && ((IEnumerable<clinicManagementSystem.Models.BlogPost>)ViewBag.LatestBlogs).Any())
+            {
+                @foreach (var blog in (IEnumerable<clinicManagementSystem.Models.BlogPost>)ViewBag.LatestBlogs)
+                {
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card border-0 shadow-sm h-100 rounded-4 overflow-hidden">
+                            <div style="height: 200px; overflow: hidden;">
+                                @if (!string.IsNullOrEmpty(blog.Image))
+                                {
+                                    <img src="@blog.Image" class="card-img-top w-100 h-100" alt="@blog.Title" style="object-fit: cover; object-position: center;">
+                                }
+                                else
+                                {
+                                    <img src="/images/default-blog.jpg" class="card-img-top w-100 h-100" alt="Default Image" style="object-fit: cover; object-position: center;">
+                                }
+                            </div>
+                            <div class="card-body p-4 d-flex flex-column justify-content-between">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge @blog.BadgeClass px-3 py-1 rounded-pill">
+                                            @blog.Category
+                                        </span>
+                                        <small class="text-muted fs-8">
+                                            <i class="bi bi-clock me-1"></i> @blog.ReadTime
+                                        </small>
+                                    </div>
+                                    <h5 class="card-title fw-bold text-dark mt-2">@blog.Title</h5>
+                                    <small class="text-muted d-block mb-2">
+                                        By <strong>@blog.Author</strong> • @blog.CreatedDate.ToString("MMM dd, yyyy")
+                                    </small>
+                                </div>
+
+                                <a href="@Url.Action("Details", "Blog", new { area = "Patient", id = blog.Id })" class="btn btn-outline-primary rounded-pill mt-3 w-100 fw-semibold">
+                                    Read More <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center py-4">
+                    <p class="text-muted fs-6">No blog posts available at the moment.</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+
+
+<!-- 5. Contact Us Section -->
+<section id="contact" class="py-5 bg-light border-top">
+    <div class="container py-4">
+        <div class="row g-5">
+            <div class="col-lg-5">
+                <span class="text-primary fw-bold text-uppercase tracking-wide">Get In Touch</span>
+                <h2 class="display-6 fw-bold text-dark mt-1 mb-3">Contact Us</h2>
+                <p class="text-muted mb-4">Have questions? Reach out to our medical support team.</p>
+
+                <div class="d-flex flex-column gap-4">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-white shadow-sm rounded-circle d-flex align-items-center justify-content-center text-primary" style="width: 50px; height: 50px;">
+                            <i class="bi bi-geo-alt fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0 text-dark">Address</h6>
+                            <small class="text-muted">123 Health Street, Cairo, Egypt</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-white shadow-sm rounded-circle d-flex align-items-center justify-content-center text-primary" style="width: 50px; height: 50px;">
+                            <i class="bi bi-telephone fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0 text-dark">Phone</h6>
+                            <small class="text-muted">+20 123 456 7890</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="bg-white shadow-sm rounded-circle d-flex align-items-center justify-content-center text-primary" style="width: 50px; height: 50px;">
+                            <i class="bi bi-envelope fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0 text-dark">Email</h6>
+                            <small class="text-muted">support@healthcareportal.com</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="bg-white p-4 p-md-5 rounded-4 shadow-sm">
+                    <h4 class="fw-bold text-dark mb-4">Send Us a Message</h4>
+
+                    <form asp-action="SendContactMessage" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="text" name="Name" class="form-control form-control-lg rounded-3 fs-6" placeholder="Your Name" required />
+                            </div>
+                            <div class="col-md-6">
+                                <input type="email" name="Email" class="form-control form-control-lg rounded-3 fs-6" placeholder="Your Email" required />
+                            </div>
+                            <div class="col-12">
+                                <textarea name="Message" rows="4" class="form-control form-control-lg rounded-3 fs-6" placeholder="Message" required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary rounded-pill px-5 py-3 fw-semibold shadow-sm">
+                                    Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 @section Scripts {
     <script>
                     document.addEventListener("DOMContentLoaded", function () {
+
                         var heroCarousel = new bootstrap.Carousel(document.getElementById('heroCarousel'), {
                             interval: 5000,
                             ride: 'carousel',
                             pause: false
                         });
 
-                        
+
+                        var counterStarted = false;
+                        var counterElement = document.getElementById("yearsCounter");
+
+                        if (counterElement) {
+                            var targetNumber = parseInt(counterElement.getAttribute("data-target")) || 15;
+
+                            function startCounter() {
+                                var currentNumber = 0;
+                                var duration = 1800; 
+                                var stepTime = Math.abs(Math.floor(duration / targetNumber));
+
+                                var timer = setInterval(function () {
+                                    currentNumber += 1;
+                                    counterElement.textContent = currentNumber;
+                                    if (currentNumber >= targetNumber) {
+                                        clearInterval(timer);
+                                    }
+                                }, stepTime);
+                            }
+            window.addEventListener("scroll", function () {
+                                var position = counterElement.getBoundingClientRect();
+                                if (position.top < window.innerHeight && position.bottom >= 0 && !counterStarted) {
+                                    counterStarted = true;
+                                    startCounter();
+                                }
+                            });
                         }
                     });
     </script>

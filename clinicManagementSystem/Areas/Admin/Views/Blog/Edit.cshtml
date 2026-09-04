@@ -1,0 +1,76 @@
+﻿@model clinicManagementSystem.ViewModels.BlogPostCreateVM
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-warning text-dark py-3" style="background-color: #ffc107 !important;">
+        <h3 class="card-title font-weight-bold m-0 text-dark" style="font-size: 1.5rem;">Edit Article</h3>
+    </div>
+
+    <form asp-area="Admin" asp-controller="Blog" asp-action="Edit" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ExistingImagePath" />
+
+        <div class="card-body p-4">
+            <div class="form-group mb-4">
+                <label asp-for="Title" class="font-weight-bold text-dark mb-2">Article Title</label>
+                <input asp-for="Title" class="form-control" placeholder="Enter article title" />
+                <span asp-validation-for="Title" class="text-danger small d-block mt-1"></span>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <label asp-for="Category" class="font-weight-bold text-dark mb-2">Category</label>
+                    <input asp-for="Category" class="form-control" placeholder="e.g. Cardiology" />
+                    <span asp-validation-for="Category" class="text-danger small d-block mt-1"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Author" class="font-weight-bold text-dark mb-2">Select Doctor (Author)</label>
+                    <select asp-for="Author" asp-items="Model.DoctorsList" class="form-control custom-select">
+                        <option value="">-- Select Doctor --</option>
+                    </select>
+                    <span asp-validation-for="Author" class="text-danger small d-block mt-1"></span>
+                </div>
+            </div>
+
+            <div class="form-group mb-4">
+                <label asp-for="Content" class="font-weight-bold text-dark mb-2">Content</label>
+                <textarea asp-for="Content" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Content" class="text-danger small d-block mt-1"></span>
+            </div>
+
+            <div class="form-group mb-4">
+                <label class="font-weight-bold text-dark mb-2">Article Image</label>
+                <div class="d-flex align-items-center mb-3">
+                    <img src="@(string.IsNullOrEmpty(Model.ExistingImagePath) ? "/images/blogs/default.jpg" : Model.ExistingImagePath)"
+                         class="rounded border mr-3"
+                         style="width: 80px; height: 60px; object-fit: cover;"
+                         alt="Current Image" />
+                    <span class="text-muted small">Current active image</span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" asp-for="ImageFile" class="custom-file-input" id="customFile" accept="image/*">
+                    <label class="custom-file-label" for="customFile">Choose new image to replace...</label>
+                </div>
+                <span asp-validation-for="ImageFile" class="text-danger small d-block mt-1"></span>
+            </div>
+
+            <div class="pt-3">
+                <button type="submit" class="btn btn-warning px-4 py-2 font-weight-bold text-dark mr-2" style="background-color: #ffc107; border-color: #ffc107;">
+                    Update Changes
+                </button>
+                <a asp-area="Admin" asp-controller="Blog" asp-action="Index" class="btn btn-secondary px-4 py-2 font-weight-bold">
+                    Cancel
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/adminCreateBlog.js" asp-append-version="true"></script>
+}

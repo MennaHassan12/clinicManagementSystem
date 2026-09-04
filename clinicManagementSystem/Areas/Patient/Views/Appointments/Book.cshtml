@@ -11,17 +11,22 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm border-0 rounded-4 p-4">
-                <h3 class="fw-bold text-primary mb-4">Book an Appointment</h3>
+                <div class="d-flex align-items-center mb-4 gap-2">
+                    <a asp-area="Patient" asp-controller="Home" asp-action="AllDoctors" class="btn btn-sm btn-outline-secondary rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;" title="Back">
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+                    <h3 class="fw-bold text-primary mb-0">Book an Appointment</h3>
+                </div>
 
                 @if (TempData["error_notification"] != null)
                 {
-                    <div class="alert alert-danger mb-3">@TempData["error_notification"]</div>
+                    <div class="alert alert-danger mb-3 rounded-3">@TempData["error_notification"]</div>
                 }
 
-                <form asp-area="Patient" asp-controller="Appointments" asp-action="Book" method="post" onsubmit="return validateForm()">
+                <form id="patientBookingForm" asp-area="Patient" asp-controller="Appointments" asp-action="Book" method="post">
                     @Html.AntiForgeryToken()
 
-                    <input type="hidden" id="DoctorId" name="DoctorId" value="@Model?.DoctorId" />
+                    <input type="hidden" asp-for="DoctorId" id="DoctorId" />
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Doctor</label>
@@ -32,7 +37,7 @@
                         <label class="form-label fw-bold">Select Working Shift / Day</label>
                         @if (Model?.AvailableSchedules != null && Model.AvailableSchedules.Any())
                         {
-                            <select id="DoctorScheduleId" name="DoctorScheduleId" class="form-select" onchange="updateShiftAndReload()" required>
+                            <select asp-for="DoctorScheduleId" id="DoctorScheduleId" class="form-select">
                                 @foreach (var schedule in Model.AvailableSchedules)
                                 {
                                     bool isSelected = Model.DoctorScheduleId == schedule.DoctorScheduleId;
@@ -41,6 +46,7 @@
                                     </option>
                                 }
                             </select>
+                            <span asp-validation-for="DoctorScheduleId" class="text-danger small d-block mt-1"></span>
                         }
                         else
                         {
@@ -49,31 +55,50 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Patient Name</label>
-                        <input type="text" name="PatientName" id="PatientName" class="form-control" value="@Model?.PatientName" placeholder="Enter patient full name" required />
+                        <label class="form-label fw-bold">Patient Name *</label>
+                        <input asp-for="PatientName" id="PatientName" class="form-control" placeholder="Enter patient full name" />
+                        <span asp-validation-for="PatientName" class="text-danger small d-block mt-1"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Email Address</label>
-                        <input type="email" name="PatientEmail" id="PatientEmail" class="form-control" value="@Model?.PatientEmail" placeholder="example@domain.com" required />
+                        <label class="form-label fw-bold">Email Address *</label>
+                        <input asp-for="PatientEmail" id="PatientEmail" class="form-control" placeholder="example@domain.com" />
+                        <span asp-validation-for="PatientEmail" class="text-danger small d-block mt-1"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Select Date</label>
-                        <input type="date" name="appointmentDate" id="appointmentDate" class="form-control" value="@Model?.AppointmentDate" onchange="validateAndReloadDate()" required />
+                        <label class="form-label fw-bold">Phone Number *</label>
+                        <input asp-for="PatientPhone" id="PatientPhone" class="form-control" placeholder="Enter phone number" />
+                        <span asp-validation-for="PatientPhone" class="text-danger small d-block mt-1"></span>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Date of Birth *</label>
+                        <input asp-for="BirthDate" type="date" id="BirthDate" class="form-control" />
+                        <span asp-validation-for="BirthDate" class="text-danger small d-block mt-1"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Select Time Slot</label>
+                        <label class="form-label fw-bold">Select Date *</label>
+                        <input asp-for="AppointmentDate" type="date" id="appointmentDate" class="form-control" 
+                               data-target-day="@selectedDayOfWeek" 
+                               data-default-date="@Model?.AppointmentDate" />
+                        <span asp-validation-for="AppointmentDate" class="text-danger small d-block mt-1"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Select Time Slot *</label>
                         @if (timeSlots.Any())
-{
-                            <select name="appointmentTime" class="form-select" required>
+                        {
+                            <select name="appointmentTime" id="appointmentTime" class="form-select" required>
                                 <option value="">-- Choose Time Slot --</option>
                                 @foreach (var slot in timeSlots)
                                 {
                                     <option value="@slot.Value">@slot.Text</option>
                                 }
                             </select>
+                            <span asp-validation-for="AppointmentTime" class="text-danger small d-block mt-1"></span>
                         }
                         else
                         {
@@ -85,17 +110,17 @@
 
                     <div class="mb-4">
                         <label class="form-label fw-bold">Notes / Symptoms (Optional)</label>
-                        <textarea name="Notes" id="Notes" class="form-control" rows="3" placeholder="Describe your symptoms...">@Model?.Notes</textarea>
+                        <textarea asp-for="Notes" id="Notes" class="form-control" rows="3" placeholder="Describe your symptoms..."></textarea>
+                        <span asp-validation-for="Notes" class="text-danger small d-block mt-1"></span>
                     </div>
 
                     <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm" @(timeSlots.Any() ? "" : "disabled")>
-                            Confirm & Book
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm rounded-pill" @(timeSlots.Any() ? "" : "disabled")>
+                            <i class="bi bi-calendar-check me-1"></i> Confirm & Book
                         </button>
-                        <a href="@Url.Action("Index", "Home", new { area = "Patient" })"
-   class="btn btn-outline-secondary px-4 py-2 fw-semibold">
-    Cancel
-</a>
+                        <a asp-area="Patient" asp-controller="Home" asp-action="AllDoctors" class="btn btn-outline-secondary px-4 py-2 fw-semibold rounded-pill">
+                            Cancel
+                        </a>
                     </div>
                 </form>
             </div>
@@ -103,51 +128,7 @@
     </div>
 </div>
 
-<script>
-    var targetDayOfWeek = @selectedDayOfWeek;
-
-    function updateShiftAndReload() {
-        var doctorId = document.getElementById('DoctorId').value;
-        var scheduleId = document.getElementById('DoctorScheduleId').value;
-        var timeStamp = new Date().getTime();
-
-        window.location.href = /Patient/Appointments/Book?doctorId=${doctorId}&scheduleId=${scheduleId}&_=${timeStamp};
-    }
-
-    function validateAndReloadDate() {
-        var dateInput = document.getElementById('appointmentDate');
-
-        if (dateInput.value) {
-            var parts = dateInput.value.split('-');
-            var selectedDate = new Date(parts[0], parts[1] - 1, parts[2]);
-            var day = selectedDate.getDay();
-
-            if (day !== targetDayOfWeek) {
-                alert("The selected date does not match the shift day. Please choose a valid date for this shift.");
-                dateInput.value = "@Model?.AppointmentDate";
-                return;
-            }
-        }
-
-        var doctorId = document.getElementById('DoctorId').value;
-        var scheduleId = document.getElementById('DoctorScheduleId').value;
-        var date = dateInput.value;
-        var timeStamp = new Date().getTime();
-
-        window.location.href = /Patient/Appointments/Book?doctorId=${doctorId}&scheduleId=${scheduleId}&date=${date}&_=${timeStamp};
-    }
-
-    function validateForm() {
-        var dateInput = document.getElementById('appointmentDate');
-        if (dateInput.value) {
-            var parts = dateInput.value.split('-');
-            var selectedDate = new Date(parts[0], parts[1] - 1, parts[2]);
-            var day = selectedDate.getDay();
-            if (day !== targetDayOfWeek) {
-                alert("Date day does not match shift day!");
-                return false;
-            }
-        }
-        return true;
-    }
-</script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/patientBookAppointment.js" asp-append-version="true"></script>
+}

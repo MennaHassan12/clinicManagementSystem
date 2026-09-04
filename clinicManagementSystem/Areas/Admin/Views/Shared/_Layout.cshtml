@@ -1,8 +1,4 @@
 ﻿<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -15,6 +11,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 </head>
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
@@ -68,7 +67,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
             <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
+                <!-- Sidebar user panel -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
                         <img src="~/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
@@ -98,70 +97,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         data-accordion="false">
 
                         <li class="nav-item">
-                            <a asp-area="Admin"
-                               asp-controller="Dashboard"
-                               asp-action="Index"
-                               class="nav-link active">
+                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a asp-area="Admin"
-                               asp-controller="Department"
-                               asp-action="Index"
-                               class="nav-link">
+                            <a asp-area="Admin" asp-controller="Department" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fas fa-hospital"></i>
                                 <p>Departments</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a asp-area="Admin"
-                               asp-controller="Doctor"
-                               asp-action="Index"
-                               class="nav-link">
+                            <a asp-area="Admin" asp-controller="Doctor" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fas fa-user-md"></i>
                                 <p>Doctors</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a asp-area="Admin"
-                               asp-controller="Patient"
-                               asp-action="Index"
-                               class="nav-link">
+                            <a asp-area="Admin" asp-controller="Patient" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fas fa-user-injured"></i>
                                 <p>Patients</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a asp-area="Admin"
-                               asp-controller="Appointment"
-                               asp-action="Index"
-                               class="nav-link">
+                            <a asp-area="Admin" asp-controller="Appointment" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fas fa-calendar-check"></i>
                                 <p>Appointments</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a asp-area="Admin"
-                               asp-controller="MedicalFile"
-                               asp-action="Index"
-                               class="nav-link">
+                            <a asp-area="Admin" asp-controller="MedicalFile" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fas fa-folder-open"></i>
                                 <p>Medical Files</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a asp-area="Admin"
-                               asp-controller="Review"
-                               asp-action="Index"
-                               class="nav-link">
+                            <a asp-area="Admin" asp-controller="Review" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fas fa-star"></i>
                                 <p>Reviews</p>
                             </a>
@@ -179,72 +157,63 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                     </ul>
                 </nav>
-                <!-- /.sidebar-menu -->
             </div>
-            <!-- /.sidebar -->
         </aside>
 
-        <!-- Content Wrapper. Contains page content -->
+        <!-- Content Wrapper -->
         <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
             <div class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Dashboard</h1>
-                        </div><!-- /.col -->
+                            <h1 class="m-0">@ViewData["Title"]</h1>
+                        </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Dashboard</li>
+                                <li class="breadcrumb-item active">@ViewData["Title"]</li>
                             </ol>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- /.content-header -->
-            <!-- Main content -->
 
+            <!-- Main content -->
             <div class="content">
                 <div class="container-fluid">
                     @RenderBody()
                 </div>
             </div>
-
-            <!-- /.content -->
         </div>
-        <!-- /.content-wrapper -->
+
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
             <div class="p-3">
                 <h5>Title</h5>
                 <p>Sidebar content</p>
             </div>
         </aside>
-        <!-- /.control-sidebar -->
+
         <!-- Main Footer -->
         <footer class="main-footer">
-
-            <strong>
-                © 2026 Clinic Management System
-            </strong>
-
+            <strong>© 2026 Clinic Management System</strong>
             <div class="float-right d-none d-sm-inline">
                 Developed by FCAI Team
             </div>
-
         </footer>
     </div>
-    <!-- ./wrapper -->
-    <!-- REQUIRED SCRIPTS -->
-    <!-- jQuery -->
-    <script src="~/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="~/dist/js/adminlte.min.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 
+    <!-- REQUIRED SCRIPTS -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/dist/js/adminlte.min.js"></script>
+
+    <!-- Toastr JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- Render Notifications Partial -->
+    <partial name="_NotificationPartial" />
+
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
