@@ -9,6 +9,7 @@ using DoctorModel = clinicManagementSystem.Models.Doctor;
 namespace clinicManagementSystem.Areas.Patient.Controllers
 {
     [Area("Patient")]
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly IRepository<Department> _departmentRepo;

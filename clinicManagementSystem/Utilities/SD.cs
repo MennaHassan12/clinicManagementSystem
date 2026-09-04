@@ -8,5 +8,10 @@
         public const string IDENTITY_AREA = "Identity";
 
         public const string ACCOUNT_CONTROLER = "Account";
+
+        public const string ROLE_SUPER_ADMIN = "SuperAdmin";
+        public const string ROLE_ADMIN = "Admin";
+        public const string ROLE_DOCTOR = "Doctor";
+        public const string ROLE_PATIENT = "Patient";
     }
 }

@@ -1,4 +1,11 @@
 ﻿@using clinicManagementSystem
 @using clinicManagementSystem.Models
 @using clinicManagementSystem.ViewModels
+@using Microsoft.AspNetCore.Identity
+@using clinicManagementSystem.Models
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    bool isAdminOrSuperAdmin = User.IsInRole("Admin") || User.IsInRole("SuperAdmin");
+}
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

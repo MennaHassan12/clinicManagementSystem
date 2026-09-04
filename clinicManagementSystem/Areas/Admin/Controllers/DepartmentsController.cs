@@ -1,10 +1,12 @@
 ﻿using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Policy = "RequireAdminOrSuperAdmin")]
     public class DepartmentsController : Controller
     {
         private readonly IRepository<Department> _departmentRepository;

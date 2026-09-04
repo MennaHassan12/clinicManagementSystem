@@ -4,6 +4,8 @@ using clinicManagementSystem.ViewModels;
 using clinicManagementSystem.Repositories.IRepositories;
 using clinicManagementSystem.Services.IServices;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text.RegularExpressions;
 
 using PatientModel = clinicManagementSystem.Models.Patient;
@@ -13,6 +15,7 @@ using clinicManagementSystem.Models;
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Policy = "RequireAdminOrSuperAdmin")]
     public class AppointmentsController : Controller
     {
         private readonly IRepository<Appointment> _appointmentRepo;

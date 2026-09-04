@@ -14,6 +14,7 @@ using DoctorModel = clinicManagementSystem.Models.Doctor;
 namespace clinicManagementSystem.Areas.Patient.Controllers
 {
     [Area("Patient")]
+    [Authorize(Policy = "RequirePatient")]
     public class AppointmentsController : Controller
     {
         private readonly IRepository<Appointment> _appointmentRepo;

@@ -1,5 +1,6 @@
 ﻿using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
@@ -8,6 +9,7 @@ using PatientModel = clinicManagementSystem.Models.Patient;
 namespace clinicManagementSystem.Areas.Patient.Controllers
 {
     [Area("Patient")]
+    [Authorize(Policy = "RequirePatient")]
     public class MedicalFilesController : Controller
     {
         private readonly IRepository<MedicalFile> _medicalFileRepository;
