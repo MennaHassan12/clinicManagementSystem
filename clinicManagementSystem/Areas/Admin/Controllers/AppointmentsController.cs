@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text.RegularExpressions;
 
+using PatientModel = clinicManagementSystem.Models.Patient;
+using DoctorModel = clinicManagementSystem.Models.Doctor;
+using clinicManagementSystem.Models;
+using Microsoft.AspNetCore.Authorization;
+
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]

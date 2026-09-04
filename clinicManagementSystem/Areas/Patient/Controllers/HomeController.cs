@@ -7,6 +7,9 @@ using Microsoft.Extensions.Configuration;
 using clinicManagementSystem.Data;
 using clinicManagementSystem.Models;
 using clinicManagementSystem.ViewModels;
+using clinicManagementSystem.Repositories.IRepositories;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using DoctorModel = clinicManagementSystem.Models.Doctor;
 using Microsoft.AspNetCore.Authorization;
 
 namespace clinicManagementSystem.Areas.Patient.Controllers

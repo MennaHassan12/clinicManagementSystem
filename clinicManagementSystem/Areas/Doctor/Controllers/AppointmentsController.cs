@@ -6,11 +6,12 @@ using System.Security.Claims;
 using clinicManagementSystem.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace clinicManagementSystem.Areas.Doctor.Controllers
 {
     [Area("Doctor")]
-    [Authorize(Policy = "RequireDoctor")]
+    [Authorize(Policy = "RequireDoctorRole")]
     public class AppointmentsController : Controller
     {
         private readonly IRepository<Appointment> _appointmentRepo;
