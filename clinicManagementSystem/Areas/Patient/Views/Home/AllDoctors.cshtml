@@ -1,1 +1,51 @@
-﻿
+﻿@model IEnumerable<clinicManagementSystem.Models.Doctor>
+@{
+    Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "All Doctors";
+}
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">Find Your Healthcare Provider</h2>
+            <p class="text-muted">Explore our full directory of experienced medical professionals</p>
+        </div>
+
+
+        <form method="get" action="/Patient/Home/AllDoctors" id="filterForm" class="card border-0 shadow-sm rounded-4 p-3 mb-5 bg-white">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-5">
+                    <input type="text" name="searchTerm" id="searchInput" class="form-control bg-light"
+                           placeholder="Search by doctor name or keyword..." value="@ViewBag.CurrentSearch" />
+                </div>
+                <div class="col-md-4">
+                    <select name="departmentId" id="departmentSelect" class="form-select bg-light">
+                        <option value="0">All Specialties</option>
+                        @if (ViewBag.Departments != null)
+                        {
+                            foreach (var dept in ViewBag.Departments)
+                            {
+                                var isSelected = ViewBag.CurrentDepartment != null && (int)ViewBag.CurrentDepartment == dept.DepartmentId;
+                                <option value="@dept.DepartmentId" selected="@isSelected">@dept.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+
+                    <button type="submit" class="btn btn-primary w-100 rounded-3 fw-bold">
+                        <i class="bi bi-search me-1"></i> Find
+                    </button>
+
+                    <a href="/Patient/Home/AllDoctors" class="btn btn-outline-secondary rounded-3 fw-bold px-3" title="Reset Filters">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
+
+        <div id="doctorListContainer">
+            @await Html.PartialAsync("_DoctorListPartial", Model)
+        </div>
+    </div>
+</section>

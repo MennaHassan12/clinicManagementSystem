@@ -1,0 +1,83 @@
+﻿@model IEnumerable<clinicManagementSystem.Models.BlogPost>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="text-primary font-weight-bold mb-1">Blog Directory</h1>
+        <p class="text-muted mb-0">Manage blog articles and department content</p>
+    </div>
+    <div>
+        <a href="/Admin/Blog/Create" class="btn btn-primary px-4 py-2 font-weight-bold rounded-lg shadow-sm">
+            + Add New Article
+        </a>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm rounded-lg">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light text-uppercase text-secondary small font-weight-bold border-bottom">
+                    <tr>
+                        <th class="py-3 px-4 border-0">ARTICLE / AUTHOR</th>
+                        <th class="py-3 border-0">CATEGORY</th>
+                        <th class="py-3 border-0">DATE</th>
+                        <th class="py-3 text-right px-4 border-0" style="width: 180px;">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-muted">No blog posts found.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr class="border-bottom">
+                                <td class="py-3 px-4">
+                                    <div class="d-flex align-items-center">
+                                        <img src="@(string.IsNullOrEmpty(item.Image) ? "/images/blogs/default.jpg" : item.Image)"
+                                             class="rounded-circle mr-3"
+                                             style="width: 48px; height: 48px; object-fit: cover;"
+                                             alt="Article Image" />
+                                        <div>
+                                            <div class="font-weight-bold text-dark">@item.Title</div>
+                                            <small class="text-muted">By @item.Author | ID: #@item.Id</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle">
+                                    <span class="badge badge-info px-3 py-2 font-weight-normal" style="background-color: #e0f7fa; color: #00838f; border-radius: 12px;">
+                                        @item.Category
+                                    </span>
+                                </td>
+                                <td class="align-middle text-muted">
+                                    @item.CreatedDate.ToString("yyyy-MM-dd")
+                                </td>
+                                <td class="align-middle text-right px-4">
+                                    <div class="d-inline-flex">
+                                        <a href="/Admin/Blog/Edit/@item.Id" class="btn btn-sm btn-outline-warning mr-2 px-3">
+                                            Edit
+                                        </a>
+                                        <form asp-area="Admin" asp-controller="Blog" asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this article?');">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-outline-danger px-3">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

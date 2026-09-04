@@ -1,0 +1,41 @@
+﻿@model clinicManagementSystem.Models.BlogPost
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <a href="@Url.Action("Index", "Blog", new { area = "Patient" })" class="btn btn-link text-decoration-none p-0 mb-4 fw-semibold">
+                <i class="bi bi-arrow-left me-1"></i> Back to All Articles
+            </a>
+
+            <div class="mb-3">
+                <span class="badge @Model.BadgeClass px-3 py-2 rounded-pill">
+                    @Model.Category
+                </span>
+            </div>
+
+            <h1 class="fw-bold display-6 mb-3">@Model.Title</h1>
+
+            <div class="d-flex align-items-center text-muted mb-4 fs-7 border-bottom pb-3">
+                <span class="me-3"><i class="bi bi-person me-1"></i> By <strong>@Model.Author</strong></span>
+                <span class="me-3"><i class="bi bi-calendar3 me-1"></i> @Model.CreatedDate.ToString("MMMM dd, yyyy")</span>
+                <span><i class="bi bi-clock me-1"></i> @Model.ReadTime</span>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Image))
+            {
+                <div class="mb-4 rounded-4 overflow-hidden shadow-sm" style="max-height: 400px;">
+                    <img src="@Model.Image" class="w-100 h-100" style="object-fit: cover;" alt="@Model.Title" />
+                </div>
+            }
+
+            <div class="blog-content leading-relaxed fs-6 text-dark" style="white-space: pre-line;">
+                @Html.Raw(Model.Content)
+            </div>
+        </div>
+    </div>
+</div>

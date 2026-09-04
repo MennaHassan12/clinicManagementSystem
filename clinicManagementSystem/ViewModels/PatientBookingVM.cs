@@ -12,11 +12,18 @@ namespace clinicManagementSystem.ViewModels
         [Required(ErrorMessage = "Patient Name is required.")]
         public string PatientName { get; set; }
 
+        [Required(ErrorMessage = "Date of Birth is required")]
+        [DataType(DataType.Date)]
+        public string BirthDate { get; set; }
+
+
         [Required(ErrorMessage = "Email Address is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string PatientEmail { get; set; }
 
-        
+        [Required(ErrorMessage = "Phone number is required.")]
+        [Phone(ErrorMessage = "Invalid phone number.")]
+        public string PatientPhone { get; set; } = null!;
         public string AppointmentDate { get; set; } = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
 
         public string AppointmentTime { get; set; } = DateTime.Now.ToString("HH:mm");

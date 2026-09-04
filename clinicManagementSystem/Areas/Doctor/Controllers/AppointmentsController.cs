@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
-using Microsoft.AspNetCore.Identity.UI.Services;
+using clinicManagementSystem.Services.IServices;
 using System.Security.Claims;
 using clinicManagementSystem.Utilities;
-using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 
@@ -16,16 +15,16 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
     {
         private readonly IRepository<Appointment> _appointmentRepo;
         private readonly IRepository<clinicManagementSystem.Models.Doctor> _doctorRepo;
-        private readonly IEmailSender _emailSender;
+        private readonly IAppointmentService _appointmentService;
 
         public AppointmentsController(
             IRepository<Appointment> appointmentRepo,
             IRepository<clinicManagementSystem.Models.Doctor> doctorRepo,
-            IEmailSender emailSender)
+            IAppointmentService appointmentService)
         {
             _appointmentRepo = appointmentRepo;
             _doctorRepo = doctorRepo;
-            _emailSender = emailSender;
+            _appointmentService = appointmentService;
         }
 
         [HttpGet]
@@ -76,10 +75,11 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 }
 
                 fullAppointment.Status = status;
-                try { _appointmentRepo.Update(fullAppointment); } catch { }
+                _appointmentRepo.Update(fullAppointment);
                 await _appointmentRepo.CommitAsync();
 
                 string? targetEmail = null;
+                string? targetPatientName = null;
 
                 if (!string.IsNullOrWhiteSpace(fullAppointment.Notes))
                 {
@@ -92,31 +92,47 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                     {
                         targetEmail = match.Value;
                     }
+                    if (fullAppointment.Notes.StartsWith("Patient:"))
+                    {
+                        var parts = fullAppointment.Notes.Split('-');
+                        var namePart = parts[0].Replace("Patient:", "").Trim();
+
+                        if (namePart.Contains('|'))
+                        {
+                            namePart = namePart.Split('|')[0].Trim();
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(namePart))
+                        {
+                            targetPatientName = namePart;
+                        }
+                    }
                 }
+
                 if (string.IsNullOrWhiteSpace(targetEmail))
                 {
                     targetEmail = fullAppointment.Patient?.ApplicationUser?.Email;
+                }
+
+                if (string.IsNullOrWhiteSpace(targetPatientName))
+                {
+                    targetPatientName = fullAppointment.Patient?.ApplicationUser?.FullName ?? "Patient";
                 }
 
                 if (!string.IsNullOrEmpty(targetEmail))
                 {
                     try
                     {
-                        var doctorName = fullAppointment.Doctor?.ApplicationUser?.FullName ?? "your doctor";
-                        var patientName = fullAppointment.Patient?.ApplicationUser?.FullName ?? "Patient";
+                        var doctorName = fullAppointment.Doctor?.ApplicationUser?.FullName ?? "Doctor";
 
-                        string emailBody = $@"
-                            <div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 10px;'>
-                                <h2 style='color: #0d6efd;'>Appointment Status Update</h2>
-                                <p>Dear <b>{patientName}</b>,</p>
-                                <p>Your appointment status with <b>{doctorName}</b> has been updated to: <b style='color: #198754; font-size: 16px;'>{status}</b>.</p>
-                                <p><b>Appointment Date:</b> {fullAppointment.AppointmentDate:dd MMMM, yyyy}</p>
-                                <p><b>Appointment Time:</b> {fullAppointment.AppointmentTime}</p>
-                                <br/>
-                                <p style='color: #6c757d; font-size: 12px;'>Thank you for choosing Clinic Management System.</p>
-                            </div>";
+                        await _appointmentService.SendAppointmentStatusUpdateAsync(
+                            toEmail: targetEmail,
+                            patientName: targetPatientName,
+                            doctorName: doctorName,
+                            date: fullAppointment.AppointmentDate,
+                            status: status
+                        );
 
-                        await _emailSender.SendEmailAsync(targetEmail, $"Appointment Update - {status}", emailBody);
                         TempData["success_notification"] = $"Appointment status updated to {status} and email sent successfully!";
                     }
                     catch

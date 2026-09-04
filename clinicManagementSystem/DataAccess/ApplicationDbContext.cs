@@ -28,7 +28,7 @@ namespace clinicManagementSystem.Data
         public DbSet<Prescription> Prescriptions { get; set; }
         public DbSet<ApplicationUserOTP> ApplicationUserOTPs { get; set; }
 
-
+        public DbSet<BlogPost> BlogPosts { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

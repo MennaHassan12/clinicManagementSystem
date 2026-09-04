@@ -6,6 +6,7 @@ using clinicManagementSystem.Repositories.IRepositories;
 using clinicManagementSystem.Services; 
 using clinicManagementSystem.Services.IServices; 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace clinicManagementSystem
@@ -66,6 +67,8 @@ namespace clinicManagementSystem
 
             builder.Services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, clinicManagementSystem.Utilities.EmailSender>();
 
+            builder.Services.AddScoped<IDoctorService, DoctorService>();
+            builder.Services.AddScoped<IAppointmentService, AppointmentService>();
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
