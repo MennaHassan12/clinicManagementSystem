@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using PatientModel = clinicManagementSystem.Models.Patient;
 using DoctorModel = clinicManagementSystem.Models.Doctor;
 using clinicManagementSystem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {

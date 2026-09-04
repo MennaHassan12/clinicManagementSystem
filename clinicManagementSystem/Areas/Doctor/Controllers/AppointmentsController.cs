@@ -5,6 +5,7 @@ using clinicManagementSystem.Services.IServices;
 using System.Security.Claims;
 using clinicManagementSystem.Utilities;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace clinicManagementSystem.Areas.Doctor.Controllers
 {
