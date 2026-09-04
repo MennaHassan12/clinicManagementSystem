@@ -1,1 +1,101 @@
-﻿
+﻿@model IEnumerable<clinicManagementSystem.Models.Doctor>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var doctor in Model)
+        {
+
+            var rawName = doctor.ApplicationUser != null && !string.IsNullOrEmpty(doctor.ApplicationUser.FullName)
+                ? doctor.ApplicationUser.FullName.Trim()
+                : "Medical Specialist";
+
+
+            if (rawName.StartsWith("Dr. ", StringComparison.OrdinalIgnoreCase))
+            {
+                rawName = rawName.Substring(4).Trim();
+            }
+            else if (rawName.StartsWith("Dr.", StringComparison.OrdinalIgnoreCase))
+            {
+                rawName = rawName.Substring(3).Trim();
+            }
+            else if (rawName.StartsWith("Dr ", StringComparison.OrdinalIgnoreCase))
+            {
+                rawName = rawName.Substring(3).Trim();
+            }
+
+            var displayName = $"Dr. {rawName}";
+
+
+            string imageSrc = "";
+            if (!string.IsNullOrEmpty(doctor.Image))
+            {
+                if (doctor.Image.StartsWith("http") || doctor.Image.StartsWith("/"))
+                {
+                    imageSrc = doctor.Image;
+                }
+                else
+                {
+                    imageSrc = $"/images/doctors/{doctor.Image}";
+                }
+            }
+
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-3 bg-white">
+                    <div class="d-flex align-items-center gap-3">
+
+                        @if (!string.IsNullOrEmpty(imageSrc))
+                        {
+                            <img src="@imageSrc"
+                                 class="rounded-circle border shadow-sm"
+                                 style="width: 85px; height: 85px; object-fit: cover;"
+                                 alt="@displayName"
+                                 onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+
+                            <div class="rounded-circle bg-light border align-items-center justify-content-center shadow-sm"
+                                 style="width: 85px; height: 85px; flex-shrink: 0; display: none;">
+                                <i class="bi bi-person-fill text-secondary fs-1"></i>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center border shadow-sm"
+                                 style="width: 85px; height: 85px; flex-shrink: 0;">
+                                <i class="bi bi-person-fill text-secondary fs-1"></i>
+                            </div>
+                        }
+
+                        <div class="flex-grow-1">
+                            <span class="badge bg-light text-primary px-3 py-1 rounded-pill mb-1">
+                                @(doctor.Department?.Name ?? "General")
+                            </span>
+                            <h5 class="fw-bold mb-1 text-dark">@displayName</h5>
+                            <small class="text-muted d-block mb-1">
+                                <i class="bi bi-award me-1"></i> @doctor.YearsOfExperience Years Experience
+                            </small>
+                            <small class="text-muted d-block mb-2">
+                                <i class="bi bi-cash me-1"></i> Fee: @doctor.ConsultationFee EGP
+                            </small>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 mt-3 pt-2 border-top">
+                        <a href="/Patient/Appointments/DoctorDetails/@doctor.DoctorId" class="btn btn-outline-secondary w-50 rounded-pill fw-bold">
+                            View Details
+                        </a>
+                        <a href="/Patient/Appointments/Book?doctorId=@doctor.DoctorId" class="btn btn-primary w-50 rounded-pill fw-bold text-center">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-person-x fs-1 text-muted d-block mb-2"></i>
+            <h5 class="text-muted fw-bold">No Doctors Found</h5>
+            <p class="text-muted small">Try searching with a different doctor name or specialty.</p>
+        </div>
+    }
+</div>

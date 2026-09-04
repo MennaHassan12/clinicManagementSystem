@@ -11,31 +11,32 @@
             <h4 class="mb-0 fw-bold"><i class="bi bi-person-plus-fill me-2"></i>Add New Doctor</h4>
         </div>
         <div class="card-body p-4">
+
             <form asp-area="Admin" asp-controller="Doctors" asp-action="Create" method="post" enctype="multipart/form-data">
-                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Doctor Name</label>
                         <input asp-for="Name" class="form-control" placeholder="Enter doctor full name" />
-                        <span asp-validation-for="Name" class="text-danger small"></span>
+                        <span asp-validation-for="Name" class="text-danger small d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Email Address (For Login)</label>
                         <input asp-for="Email" class="form-control" placeholder="doctor@example.com" />
-                        <span asp-validation-for="Email" class="text-danger small"></span>
+                        <span asp-validation-for="Email" class="text-danger small d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Phone Number</label>
                         <input asp-for="Phone" class="form-control" placeholder="Enter phone number" />
-                        <span asp-validation-for="Phone" class="text-danger small"></span>
+                        <span asp-validation-for="Phone" class="text-danger small d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">License Number</label>
                         <input asp-for="LicenseNumber" type="number" min="1" class="form-control" placeholder="e.g. 102030" />
-                        <span asp-validation-for="LicenseNumber" class="text-danger small"></span>
+                        <span asp-validation-for="LicenseNumber" class="text-danger small d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-6">
@@ -43,31 +44,30 @@
                         <select asp-for="DepartmentId" asp-items="Model.Departments" class="form-select">
                             <option value="">-- Select Department (Optional) --</option>
                         </select>
-                        <span asp-validation-for="DepartmentId" class="text-danger small"></span>
+                        <span asp-validation-for="DepartmentId" class="text-danger small d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Consultation Fee ($)</label>
                         <input asp-for="ConsultationFee" type="number" step="0.01" min="0" class="form-control" placeholder="0.00" />
-                        <span asp-validation-for="ConsultationFee" class="text-danger small"></span>
+                        <span asp-validation-for="ConsultationFee" class="text-danger small d-block mt-1"></span>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label fw-semibold">Years Of Experience</label>
                         <input asp-for="YearsOfExperience" type="number" min="0" class="form-control" placeholder="e.g. 5" />
-                        <span asp-validation-for="YearsOfExperience" class="text-danger small"></span>
+                        <span asp-validation-for="YearsOfExperience" class="text-danger small d-block mt-1"></span>
                     </div>
 
                     <div class="col-12">
                         <label class="form-label fw-semibold">Doctor Bio</label>
                         <textarea asp-for="Bio" class="form-control" rows="2" placeholder="Brief summary about doctor background..."></textarea>
-                        <span asp-validation-for="Bio" class="text-danger small"></span>
+                        <span asp-validation-for="Bio" class="text-danger small d-block mt-1"></span>
                     </div>
-
                     <div class="col-12">
-<label class="form-label fw-semibold">Doctor Image</label>
+                        <label class="form-label fw-semibold">Doctor Image</label>
                         <input type="file" asp-for="Photo" class="form-control" accept="image/*" />
-                        <span asp-validation-for="Photo" class="text-danger small"></span>
+                        <span asp-validation-for="Photo" class="text-danger small d-block mt-1"></span>
                     </div>
 
                     <div class="col-12">
