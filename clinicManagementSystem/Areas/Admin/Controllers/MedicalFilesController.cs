@@ -1,12 +1,15 @@
-﻿using clinicManagementSystem.Models;
+using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
+using clinicManagementSystem.Utilities;
+using clinicManagementSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
-using clinicManagementSystem.ViewModels;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area(SD.ADMIN_AREA)]
+    [Authorize]
     public class MedicalFilesController : Controller
     {
         private readonly IRepository<MedicalFile> _medicalFileRepository;
@@ -14,16 +17,18 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
         private readonly IWebHostEnvironment _environment;
 
         public MedicalFilesController(
-    IRepository<MedicalFile> medicalFileRepository,
-    IRepository<MedicalRecord> medicalRecordRepository,
-    IWebHostEnvironment environment)
+            IRepository<MedicalFile> medicalFileRepository,
+            IRepository<MedicalRecord> medicalRecordRepository,
+            IWebHostEnvironment environment)
         {
             _medicalFileRepository = medicalFileRepository;
             _medicalRecordRepository = medicalRecordRepository;
             _environment = environment;
         }
 
-        // GET: Admin/MedicalFiles
+        // =========================
+        // INDEX
+        // =========================
         public async Task<IActionResult> Index()
         {
             var medicalFiles = await _medicalFileRepository.GetAsync(
@@ -38,7 +43,9 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             return View(medicalFiles);
         }
 
-        // GET: Admin/MedicalFiles/Create
+        // =========================
+        // CREATE - GET
+        // =========================
         public async Task<IActionResult> Create()
         {
             await LoadMedicalRecords();
@@ -49,7 +56,9 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             });
         }
 
-        // POST: Admin/MedicalFiles/Create
+        // =========================
+        // CREATE - POST
+        // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MedicalFileVM model)
@@ -70,11 +79,11 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
 
             var allowedExtensions = new[]
             {
-        ".pdf",
-        ".jpg",
-        ".jpeg",
-        ".png"
-    };
+                ".pdf",
+                ".jpg",
+                ".jpeg",
+                ".png"
+            };
 
             var extension = Path
                 .GetExtension(model.File!.FileName)
@@ -162,7 +171,9 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             }
         }
 
-        // GET: Admin/MedicalFiles/Edit/5
+        // =========================
+        // EDIT - GET
+        // =========================
         public async Task<IActionResult> Edit(int id)
         {
             var medicalFile = await _medicalFileRepository.GetOneAsync(
@@ -180,24 +191,86 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             return View(medicalFile);
         }
 
-        // POST: Admin/MedicalFiles/Edit/5
+        // =========================
+        // EDIT - POST
+        // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, MedicalFile medicalFile)
+        public async Task<IActionResult> Edit(
+            int id,
+            int MedicalRecordId,
+            DateTime UploadDate,
+            IFormFile? uploadedFile)
         {
-            if (id != medicalFile.MedicalFileId)
+            var existingFile = await _medicalFileRepository.GetOneAsync(
+                f => f.MedicalFileId == id
+            );
+
+            if (existingFile == null)
             {
                 return NotFound();
             }
 
-            if (!ModelState.IsValid)
+            if (MedicalRecordId <= 0)
             {
-                await LoadMedicalRecords(medicalFile.MedicalRecordId);
-
-                return View(medicalFile);
+                TempData["Error"] = "Please select a medical record.";
+                await LoadMedicalRecords(MedicalRecordId);
+                return View(existingFile);
             }
 
-            _medicalFileRepository.Update(medicalFile);
+            existingFile.MedicalRecordId = MedicalRecordId;
+            existingFile.UploadDate = UploadDate == default ? DateTime.Now : UploadDate;
+
+            if (uploadedFile != null && uploadedFile.Length > 0)
+            {
+                var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
+                var extension = Path.GetExtension(uploadedFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    TempData["Error"] = "Only PDF, JPG, JPEG and PNG files are allowed.";
+                    await LoadMedicalRecords(MedicalRecordId);
+                    return View(existingFile);
+                }
+
+                const long maxFileSize = 10 * 1024 * 1024;
+                if (uploadedFile.Length > maxFileSize)
+                {
+                    TempData["Error"] = "File size must not exceed 10 MB.";
+                    await LoadMedicalRecords(MedicalRecordId);
+                    return View(existingFile);
+                }
+
+                var uploadsFolder = Path.Combine(
+                    _environment.WebRootPath, "uploads", "medical-files");
+
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var uniqueFileName = $"{Guid.NewGuid()}{extension}";
+                var physicalFilePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(physicalFilePath, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(stream);
+                }
+
+                // Delete old physical file
+                if (!string.IsNullOrEmpty(existingFile.FilePath))
+                {
+                    var oldRelativePath = existingFile.FilePath
+                        .TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
+                    var oldPhysicalPath = Path.Combine(_environment.WebRootPath, oldRelativePath);
+                    if (System.IO.File.Exists(oldPhysicalPath))
+                        System.IO.File.Delete(oldPhysicalPath);
+                }
+
+                existingFile.FileName = Path.GetFileName(uploadedFile.FileName);
+                existingFile.FilePath = $"/uploads/medical-files/{uniqueFileName}";
+                existingFile.FileType = extension;
+            }
+
+            _medicalFileRepository.Update(existingFile);
             await _medicalFileRepository.CommitAsync();
 
             TempData["Success"] = "Medical file updated successfully.";
@@ -205,7 +278,9 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Admin/MedicalFiles/Delete/5
+        // =========================
+        // DELETE - GET
+        // =========================
         public async Task<IActionResult> Delete(int id)
         {
             var medicalFile = await _medicalFileRepository.GetOneAsync(
@@ -225,7 +300,9 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             return View(medicalFile);
         }
 
-        // POST: Admin/MedicalFiles/Delete/5
+        // =========================
+        // DELETE - POST
+        // =========================
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -239,6 +316,16 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            // Delete physical file from disk
+            if (!string.IsNullOrEmpty(medicalFile.FilePath))
+            {
+                var relativePath = medicalFile.FilePath
+                    .TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
+                var physicalPath = Path.Combine(_environment.WebRootPath, relativePath);
+                if (System.IO.File.Exists(physicalPath))
+                    System.IO.File.Delete(physicalPath);
+            }
+
             _medicalFileRepository.Delete(medicalFile);
             await _medicalFileRepository.CommitAsync();
 
@@ -247,7 +334,9 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Load Medical Records for Create/Edit
+        // =========================
+        // LOAD MEDICAL RECORDS
+        // =========================
         private async Task LoadMedicalRecords(int? selectedMedicalRecordId = null)
         {
             var medicalRecords = await _medicalRecordRepository.GetAsync(

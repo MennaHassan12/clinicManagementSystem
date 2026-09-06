@@ -1,8 +1,8 @@
-﻿@model clinicManagementSystem.Models.MedicalFile
+@model clinicManagementSystem.Models.MedicalFile
 
 @{
     ViewData["Title"] = "Edit Medical File";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 
     var medicalRecords =
         ViewBag.MedicalRecords as IEnumerable<dynamic>;
@@ -18,7 +18,7 @@
             </h2>
 
             <p class="text-muted mb-0">
-                Update medical file information
+                Update medical record link, date, or replace the file
             </p>
         </div>
 
@@ -34,6 +34,15 @@
 
     </div>
 
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     <div class="card shadow-sm border-0 rounded-3">
 
         <div class="card-body p-4">
@@ -42,30 +51,24 @@
                   asp-controller="MedicalFiles"
                   asp-action="Edit"
                   asp-route-id="@Model.MedicalFileId"
-                  method="post">
+                  method="post"
+                  enctype="multipart/form-data">
 
                 @Html.AntiForgeryToken()
 
-                <input type="hidden"
-                       asp-for="MedicalFileId" />
-
-                <div asp-validation-summary="ModelOnly"
-                     class="alert alert-danger">
-                </div>
+                <input type="hidden" asp-for="MedicalFileId" />
 
                 <!-- Medical Record -->
-
                 <div class="mb-4">
 
-                    <label asp-for="MedicalRecordId"
-                           class="form-label fw-semibold">
+                    <label class="form-label fw-semibold">
                         Medical Record
                     </label>
 
-                    <select asp-for="MedicalRecordId"
+                    <select name="MedicalRecordId"
                             class="form-select">
 
-                        <option value="0">
+                        <option value="">
                             -- Select Medical Record --
                         </option>
 
@@ -73,7 +76,8 @@
                         {
                             foreach (var record in medicalRecords)
                             {
-                                <option value="@record.Id">
+                                <option value="@record.Id"
+                                        selected="@(Model.MedicalRecordId == record.Id ? "selected" : null)">
                                     @record.Display
                                 </option>
                             }
@@ -81,85 +85,71 @@
 
                     </select>
 
-                    <span asp-validation-for="MedicalRecordId"
-                          class="text-danger">
-                    </span>
-
                 </div>
 
-                <!-- File Name -->
 
+                <!-- Current File -->
                 <div class="mb-4">
 
-                    <label asp-for="FileName"
-                           class="form-label fw-semibold">
-                        File Name
+                    <label class="form-label fw-semibold">
+                        Current File
                     </label>
 
-                    <input asp-for="FileName"
-                           class="form-control" />
+                    <div class="p-3 bg-light rounded-3">
 
-                    <span asp-validation-for="FileName"
-                          class="text-danger">
-                    </span>
+                        <i class="fas fa-file-medical text-primary me-2"></i>
+
+                        <span>
+                            @Model.FileName
+                        </span>
+
+                        <span class="badge bg-secondary ms-2">
+                            @Model.FileType
+                        </span>
+
+                    </div>
 
                 </div>
 
-                <!-- File Path -->
 
+                <!-- Replace File -->
                 <div class="mb-4">
 
-                    <label asp-for="FilePath"
-                           class="form-label fw-semibold">
-                        File Path
+                    <label class="form-label fw-semibold">
+                        Replace File <small class="text-muted fw-normal">(optional)</small>
                     </label>
 
-                    <input asp-for="FilePath"
-                           class="form-control" />
+                    <input type="file"
+                           name="uploadedFile"
+                           class="form-control"
+                           accept=".pdf,.jpg,.jpeg,.png" />
 
-                    <span asp-validation-for="FilePath"
-                          class="text-danger">
-                    </span>
+                    <div class="form-text mt-2">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Leave empty to keep the current file.
+                        Allowed files: PDF, JPG, JPEG and PNG.
+                        Maximum size: 10 MB.
+                    </div>
 
                 </div>
 
-                <!-- File Type -->
-
-                <div class="mb-4">
-
-                    <label asp-for="FileType"
-                           class="form-label fw-semibold">
-                        File Type
-                    </label>
-
-                    <input asp-for="FileType"
-                           class="form-control" />
-
-                    <span asp-validation-for="FileType"
-                          class="text-danger">
-                    </span>
-
-                </div>
 
                 <!-- Upload Date -->
-
                 <div class="mb-4">
 
-                    <label asp-for="UploadDate"
-                           class="form-label fw-semibold">
+                    <label class="form-label fw-semibold">
                         Upload Date
                     </label>
 
-                    <input asp-for="UploadDate"
-                           type="date"
+                    <input type="date"
+                           name="UploadDate"
+                           value="@Model.UploadDate.ToString("yyyy-MM-dd")"
                            class="form-control" />
-
-                    <span asp-validation-for="UploadDate"
-                          class="text-danger">
-                    </span>
 
                 </div>
 
+
+                <!-- Buttons -->
                 <div class="d-flex justify-content-end gap-2">
 
                     <a asp-area="Admin"
@@ -186,11 +176,3 @@
     </div>
 
 </div>
-
-@section Scripts {
-
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-
-}

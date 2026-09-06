@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
@@ -91,7 +91,8 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
                 includes: [
                     a => a.Doctor,
                     a => a.Doctor.ApplicationUser,
-                    a => a.Schedule
+                    a => a.Schedule,
+                    a => a.Review!
                 ]
             );
             var resultList = appointments != null
@@ -105,6 +106,13 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         [HttpGet]
         public async Task<IActionResult> Book(int? doctorId, int? scheduleId, string? date)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return RedirectToAction("Login", "Account", new { area = SD.IDENTITY_AREA });
+
+            var patient = await _patientRepo.GetOneAsync(
+                expression: p => p.ApplicationUserId == userId,
+                includes: [p => p.ApplicationUser]
+            );
             DoctorModel? doctor = null;
 
             if (doctorId.HasValue && doctorId.Value > 0)

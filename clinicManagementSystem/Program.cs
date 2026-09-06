@@ -1,4 +1,5 @@
 ﻿using clinicManagementSystem.Data;
+using clinicManagementSystem.DataAccess;
 using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories;
 using clinicManagementSystem.Repositories.IRepositories;
@@ -11,7 +12,7 @@ namespace clinicManagementSystem
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -66,12 +67,19 @@ namespace clinicManagementSystem
             });
 
             var app = builder.Build();
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                await DbInitializer.SeedAsync(services);
+            }
 
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -93,10 +101,10 @@ namespace clinicManagementSystem
             app.MapControllerRoute(
                 name: "areas",
                 pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-            app.MapControllerRoute(
-                            name: "default",
-                            pattern: "{controller=Home}/{action=Index}/{id?}");
 
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{area=Patient}/{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
             app.Run();
         }

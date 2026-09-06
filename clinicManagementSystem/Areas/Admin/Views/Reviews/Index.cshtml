@@ -1,8 +1,8 @@
-﻿@model IEnumerable<clinicManagementSystem.Models.Review>
+@model IEnumerable<clinicManagementSystem.Models.Review>
 
 @{
     ViewData["Title"] = "Reviews";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container-fluid py-4">
@@ -50,52 +50,52 @@
                     <table class="table table-hover align-middle mb-0">
 
                         <thead class="table-light">
-
-                            <tr>
-                                <th>ID</th>
-                                <th>Appointment</th>
+                            <tr class="text-secondary small text-uppercase fw-bold">
+                                <th>Doctor</th>
+                                <th>Patient</th>
                                 <th>Rating</th>
                                 <th>Comment</th>
                                 <th>Review Date</th>
                                 <th class="text-center">Actions</th>
                             </tr>
-
                         </thead>
 
                         <tbody>
-
                             @foreach (var review in Model)
                             {
                                 <tr>
+                                    <td>
+                                        <div class="fw-bold text-dark">
+                                            @(review.Appointment?.Doctor?.ApplicationUser?.FullName ?? $"Doctor #{review.Appointment?.DoctorId}")
+                                        </div>
+                                        <small class="text-muted">
+                                            @(review.Appointment?.Doctor?.Department?.Name ?? "Department")
+                                        </small>
+                                    </td>
 
                                     <td>
                                         <span class="fw-semibold">
-                                            #@review.ReviewId
+                                            @(review.Appointment?.Patient?.ApplicationUser?.FullName ?? $"Patient #{review.Appointment?.PatientId}")
                                         </span>
                                     </td>
 
                                     <td>
-                                        #@review.AppointmentId
-                                    </td>
-
-                                    <td>
-
-                                        <span class="fw-semibold me-2">
-                                            @review.Rating / 5
-                                        </span>
-
-                                        @for (int i = 1; i <= 5; i++)
-                                        {
-                                            if (i <= review.Rating)
+                                        <div class="d-flex align-items-center">
+                                            <span class="fw-bold me-2 text-dark">
+                                                @review.Rating / 5
+                                            </span>
+                                            @for (int i = 1; i <= 5; i++)
                                             {
-                                                <i class="bi bi-star-fill text-warning"></i>
+                                                if (i <= review.Rating)
+                                                {
+                                                    <i class="bi bi-star-fill text-warning"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-star text-muted"></i>
+                                                }
                                             }
-                                            else
-                                            {
-                                                <i class="bi bi-star text-muted"></i>
-                                            }
-                                        }
-
+                                        </div>
                                     </td>
 
                                     <td>
@@ -105,7 +105,7 @@
                                     </td>
 
                                     <td>
-                                        @review.ReviewDate.ToString("dd/MM/yyyy")
+                                        @review.ReviewDate.ToString("dd/MM/yyyy hh:mm tt")
                                     </td>
 
                                     <td class="text-center">

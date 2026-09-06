@@ -1,4 +1,4 @@
-﻿@model IEnumerable<clinicManagementSystem.Models.Appointment>
+@model IEnumerable<clinicManagementSystem.Models.Appointment>
 
 @{
     ViewData["Title"] = "Manage All Appointments";
@@ -211,6 +211,16 @@ if (parts.Length > 1 && parts[1].Contains("Notes:"))
                                                 <input type="hidden" name="id" value="@item.AppointmentId" />
                                                 <input type="hidden" name="status" value="@((int)clinicManagementSystem.Models.AppointmentStatus.Confirmed)" />
                                                 <button type="submit" class="btn btn-sm btn-success rounded-pill px-3" title="Confirm Appointment">Confirm</button>
+                                            </form>
+                                        }
+
+                                        <!-- Complete Button -->
+                                        @if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Confirmed)
+                                        {
+                                            <form asp-area="Admin" asp-controller="Appointments" asp-action="ChangeStatus" method="post" class="d-inline">
+                                                <input type="hidden" name="id" value="@item.AppointmentId" />
+                                                <input type="hidden" name="status" value="@((int)clinicManagementSystem.Models.AppointmentStatus.Completed)" />
+                                                <button type="submit" class="btn btn-sm btn-outline-success rounded-pill px-2" title="Mark as Completed">✓ Complete</button>
                                             </form>
                                         }
 

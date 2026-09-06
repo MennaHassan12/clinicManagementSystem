@@ -1,8 +1,8 @@
-﻿@model IEnumerable<clinicManagementSystem.Models.Appointment>
+@model IEnumerable<clinicManagementSystem.Models.Appointment>
 
 @{
     ViewData["Title"] = "My Appointments";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container py-4">
@@ -11,7 +11,7 @@
             <h2 class="fw-bold text-primary">My Booked Appointments</h2>
             <p class="text-muted">Track and manage your medical appointments</p>
         </div>
-        <a href="/Patient/Appointments/Doctors" class="btn btn-primary shadow-sm rounded-pill px-4">
+        <a href="/Patient/Home/Index" class="btn btn-primary shadow-sm rounded-pill px-4">
             👨‍⚕️ Browse Doctors
         </a>
     </div>
@@ -61,15 +61,17 @@
                                 <td class="px-4 text-end">
                                     @if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Pending)
                                     {
-                                        <form action="/Patient/Appointments/Cancel/@item.AppointmentId" method="post" class="d-inline">
+                                        <form asp-area="Patient" asp-controller="Appointments" asp-action="Cancel" asp-route-id="@item.AppointmentId" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
                                             <button type="submit" class="btn btn-outline-danger btn-sm px-3 rounded-pill" onclick="return confirm('Are you sure you want to cancel the appointment?');">
-Cancel
+                                                Cancel
                                             </button>
                                         </form>
                                     }
                                     else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Cancelled)
                                     {
-                                        <form action="/Patient/Appointments/Delete/@item.AppointmentId" method="post" class="d-inline">
+                                        <form asp-area="Patient" asp-controller="Appointments" asp-action="Delete" asp-route-id="@item.AppointmentId" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
                                             <button type="submit" class="btn btn-danger btn-sm px-3 rounded-pill" onclick="return confirm('Are you sure you want to delete the appointment?');">
                                                 Delete
                                             </button>
@@ -77,9 +79,23 @@ Cancel
                                     }
                                     else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Completed)
                                     {
-                                        <a href="/Doctor/MedicalRecords/Details?appointmentId=@item.AppointmentId" class="btn btn-outline-primary btn-sm px-3 rounded-pill">
-                                            📄 View Prescription
-                                        </a>
+                                        <div class="d-inline-flex gap-2 align-items-center">
+                                            <a href="/Doctor/MedicalRecords/Details?appointmentId=@item.AppointmentId" class="btn btn-outline-primary btn-sm px-3 rounded-pill">
+                                                📄 Prescription
+                                            </a>
+                                            @if (item.Review == null)
+                                            {
+                                                <a asp-area="Patient" asp-controller="Reviews" asp-action="Create" asp-route-appointmentId="@item.AppointmentId" class="btn btn-warning btn-sm px-3 rounded-pill text-dark fw-bold shadow-sm">
+                                                    ⭐ Rate Doctor
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-area="Patient" asp-controller="Reviews" asp-action="Edit" asp-route-id="@item.Review.ReviewId" class="btn btn-outline-warning btn-sm px-3 rounded-pill fw-semibold" title="Rating: @item.Review.Rating / 5">
+                                                    ⭐ @item.Review.Rating/5 (Edit)
+                                                </a>
+                                            }
+                                        </div>
                                     }
                                     else
                                     {

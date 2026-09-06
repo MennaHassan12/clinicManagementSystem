@@ -1,4 +1,4 @@
-﻿@model IEnumerable<clinicManagementSystem.Models.Appointment>
+@model IEnumerable<clinicManagementSystem.Models.Appointment>
 
 @{
     ViewData["Title"] = "Doctor Appointments";
@@ -135,7 +135,15 @@
 
                                         @if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Confirmed)
                                         {
-<a href="/Doctor/MedicalRecords/Create?appointmentId=@item.AppointmentId&doctorId=@currentDoctorId" class="btn btn-sm btn-primary rounded-pill px-3">
+                                            <form action="/Doctor/Appointments/ChangeStatus" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@item.AppointmentId" />
+                                                <input type="hidden" name="status" value="@((int)clinicManagementSystem.Models.AppointmentStatus.Completed)" />
+                                                <button type="submit" class="btn btn-sm btn-outline-success rounded-pill px-2" title="Mark as Completed">
+                                                    ✓ Complete
+                                                </button>
+                                            </form>
+                                            <a href="/Doctor/MedicalRecords/Create?appointmentId=@item.AppointmentId&doctorId=@currentDoctorId" class="btn btn-sm btn-primary rounded-pill px-3">
                                                 Add Medical Record
                                             </a>
                                         }

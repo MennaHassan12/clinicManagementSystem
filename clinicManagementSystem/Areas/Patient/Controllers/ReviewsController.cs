@@ -1,34 +1,52 @@
-﻿using clinicManagementSystem.Models;
+using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
+using clinicManagementSystem.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
+using System.Security.Claims;
+using PatientModel = clinicManagementSystem.Models.Patient;
 
 namespace clinicManagementSystem.Areas.Patient.Controllers
 {
-    [Area("Patient")]
+    [Area(SD.PATIENT_AREA)]
+    [Authorize]
     public class ReviewsController : Controller
     {
         private readonly IRepository<Review> _reviewRepository;
         private readonly IRepository<Appointment> _appointmentRepository;
+        private readonly IRepository<PatientModel> _patientRepository;
 
         public ReviewsController(
             IRepository<Review> reviewRepository,
-            IRepository<Appointment> appointmentRepository)
+            IRepository<Appointment> appointmentRepository,
+            IRepository<PatientModel> patientRepository)
         {
             _reviewRepository = reviewRepository;
             _appointmentRepository = appointmentRepository;
+            _patientRepository = patientRepository;
         }
 
         // =========================
-        // INDEX
+        // INDEX (My Reviews)
         // =========================
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var patient = await GetCurrentPatientAsync();
+            if (patient == null)
+            {
+                return View(new List<Review>());
+            }
+
             var reviews = await _reviewRepository.GetAsync(
+                expression: r => r.Appointment != null && r.Appointment.PatientId == patient.PatientId,
                 includes: new Expression<Func<Review, object>>[]
                 {
-                    r => r.Appointment!
+                    r => r.Appointment!,
+                    r => r.Appointment.Doctor,
+                    r => r.Appointment.Doctor.ApplicationUser,
+                    r => r.Appointment.Doctor.Department
                 },
                 orderBy: q => q.OrderByDescending(r => r.ReviewDate),
                 tracked: false
@@ -41,10 +59,24 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         // CREATE - GET
         // =========================
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int? appointmentId)
         {
-            await LoadAppointments();
-            return View();
+            var patient = await GetCurrentPatientAsync();
+            if (patient == null)
+            {
+                TempData["error_notification"] = "Patient profile not found.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            await LoadEligibleAppointmentsAsync(patient.PatientId, appointmentId);
+
+            var model = new Review
+            {
+                AppointmentId = appointmentId ?? 0,
+                Rating = 5
+            };
+
+            return View(model);
         }
 
         // =========================
@@ -52,53 +84,69 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            int AppointmentId,
-            int Rating,
-            string? Comment)
+        public async Task<IActionResult> Create(Review review)
         {
-            if (AppointmentId <= 0)
+            var patient = await GetCurrentPatientAsync();
+            if (patient == null)
             {
-                TempData["Error"] = "Please select an appointment.";
-                await LoadAppointments();
-                return View();
+                TempData["error_notification"] = "Patient profile not found.";
+                return RedirectToAction("Index", "Home");
             }
 
-            if (Rating < 1 || Rating > 5)
+            if (review.AppointmentId <= 0)
             {
-                TempData["Error"] = "Please select a rating.";
-                await LoadAppointments();
-                return View();
+                ModelState.AddModelError(nameof(Review.AppointmentId), "Please select an appointment to review.");
             }
 
-            // Prevent duplicate review for the same appointment
-            var existingReview = await _reviewRepository.GetOneAsync(
-                r => r.AppointmentId == AppointmentId,
-                tracked: false
+            if (review.Rating < 1 || review.Rating > 5)
+            {
+                ModelState.AddModelError(nameof(Review.Rating), "Rating must be between 1 and 5 stars.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await LoadEligibleAppointmentsAsync(patient.PatientId, review.AppointmentId);
+                return View(review);
+            }
+
+            // Verify the appointment belongs to the logged in patient and is completed
+            var appointment = await _appointmentRepository.GetOneAsync(
+                expression: a => a.AppointmentId == review.AppointmentId && a.PatientId == patient.PatientId,
+                includes: new Expression<Func<Appointment, object>>[] { a => a.Review! }
             );
 
-            if (existingReview != null)
+            if (appointment == null)
             {
-                TempData["Error"] =
-                    "This appointment already has a review. Please edit the existing review.";
-
-                await LoadAppointments();
-                return View();
+                TempData["error_notification"] = "Selected appointment was not found in your records.";
+                await LoadEligibleAppointmentsAsync(patient.PatientId, review.AppointmentId);
+                return View(review);
             }
 
-            var review = new Review
+            if (appointment.Status != AppointmentStatus.Completed)
             {
-                AppointmentId = AppointmentId,
-                Rating = Rating,
-                Comment = Comment,
+                TempData["error_notification"] = "You can only rate doctors for completed appointments.";
+                await LoadEligibleAppointmentsAsync(patient.PatientId, review.AppointmentId);
+                return View(review);
+            }
+
+            if (appointment.Review != null)
+            {
+                TempData["error_notification"] = "This appointment already has a review. You can edit your existing review.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var newReview = new Review
+            {
+                AppointmentId = review.AppointmentId,
+                Rating = review.Rating,
+                Comment = review.Comment?.Trim(),
                 ReviewDate = DateTime.Now
             };
 
-            await _reviewRepository.CreateAsync(review);
+            await _reviewRepository.CreateAsync(newReview);
             await _reviewRepository.CommitAsync();
 
-            TempData["Success"] = "Review created successfully.";
-
+            TempData["success_notification"] = "Thank you! Your review has been submitted successfully.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -108,8 +156,17 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
+            var patient = await GetCurrentPatientAsync();
+            if (patient == null) return NotFound();
+
             var review = await _reviewRepository.GetOneAsync(
-                r => r.ReviewId == id,
+                expression: r => r.ReviewId == id && r.Appointment != null && r.Appointment.PatientId == patient.PatientId,
+                includes: new Expression<Func<Review, object>>[]
+                {
+                    r => r.Appointment!,
+                    r => r.Appointment.Doctor,
+                    r => r.Appointment.Doctor.ApplicationUser
+                },
                 tracked: false
             );
 
@@ -124,47 +181,45 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(
-            int id,
-            int ReviewId,
-            int AppointmentId,
-            int Rating,
-            string? Comment)
+        public async Task<IActionResult> Edit(int id, Review review)
         {
-            if (id != ReviewId)
+            if (id != review.ReviewId)
                 return BadRequest();
 
-            if (Rating < 1 || Rating > 5)
+            var patient = await GetCurrentPatientAsync();
+            if (patient == null) return NotFound();
+
+            if (review.Rating < 1 || review.Rating > 5)
             {
-                TempData["Error"] = "Please select a valid rating.";
-
-                var invalidReview = new Review
-                {
-                    ReviewId = ReviewId,
-                    AppointmentId = AppointmentId,
-                    Rating = Rating,
-                    Comment = Comment
-                };
-
-                return View(invalidReview);
+                ModelState.AddModelError(nameof(Review.Rating), "Rating must be between 1 and 5 stars.");
             }
 
             var existingReview = await _reviewRepository.GetOneAsync(
-                r => r.ReviewId == id
+                expression: r => r.ReviewId == id && r.Appointment != null && r.Appointment.PatientId == patient.PatientId,
+                includes: new Expression<Func<Review, object>>[]
+                {
+                    r => r.Appointment!,
+                    r => r.Appointment.Doctor,
+                    r => r.Appointment.Doctor.ApplicationUser
+                }
             );
 
             if (existingReview == null)
                 return NotFound();
 
-            existingReview.Rating = Rating;
-            existingReview.Comment = Comment;
+            if (!ModelState.IsValid)
+            {
+                review.Appointment = existingReview.Appointment;
+                return View(review);
+            }
+
+            existingReview.Rating = review.Rating;
+            existingReview.Comment = review.Comment?.Trim();
 
             _reviewRepository.Update(existingReview);
-
             await _reviewRepository.CommitAsync();
 
-            TempData["Success"] = "Review updated successfully.";
-
+            TempData["success_notification"] = "Your review has been updated successfully.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -174,11 +229,16 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
+            var patient = await GetCurrentPatientAsync();
+            if (patient == null) return NotFound();
+
             var review = await _reviewRepository.GetOneAsync(
-                r => r.ReviewId == id,
+                expression: r => r.ReviewId == id && r.Appointment != null && r.Appointment.PatientId == patient.PatientId,
                 includes: new Expression<Func<Review, object>>[]
                 {
-                    r => r.Appointment!
+                    r => r.Appointment!,
+                    r => r.Appointment.Doctor,
+                    r => r.Appointment.Doctor.ApplicationUser
                 },
                 tracked: false
             );
@@ -192,37 +252,72 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         // =========================
         // DELETE - POST
         // =========================
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var patient = await GetCurrentPatientAsync();
+            if (patient == null) return NotFound();
+
             var review = await _reviewRepository.GetOneAsync(
-                r => r.ReviewId == id
+                expression: r => r.ReviewId == id && r.Appointment != null && r.Appointment.PatientId == patient.PatientId
             );
 
             if (review == null)
                 return NotFound();
 
             _reviewRepository.Delete(review);
-
             await _reviewRepository.CommitAsync();
 
-            TempData["Success"] = "Review deleted successfully.";
-
+            TempData["success_notification"] = "Review deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
 
         // =========================
-        // LOAD APPOINTMENTS
+        // HELPERS
         // =========================
-        private async Task LoadAppointments()
+        private async Task<PatientModel?> GetCurrentPatientAsync()
         {
-            var appointments = await _appointmentRepository.GetAsync(
-                orderBy: q => q.OrderByDescending(a => a.AppointmentDate),
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+                return null;
+
+            var patient = await _patientRepository.GetOneAsync(
+                expression: p => p.ApplicationUserId == userId,
+                includes: new Expression<Func<PatientModel, object>>[] { p => p.ApplicationUser }
+            );
+
+            if (patient == null)
+            {
+                patient = new PatientModel
+                {
+                    ApplicationUserId = userId,
+                    Address = "Egypt"
+                };
+                await _patientRepository.CreateAsync(patient);
+                await _patientRepository.CommitAsync();
+            }
+
+            return patient;
+        }
+
+        private async Task LoadEligibleAppointmentsAsync(int patientId, int? preselectedAppointmentId)
+        {
+            var eligibleAppointments = await _appointmentRepository.GetAsync(
+                expression: a => a.PatientId == patientId && a.Status == AppointmentStatus.Completed && (a.Review == null || (preselectedAppointmentId.HasValue && a.AppointmentId == preselectedAppointmentId.Value)),
+                includes: new Expression<Func<Appointment, object>>[]
+                {
+                    a => a.Doctor,
+                    a => a.Doctor.ApplicationUser,
+                    a => a.Doctor.Department,
+                    a => a.Review!
+                },
+                orderBy: q => q.OrderByDescending(a => a.AppointmentDate).ThenByDescending(a => a.AppointmentTime),
                 tracked: false
             );
 
-            ViewBag.Appointments = appointments;
+            ViewBag.Appointments = eligibleAppointments.ToList();
+            ViewBag.SelectedAppointmentId = preselectedAppointmentId;
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using clinicManagementSystem.Models;
+using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Linq.Expressions;
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -14,16 +14,21 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             _departmentRepository = departmentRepository;
         }
 
-        // GET: Admin/Departments
-        public async Task<IActionResult> Index()
+       // GET: Admin/Departments
+public async Task<IActionResult> Index()
+{
+    var departments = await _departmentRepository.GetAsync(
+        includes: new Expression<Func<Department, object>>[]
         {
-            var departments = await _departmentRepository.GetAsync(
-                orderBy: q => q.OrderBy(d => d.Name),
-                tracked: false
-            );
+            d => d.Doctors
+        },
+        orderBy: q => q.OrderBy(d => d.Name),
+        tracked: false
+    );
 
-            return View(departments);
-        }
+    return View(departments);
+}
+
 
         // GET: Admin/Departments/Create
         public IActionResult Create()

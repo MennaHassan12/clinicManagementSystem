@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
@@ -99,39 +99,41 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         <li class="nav-item">
                             <a asp-area="Doctor"
-                               asp-controller="Doctor Dashboard"
+                               asp-controller="Dashboard"
                                asp-action="Index"
-                               class="nav-link active">
+                               class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Doctor Dashboard</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a asp-area="Doctor"
+                               asp-controller="Appointments"
+                               asp-action="Index"
+                               class="nav-link">
                                 <i class="nav-icon fas fa-calendar-check"></i>
                                 <p>My Appointments</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-user-injured"></i>
-                                <p>My Patients</p>
+                            <a asp-area="Doctor"
+                               asp-controller="Reviews"
+                               asp-action="Index"
+                               class="nav-link">
+                                <i class="nav-icon fas fa-star text-warning"></i>
+                                <p>Patient Reviews</p>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a asp-area="Doctor"
+                               asp-controller="MedicalFiles"
+                               asp-action="Index"
+                               class="nav-link">
                                 <i class="nav-icon fas fa-notes-medical"></i>
-                                <p>Medical Records</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-prescription-bottle-alt"></i>
-                                <p>Prescriptions</p>
+                                <p>Medical Files</p>
                             </a>
                         </li>
 

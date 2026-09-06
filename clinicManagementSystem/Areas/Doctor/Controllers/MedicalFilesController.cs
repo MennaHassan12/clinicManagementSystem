@@ -1,26 +1,48 @@
-﻿using clinicManagementSystem.Models;
+using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
+using clinicManagementSystem.Utilities;
 using clinicManagementSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace clinicManagementSystem.Areas.Doctor.Controllers
 {
-    [Area("Doctor")]
+    [Area(SD.DOCTOR_AREA)]
+    [Authorize]
     public class MedicalFilesController : Controller
     {
         private readonly IRepository<MedicalFile> _medicalFileRepository;
         private readonly IRepository<MedicalRecord> _medicalRecordRepository;
+        private readonly IRepository<Models.Doctor> _doctorRepository;
         private readonly IWebHostEnvironment _environment;
 
         public MedicalFilesController(
             IRepository<MedicalFile> medicalFileRepository,
             IRepository<MedicalRecord> medicalRecordRepository,
+            IRepository<Models.Doctor> doctorRepository,
             IWebHostEnvironment environment)
         {
             _medicalFileRepository = medicalFileRepository;
             _medicalRecordRepository = medicalRecordRepository;
+            _doctorRepository = doctorRepository;
             _environment = environment;
+        }
+
+        // =========================
+        // GET CURRENT DOCTOR
+        // =========================
+
+        private async Task<Models.Doctor?> GetCurrentDoctorAsync()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return null;
+
+            return await _doctorRepository.GetOneAsync(
+                d => d.ApplicationUserId == userId,
+                tracked: false
+            );
         }
 
         // =========================
@@ -29,10 +51,23 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null)
+            {
+                TempData["Error"] = "Doctor profile not found.";
+                return View(new List<MedicalFile>());
+            }
+
+            // Only show medical files linked to THIS doctor's medical records / appointments
             var medicalFiles = await _medicalFileRepository.GetAsync(
+                expression: f =>
+                    f.MedicalRecord != null &&
+                    f.MedicalRecord.Appointment != null &&
+                    f.MedicalRecord.Appointment.DoctorId == doctor.DoctorId,
                 includes: new Expression<Func<MedicalFile, object>>[]
                 {
-                    f => f.MedicalRecord
+                    f => f.MedicalRecord,
+                    f => f.MedicalRecord.Appointment
                 },
                 orderBy: q => q.OrderByDescending(f => f.UploadDate),
                 tracked: false
@@ -47,7 +82,10 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
         public async Task<IActionResult> Create()
         {
-            await LoadMedicalRecords();
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound("Doctor profile not found.");
+
+            await LoadMedicalRecords(doctor.DoctorId);
 
             return View(new MedicalFileVM
             {
@@ -65,6 +103,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             DateTime UploadDate,
             IFormFile? uploadedFile)
         {
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound("Doctor profile not found.");
+
             // Get MedicalRecordId directly from Form
             var medicalRecordIdValue =
                 Request.Form["MedicalRecordId"].ToString();
@@ -85,13 +126,30 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 TempData["Error"] =
                     "Please select a medical record.";
 
-                await LoadMedicalRecords(medicalRecordId);
+                await LoadMedicalRecords(doctor.DoctorId, medicalRecordId);
 
                 return View(new MedicalFileVM
                 {
                     MedicalRecordId = medicalRecordId,
                     UploadDate = UploadDate
                 });
+            }
+
+            // Verify this medical record belongs to this doctor
+            var medicalRecord = await _medicalRecordRepository.GetOneAsync(
+                r => r.MedicalRecordId == medicalRecordId &&
+                     r.Appointment != null &&
+                     r.Appointment.DoctorId == doctor.DoctorId,
+                tracked: false
+            );
+
+            if (medicalRecord == null)
+            {
+                TempData["Error"] =
+                    "Invalid medical record or you don't have permission.";
+
+                await LoadMedicalRecords(doctor.DoctorId);
+                return View(new MedicalFileVM { UploadDate = UploadDate });
             }
 
             // =========================
@@ -103,7 +161,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 TempData["Error"] =
                     "Please select a file.";
 
-                await LoadMedicalRecords(medicalRecordId);
+                await LoadMedicalRecords(doctor.DoctorId, medicalRecordId);
 
                 return View(new MedicalFileVM
                 {
@@ -133,7 +191,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 TempData["Error"] =
                     "Only PDF, JPG, JPEG and PNG files are allowed.";
 
-                await LoadMedicalRecords(medicalRecordId);
+                await LoadMedicalRecords(doctor.DoctorId, medicalRecordId);
 
                 return View(new MedicalFileVM
                 {
@@ -153,7 +211,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 TempData["Error"] =
                     "File size must not exceed 10 MB.";
 
-                await LoadMedicalRecords(medicalRecordId);
+                await LoadMedicalRecords(doctor.DoctorId, medicalRecordId);
 
                 return View(new MedicalFileVM
                 {
@@ -232,7 +290,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 TempData["Error"] =
                     $"Failed to upload medical file: {ex.Message}";
 
-                await LoadMedicalRecords(medicalRecordId);
+                await LoadMedicalRecords(doctor.DoctorId, medicalRecordId);
 
                 return View(new MedicalFileVM
                 {
@@ -241,15 +299,22 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 });
             }
         }
+
         // =========================
         // EDIT - GET
         // =========================
 
         public async Task<IActionResult> Edit(int id)
         {
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound("Doctor profile not found.");
+
             var medicalFile =
                 await _medicalFileRepository.GetOneAsync(
-                    f => f.MedicalFileId == id,
+                    f => f.MedicalFileId == id &&
+                         f.MedicalRecord != null &&
+                         f.MedicalRecord.Appointment != null &&
+                         f.MedicalRecord.Appointment.DoctorId == doctor.DoctorId,
                     tracked: false
                 );
 
@@ -259,11 +324,11 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             }
 
             await LoadMedicalRecords(
+                doctor.DoctorId,
                 medicalFile.MedicalRecordId);
 
             return View(medicalFile);
         }
-
 
         // =========================
         // EDIT - POST
@@ -277,13 +342,19 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             DateTime UploadDate,
             IFormFile? uploadedFile)
         {
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound("Doctor profile not found.");
+
             // =========================
-            // GET EXISTING FILE
+            // GET EXISTING FILE (doctor-scoped)
             // =========================
 
             var existingFile =
                 await _medicalFileRepository.GetOneAsync(
-                    f => f.MedicalFileId == id
+                    f => f.MedicalFileId == id &&
+                         f.MedicalRecord != null &&
+                         f.MedicalRecord.Appointment != null &&
+                         f.MedicalRecord.Appointment.DoctorId == doctor.DoctorId
                 );
 
             if (existingFile == null)
@@ -300,8 +371,25 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 TempData["Error"] =
                     "Please select a medical record.";
 
-                await LoadMedicalRecords(MedicalRecordId);
+                await LoadMedicalRecords(doctor.DoctorId, MedicalRecordId);
 
+                return View(existingFile);
+            }
+
+            // Verify new medical record also belongs to this doctor
+            var medicalRecord = await _medicalRecordRepository.GetOneAsync(
+                r => r.MedicalRecordId == MedicalRecordId &&
+                     r.Appointment != null &&
+                     r.Appointment.DoctorId == doctor.DoctorId,
+                tracked: false
+            );
+
+            if (medicalRecord == null)
+            {
+                TempData["Error"] =
+                    "Invalid medical record or you don't have permission.";
+
+                await LoadMedicalRecords(doctor.DoctorId, existingFile.MedicalRecordId);
                 return View(existingFile);
             }
 
@@ -330,11 +418,11 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             {
                 var allowedExtensions = new[]
                 {
-            ".pdf",
-            ".jpg",
-            ".jpeg",
-            ".png"
-        };
+                    ".pdf",
+                    ".jpg",
+                    ".jpeg",
+                    ".png"
+                };
 
                 var extension =
                     Path.GetExtension(
@@ -347,7 +435,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                     TempData["Error"] =
                         "Only PDF, JPG, JPEG and PNG files are allowed.";
 
-                    await LoadMedicalRecords(MedicalRecordId);
+                    await LoadMedicalRecords(doctor.DoctorId, MedicalRecordId);
 
                     return View(existingFile);
                 }
@@ -361,7 +449,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                     TempData["Error"] =
                         "File size must not exceed 10 MB.";
 
-                    await LoadMedicalRecords(MedicalRecordId);
+                    await LoadMedicalRecords(doctor.DoctorId, MedicalRecordId);
 
                     return View(existingFile);
                 }
@@ -467,14 +555,103 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
         }
 
         // =========================
-        // LOAD MEDICAL RECORDS
+        // DELETE - GET
+        // =========================
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound("Doctor profile not found.");
+
+            var medicalFile =
+                await _medicalFileRepository.GetOneAsync(
+                    f => f.MedicalFileId == id &&
+                         f.MedicalRecord != null &&
+                         f.MedicalRecord.Appointment != null &&
+                         f.MedicalRecord.Appointment.DoctorId == doctor.DoctorId,
+                    includes: new Expression<Func<MedicalFile, object>>[]
+                    {
+                        f => f.MedicalRecord
+                    },
+                    tracked: false
+                );
+
+            if (medicalFile == null)
+            {
+                return NotFound();
+            }
+
+            return View(medicalFile);
+        }
+
+        // =========================
+        // DELETE - POST
+        // =========================
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null) return NotFound("Doctor profile not found.");
+
+            var medicalFile =
+                await _medicalFileRepository.GetOneAsync(
+                    f => f.MedicalFileId == id &&
+                         f.MedicalRecord != null &&
+                         f.MedicalRecord.Appointment != null &&
+                         f.MedicalRecord.Appointment.DoctorId == doctor.DoctorId
+                );
+
+            if (medicalFile == null)
+            {
+                return NotFound();
+            }
+
+            // =========================
+            // DELETE PHYSICAL FILE
+            // =========================
+
+            if (!string.IsNullOrEmpty(medicalFile.FilePath))
+            {
+                var relativePath =
+                    medicalFile.FilePath
+                        .TrimStart('/')
+                        .Replace('/', Path.DirectorySeparatorChar);
+
+                var physicalPath =
+                    Path.Combine(
+                        _environment.WebRootPath,
+                        relativePath
+                    );
+
+                if (System.IO.File.Exists(physicalPath))
+                {
+                    System.IO.File.Delete(physicalPath);
+                }
+            }
+
+            _medicalFileRepository.Delete(medicalFile);
+            await _medicalFileRepository.CommitAsync();
+
+            TempData["Success"] = "Medical file deleted successfully.";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // =========================
+        // LOAD MEDICAL RECORDS (doctor-scoped)
         // =========================
 
         private async Task LoadMedicalRecords(
+            int doctorId,
             int? selectedMedicalRecordId = null)
         {
             var medicalRecords =
                 await _medicalRecordRepository.GetAsync(
+                    expression: r =>
+                        r.Appointment != null &&
+                        r.Appointment.DoctorId == doctorId,
                     includes:
                         new Expression<Func<MedicalRecord, object>>[]
                         {
