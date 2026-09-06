@@ -5,110 +5,66 @@
     Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid py-4">
+<div class="container py-4" style="max-width: 650px;">
 
     <div class="mb-4">
-
-        <h2 class="fw-bold">
-            Delete Review
-        </h2>
-
-        <p class="text-muted">
-            Are you sure you want to delete this review?
-        </p>
-
+        <h2 class="fw-bold text-danger mb-1">Delete Review</h2>
+        <p class="text-muted">Are you sure you want to delete this doctor review?</p>
     </div>
 
-
-    <div class="card shadow-sm border-0">
-
-        <div class="card-body">
-
-            <dl class="row">
-
-                <dt class="col-sm-3">
-                    Appointment
-                </dt>
-
-                <dd class="col-sm-9">
-                    #@Model.AppointmentId
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4">
+            <dl class="row mb-4">
+                <dt class="col-sm-4 text-muted">Doctor</dt>
+                <dd class="col-sm-8 fw-bold text-dark">
+                    👨‍⚕️ @(Model.Appointment?.Doctor?.ApplicationUser?.FullName ?? "Doctor #" + Model.Appointment?.DoctorId)
                 </dd>
 
+                <dt class="col-sm-4 text-muted">Visit Date</dt>
+                <dd class="col-sm-8">
+                    @(Model.Appointment != null ? Model.Appointment.AppointmentDate.ToString("yyyy-MM-dd") : "N/A")
+                </dd>
 
-                <dt class="col-sm-3">
-                    Rating
-                </dt>
-
-                <dd class="col-sm-9">
-
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        if (i <= Model.Rating)
+                <dt class="col-sm-4 text-muted">Rating</dt>
+                <dd class="col-sm-8">
+                    <div class="text-warning">
+                        @for (int i = 1; i <= 5; i++)
                         {
-                            <i class="bi bi-star-fill text-warning"></i>
+                            if (i <= Model.Rating)
+                            {
+                                <i class="bi bi-star-fill"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-star text-muted opacity-50"></i>
+                            }
                         }
-                        else
-                        {
-                            <i class="bi bi-star text-muted"></i>
-                        }
-                    }
-
-                    <span class="ms-2">
-                        @Model.Rating / 5
-                    </span>
-
+                        <span class="ms-1 fw-bold text-dark">(@Model.Rating/5)</span>
+                    </div>
                 </dd>
 
-
-                <dt class="col-sm-3">
-                    Comment
-                </dt>
-
-                <dd class="col-sm-9">
-
-                    @(string.IsNullOrWhiteSpace(Model.Comment)
-                        ? "No comment"
-                        : Model.Comment)
-
+                <dt class="col-sm-4 text-muted">Comment</dt>
+                <dd class="col-sm-8 text-break">
+                    @(string.IsNullOrWhiteSpace(Model.Comment) ? Html.Raw("<span class='text-muted fst-italic'>No comment</span>") : Model.Comment)
                 </dd>
 
-
-                <dt class="col-sm-3">
-                    Review Date
-                </dt>
-
-                <dd class="col-sm-9">
-                    @Model.ReviewDate.ToString("dd/MM/yyyy")
+                <dt class="col-sm-4 text-muted">Review Date</dt>
+                <dd class="col-sm-8 text-muted">
+                    @Model.ReviewDate.ToString("yyyy-MM-dd")
                 </dd>
-
             </dl>
 
-
-            <form method="post"
-                  action="/Patient/Reviews/DeleteConfirmed/@Model.ReviewId">
-
+            <form asp-area="Patient" asp-controller="Reviews" asp-action="Delete" asp-route-id="@Model.ReviewId" method="post">
                 @Html.AntiForgeryToken()
-
-                <button type="submit"
-                        class="btn btn-danger rounded-3">
-
-                    <i class="bi bi-trash"></i>
-                    Yes, Delete
-
-                </button>
-
-
-                <a href="/Patient/Reviews"
-                   class="btn btn-secondary rounded-3">
-
-                    Cancel
-
-                </a>
-
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 shadow-sm">
+                        <i class="bi bi-trash me-1"></i> Yes, Delete
+                    </button>
+                    <a asp-area="Patient" asp-controller="Reviews" asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
+                        Cancel
+                    </a>
+                </div>
             </form>
-
         </div>
-
     </div>
-
 </div>

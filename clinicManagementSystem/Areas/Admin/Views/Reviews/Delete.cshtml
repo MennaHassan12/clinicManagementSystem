@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Delete Review";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container-fluid py-4">
@@ -19,14 +19,20 @@
 
             <dl class="row">
 
-                <dt class="col-sm-3">Review ID</dt>
-                <dd class="col-sm-9">
-                    #@Model.ReviewId
+                <dt class="col-sm-3">Doctor</dt>
+                <dd class="col-sm-9 fw-bold text-dark">
+                    @(Model.Appointment?.Doctor?.ApplicationUser?.FullName ?? $"Doctor #{Model.Appointment?.DoctorId}")
+                    <span class="badge bg-light text-muted border ms-2">@(Model.Appointment?.Doctor?.Department?.Name ?? "Department")</span>
                 </dd>
 
-                <dt class="col-sm-3">Appointment</dt>
+                <dt class="col-sm-3">Patient</dt>
+                <dd class="col-sm-9 fw-semibold">
+                    @(Model.Appointment?.Patient?.ApplicationUser?.FullName ?? $"Patient #{Model.Appointment?.PatientId}")
+                </dd>
+
+                <dt class="col-sm-3">Appointment Date</dt>
                 <dd class="col-sm-9">
-                    #@Model.AppointmentId
+                    @(Model.Appointment?.AppointmentDate.ToString("dd/MM/yyyy") ?? $"Appointment #{Model.AppointmentId}")
                 </dd>
 
                 <dt class="col-sm-3">Rating</dt>

@@ -1,12 +1,10 @@
 ﻿using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Linq.Expressions;
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Policy = "RequireAdminOrSuperAdmin")]
     public class DepartmentsController : Controller
     {
         private readonly IRepository<Department> _departmentRepository;
@@ -20,12 +18,17 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var departments = await _departmentRepository.GetAsync(
+                includes: new Expression<Func<Department, object>>[]
+                {
+            d => d.Doctors
+                },
                 orderBy: q => q.OrderBy(d => d.Name),
                 tracked: false
             );
 
             return View(departments);
         }
+
 
         // GET: Admin/Departments/Create
         public IActionResult Create()
