@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Delete Medical File";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Doctor/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container py-4">
@@ -119,7 +119,7 @@
 
             </div>
 
-            <form asp-area="Admin"
+            <form asp-area="Doctor"
                   asp-controller="MedicalFiles"
                   asp-action="Delete"
                   asp-route-id="@Model.MedicalFileId"

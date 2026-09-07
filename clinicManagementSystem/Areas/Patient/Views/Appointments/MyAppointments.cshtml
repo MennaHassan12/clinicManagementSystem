@@ -82,6 +82,14 @@
                                         <a href="/Doctor/MedicalRecords/Details?appointmentId=@item.AppointmentId" class="btn btn-outline-primary btn-sm px-3 rounded-pill">
                                             📄 View Prescription
                                         </a>
+
+                                        <a asp-area="Patient"
+                                           asp-controller="Reviews"
+                                           asp-action="Create"
+                                           asp-route-appointmentId="@item.AppointmentId"
+                                           class="btn btn-outline-warning btn-sm px-3 rounded-pill ms-2">
+                                            ⭐ Add Review
+                                        </a>
                                     }
                                     else
                                     {

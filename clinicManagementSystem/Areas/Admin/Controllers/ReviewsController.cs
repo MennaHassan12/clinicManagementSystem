@@ -1,13 +1,11 @@
 ﻿using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Policy = "RequireAdminOrSuperAdmin")]
     public class ReviewsController : Controller
     {
         private readonly IRepository<Review> _reviewRepository;
@@ -22,7 +20,11 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             var reviews = await _reviewRepository.GetAsync(
                 includes: new Expression<Func<Review, object>>[]
                 {
-                    r => r.Appointment!
+                    r => r.Appointment!,
+                    r => r.Appointment.Doctor,
+                    r => r.Appointment.Doctor.ApplicationUser,
+                    r => r.Appointment.Patient,
+                    r => r.Appointment.Patient.ApplicationUser
                 },
                 orderBy: q => q.OrderByDescending(r => r.ReviewDate),
                 tracked: false
@@ -37,7 +39,11 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                 r => r.ReviewId == id,
                 includes: new Expression<Func<Review, object>>[]
                 {
-                    r => r.Appointment!
+                    r => r.Appointment!,
+                    r => r.Appointment.Doctor,
+                    r => r.Appointment.Doctor.ApplicationUser,
+                    r => r.Appointment.Patient,
+                    r => r.Appointment.Patient.ApplicationUser
                 },
                 tracked: false
             );

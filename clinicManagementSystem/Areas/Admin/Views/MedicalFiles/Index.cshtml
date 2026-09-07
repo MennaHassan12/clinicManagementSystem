@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Medical Files";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container-fluid py-4">
@@ -103,6 +103,16 @@
                                     </td>
 
                                     <td class="text-center">
+
+                                        <a asp-area="Admin"
+                                           asp-controller="MedicalFiles"
+                                           asp-action="ViewFile"
+                                           asp-route-id="@file.MedicalFileId"
+                                           class="btn btn-sm btn-outline-primary rounded-2 me-1"
+                                           title="View">
+
+                                            <i class="fas fa-eye"></i>
+                                        </a>
 
                                         <a asp-area="Admin"
                                            asp-controller="MedicalFiles"
