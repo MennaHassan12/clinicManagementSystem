@@ -1,4 +1,4 @@
-﻿using clinicManagementSystem.Data;
+using clinicManagementSystem.Data;
 using clinicManagementSystem.DataAccess;
 using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories;
@@ -69,8 +69,28 @@ namespace clinicManagementSystem
 
             builder.Services.AddScoped<IDoctorService, DoctorService>();
             builder.Services.AddScoped<IAppointmentService, AppointmentService>();
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            builder.Services.AddControllersWithViews()
+                .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization();
             builder.Services.AddRazorPages();
+
+            var supportedCultures = new[]
+            {
+                new System.Globalization.CultureInfo("en-US"),
+                new System.Globalization.CultureInfo("ar-EG"),
+                new System.Globalization.CultureInfo("ar"),
+                new System.Globalization.CultureInfo("en")
+            };
+
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("en-US");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+                options.RequestCultureProviders.Insert(0, new Microsoft.AspNetCore.Localization.CookieRequestCultureProvider());
+            });
 
             builder.Services.AddAntiforgery(options =>
             {
@@ -100,14 +120,8 @@ namespace clinicManagementSystem
             app.UseAuthentication();
             app.UseAuthorization();
 
-            var defaultCulture = new System.Globalization.CultureInfo("en-US");
-            var localizationOptions = new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture(defaultCulture),
-                SupportedCultures = new[] { defaultCulture },
-                SupportedUICultures = new[] { defaultCulture }
-            };
-            app.UseRequestLocalization(localizationOptions);
+            var locOptions = app.Services.GetRequiredService<Microsoft.Extensions.Options.IOptions<RequestLocalizationOptions>>().Value;
+            app.UseRequestLocalization(locOptions);
 
             app.MapControllerRoute(
                 name: "areas",
