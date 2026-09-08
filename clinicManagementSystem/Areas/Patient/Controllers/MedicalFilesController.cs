@@ -57,14 +57,103 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
 
             return View(medicalFiles);
         }
+        // =========================
+        // MEDICAL FILES FOR APPOINTMENT
+        // =========================
+
+        [HttpGet]
+        public async Task<IActionResult> ForAppointment(int appointmentId)
+        {
+            var patient = await GetCurrentPatientAsync();
+
+            if (patient == null)
+            {
+                return NotFound("Patient not found.");
+            }
+
+            var medicalFiles = await _medicalFileRepository.GetAsync(
+                expression: f =>
+                    f.MedicalRecord != null &&
+                    f.MedicalRecord.Appointment != null &&
+                    f.MedicalRecord.Appointment.AppointmentId == appointmentId &&
+                    f.MedicalRecord.Appointment.PatientId == patient.PatientId,
+
+                includes: new Expression<Func<MedicalFile, object>>[]
+                {
+            f => f.MedicalRecord!,
+            f => f.MedicalRecord!.Appointment!,
+            f => f.MedicalRecord!.Appointment!.Doctor!,
+            f => f.MedicalRecord!.Appointment!.Doctor!.ApplicationUser!,
+            f => f.MedicalRecord!.Appointment!.Doctor!.Department!
+                },
+
+                orderBy: q => q.OrderByDescending(f => f.UploadDate),
+
+                tracked: false
+            );
+
+            if (medicalFiles == null || !medicalFiles.Any())
+            {
+                TempData["Error"] = "No medical files found for this appointment.";
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(medicalFiles);
+        }
+        // =========================
+        // VIEW FILE
+        // =========================
+        [HttpGet]
+        public async Task<IActionResult> ViewFile(int id)
+        {
+            var patient = await GetCurrentPatientAsync();
+
+            if (patient == null)
+            {
+                return NotFound("Patient not found.");
+            }
+
+            var medicalFile = await _medicalFileRepository.GetOneAsync(
+                expression: f => f.MedicalFileId == id &&
+                                 f.MedicalRecord != null &&
+                                 f.MedicalRecord.Appointment != null &&
+                                 f.MedicalRecord.Appointment.PatientId == patient.PatientId,
+                tracked: false
+            );
+
+            if (medicalFile == null)
+            {
+                return NotFound("Medical file not found or unauthorized access.");
+            }
+
+            var filePath = Path.Combine(
+                _webHostEnvironment.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"),
+                medicalFile.FilePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+            );
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("File could not be found on server.");
+            }
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+            var contentType = GetContentType(
+                medicalFile.FileType ?? Path.GetExtension(medicalFile.FileName)
+            );
+
+            return File(fileBytes, contentType);
+        }
 
         // =========================
-        // DOWNLOAD / VIEW FILE
+        // DOWNLOAD FILE
         // =========================
         [HttpGet]
         public async Task<IActionResult> Download(int id)
         {
             var patient = await GetCurrentPatientAsync();
+
             if (patient == null)
             {
                 return NotFound("Patient not found.");
@@ -95,11 +184,13 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
             }
 
             var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            var contentType = GetContentType(medicalFile.FileType ?? Path.GetExtension(medicalFile.FileName));
+
+            var contentType = GetContentType(
+                medicalFile.FileType ?? Path.GetExtension(medicalFile.FileName)
+            );
 
             return File(fileBytes, contentType, medicalFile.FileName);
         }
-
         // =========================
         // HELPERS
         // =========================
