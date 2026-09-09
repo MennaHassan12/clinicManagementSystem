@@ -1,4 +1,4 @@
-﻿@{
+@{
     Layout = "~/Areas/Identity/Views/Shared/_AuthLayout.cshtml";
 }
 
@@ -9,8 +9,8 @@
             <span class="icon icon-clinic"></span>
         </div>
         <div class="brand-text">
-            <h1>Clinic System</h1>
-            <span>DIAGNOSTIC PLATFORM</span>
+            <h1>@SharedLocalizer["Clinic Management System"]</h1>
+            <span>@SharedLocalizer["HealthCare"]</span>
         </div>
     </div>
 
@@ -20,8 +20,7 @@
     </div>
 
     <div class="footer-note">
-        HIPAA Compliant Diagnostic System<br />
-        Copyright &copy; @DateTime.Now.Year <b>Clinic System</b>. All Rights Reserved.
+        &copy; @DateTime.Now.Year <b>@SharedLocalizer["Clinic Management System"]</b>.
     </div>
 
 </div>

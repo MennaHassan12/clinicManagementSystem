@@ -1,4 +1,6 @@
 @using clinicManagementSystem.Models
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<clinicManagementSystem.SharedResource> SharedLocalizer
 @{ 
     Layout = null;
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
@@ -43,7 +45,7 @@
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-3 text-primary" href="/Patient/Home/Index">
                 <i class="bi bi-heart-pulse-fill fs-2"></i>
-                <span class="tracking-wide">HealthCare</span>
+                <span class="tracking-wide">@SharedLocalizer["HealthCare"]</span>
             </a>
 
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
@@ -53,31 +55,31 @@
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-semibold text-uppercase fs-7 gap-lg-3">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Patient/Home/Index">Home</a>
+                        <a class="nav-link text-dark" href="/Patient/Home/Index">@SharedLocalizer["Home"]</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-dark" href="#" id="pagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Pages
+                            @SharedLocalizer["Pages"]
                         </a>
                         <ul class="dropdown-menu border-0 shadow-lg rounded-3 py-2" aria-labelledby="pagesDropdown">
-                            <li><a class="dropdown-item py-2" href="/Patient/Home/AllDoctors"><i class="bi bi-person-badge me-2 text-primary"></i>Doctors</a></li>
-                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#departments"><i class="bi bi-hospital me-2 text-primary"></i>Departments</a></li>
-                            <li><a class="dropdown-item py-2" href="/Patient/Home/Services"><i class="bi bi-gear-wide-connected me-2 text-primary"></i>Services</a></li>
-                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#about"><i class="bi bi-info-circle me-2 text-primary"></i>About Us</a></li>
-                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#contact"><i class="bi bi-envelope me-2 text-primary"></i>Contact Us</a></li>
+                            <li><a class="dropdown-item py-2" href="/Patient/Home/AllDoctors"><i class="bi bi-person-badge me-2 text-primary"></i>@SharedLocalizer["Doctors"]</a></li>
+                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#departments"><i class="bi bi-hospital me-2 text-primary"></i>@SharedLocalizer["Departments"]</a></li>
+                            <li><a class="dropdown-item py-2" href="/Patient/Home/Services"><i class="bi bi-gear-wide-connected me-2 text-primary"></i>@SharedLocalizer["Services"]</a></li>
+                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#about"><i class="bi bi-info-circle me-2 text-primary"></i>@SharedLocalizer["About Us"]</a></li>
+                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#contact"><i class="bi bi-envelope me-2 text-primary"></i>@SharedLocalizer["Contact Us"]</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Patient/Home/Index#about">About</a>
+                        <a class="nav-link text-dark" href="/Patient/Home/Index#about">@SharedLocalizer["About"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Patient/Home/Index#contact">Contact</a>
+                        <a class="nav-link text-dark" href="/Patient/Home/Index#contact">@SharedLocalizer["Contact"]</a>
                     </li>
                 </ul>
 
                 <div class="d-flex align-items-center gap-2">
                     <a class="btn btn-outline-primary rounded-pill px-4 fw-semibold" asp-area="Identity" asp-controller="Profile" asp-action="Index">
-                        <i class="bi bi-person-circle me-1"></i> My Profile
+                        <i class="bi bi-person-circle me-1"></i> @SharedLocalizer["My Profile"]
                     </a>
                 </div>
             </div>

@@ -1,7 +1,7 @@
-﻿@model IEnumerable<clinicManagementSystem.Models.MedicalFile>
+@model IEnumerable<clinicManagementSystem.Models.MedicalFile>
 
 @{
-    ViewData["Title"] = "My Medical Files";
+    ViewData["Title"] = SharedLocalizer["My Medical Files"];
     Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
 
     int patientId = ViewBag.PatientId ?? 1;
@@ -11,57 +11,42 @@
 
     <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-
         <div>
             <h2 class="fw-bold text-primary mb-1">
-                My Medical Files
+                @SharedLocalizer["My Medical Files"]
             </h2>
-
             <p class="text-muted mb-0">
-                View your medical files and documents
+                @SharedLocalizer["View your medical files and documents"]
             </p>
         </div>
-
     </div>
-
 
     <!-- SUCCESS MESSAGE -->
     @if (TempData["Success"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show">
-
             <i class="fas fa-check-circle me-2"></i>
-
             @TempData["Success"]
-
             <button type="button"
                     class="btn-close"
                     data-bs-dismiss="alert">
             </button>
-
         </div>
     }
 
-
     <!-- FILES CARD -->
     <div class="card shadow-sm border-0">
-
         <div class="card-body">
-
             @if (Model == null || !Model.Any())
             {
                 <div class="text-center py-5">
-
                     <i class="fas fa-file-medical fa-3x text-muted mb-3"></i>
-
                     <h5 class="text-muted">
-                        No medical files found.
+                        @SharedLocalizer["No medical files found."]
                     </h5>
-
                     <p class="text-muted">
-                        Your medical documents will appear here after your doctor uploads them.
+                        @SharedLocalizer["Your medical documents will appear here after your doctor uploads them."]
                     </p>
-
                 </div>
             }
             else
@@ -73,68 +58,54 @@
                 .ToList();
 
                 <div class="row g-4">
-
                     @foreach (var file in appointments)
                     {
                         var appointment = file.MedicalRecord?.Appointment;
                         var doctor = appointment?.Doctor;
 
                         <div class="col-md-6 col-lg-4">
-
                             <div class="card h-100 border-0 shadow-sm rounded-4">
-
                                 <div class="card-body p-4">
-
                                     <!-- DOCTOR -->
                                     <div class="d-flex align-items-center mb-3">
-
                                         <div class="bg-primary-subtle rounded-circle p-3 me-3">
                                             <i class="fas fa-user-md text-primary fa-lg"></i>
                                         </div>
-
                                         <div>
                                             <h5 class="fw-bold mb-1">
-                                                @(doctor?.ApplicationUser?.FullName ?? "Doctor")
+                                                @(doctor?.ApplicationUser?.FullName ?? SharedLocalizer["Doctor"].Value)
                                             </h5>
-
                                             <small class="text-muted">
-                                                @(doctor?.Department?.Name ?? "Department")
+                                                @(doctor?.Department?.Name ?? SharedLocalizer["General"].Value)
                                             </small>
                                         </div>
-
                                     </div>
 
                                     <hr />
 
                                     <!-- APPOINTMENT -->
                                     <div class="mb-3">
-
                                         <div class="text-muted small mb-1">
                                             <i class="fas fa-calendar-alt me-2"></i>
-                                            Appointment
+                                            @SharedLocalizer["DATE & TIME"]
                                         </div>
-
                                         <div class="fw-semibold">
                                             @appointment!.AppointmentDate.ToString("dd/MM/yyyy")
                                         </div>
-
                                     </div>
 
                                     <!-- NUMBER OF FILES -->
                                     <div class="mb-4">
-
                                         <div class="text-muted small mb-1">
                                             <i class="fas fa-file-medical me-2"></i>
-                                            Medical Files
+                                            @SharedLocalizer["Medical Files"]
                                         </div>
-
                                         <span class="badge bg-info px-3 py-2 rounded-pill">
                                             @Model.Count(f =>
                                                      f.MedicalRecord?.Appointment?.AppointmentId
                                                      == appointment.AppointmentId)
-                                            File(s)
+                                            @SharedLocalizer["File"]
                                         </span>
-
                                     </div>
 
                                     <!-- BUTTON -->
@@ -143,24 +114,15 @@
                                        asp-action="ForAppointment"
                                        asp-route-appointmentId="@appointment.AppointmentId"
                                        class="btn btn-outline-primary w-100 rounded-3">
-
                                         <i class="fas fa-folder-open me-2"></i>
-                                        View Medical Files
-
+                                        @SharedLocalizer["View File"]
                                     </a>
-
                                 </div>
-
                             </div>
-
                         </div>
                     }
-
                 </div>
             }
-
         </div>
-
     </div>
-
 </div>

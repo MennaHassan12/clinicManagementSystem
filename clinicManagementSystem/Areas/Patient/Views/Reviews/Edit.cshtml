@@ -1,15 +1,15 @@
-﻿@model clinicManagementSystem.Models.Review
+@model clinicManagementSystem.Models.Review
 
 @{
-    ViewData["Title"] = "Edit Review";
+    ViewData["Title"] = SharedLocalizer["Edit"];
     Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container py-4" style="max-width: 700px;">
 
     <div class="mb-4">
-        <h2 class="fw-bold text-primary mb-1">Edit Your Review</h2>
-        <p class="text-muted">Update your rating or comments for this visit</p>
+        <h2 class="fw-bold text-primary mb-1">@SharedLocalizer["Edit"]</h2>
+        <p class="text-muted">@SharedLocalizer["Track and manage your medical appointments"]</p>
     </div>
 
     @if (TempData["error_notification"] != null)
@@ -32,37 +32,37 @@
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 small"></div>
 
                 <div class="mb-4">
-                    <label class="form-label fw-bold">Doctor / Visit</label>
+                    <label class="form-label fw-bold">@SharedLocalizer["Doctor"]</label>
                     <div class="form-control bg-light rounded-3 py-2">
                         👨‍⚕️ @(Model.Appointment?.Doctor?.ApplicationUser?.FullName ?? "Doctor #" + Model.Appointment?.DoctorId)
-                        - Visit Date: @(Model.Appointment != null ? Model.Appointment.AppointmentDate.ToString("yyyy-MM-dd") : "N/A")
+                        - @SharedLocalizer["DATE & TIME"]: @(Model.Appointment != null ? Model.Appointment.AppointmentDate.ToString("yyyy-MM-dd") : "N/A")
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label asp-for="Rating" class="form-label fw-bold">Overall Rating <span class="text-danger">*</span></label>
+                    <label asp-for="Rating" class="form-label fw-bold">@SharedLocalizer["Rating"] <span class="text-danger">*</span></label>
                     <select asp-for="Rating" class="form-select form-select-lg rounded-3">
-                        <option value="5">⭐⭐⭐⭐⭐ 5 - Excellent</option>
-                        <option value="4">⭐⭐⭐⭐ 4 - Good</option>
-                        <option value="3">⭐⭐⭐ 3 - Average</option>
-                        <option value="2">⭐⭐ 2 - Poor</option>
-                        <option value="1">⭐ 1 - Very Poor</option>
+                        <option value="5">⭐⭐⭐⭐⭐ 5</option>
+                        <option value="4">⭐⭐⭐⭐ 4</option>
+                        <option value="3">⭐⭐⭐ 3</option>
+                        <option value="2">⭐⭐ 2</option>
+                        <option value="1">⭐ 1</option>
                     </select>
                     <span asp-validation-for="Rating" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-4">
-                    <label asp-for="Comment" class="form-label fw-bold">Feedback / Comments</label>
+                    <label asp-for="Comment" class="form-label fw-bold">@SharedLocalizer["Comment"]</label>
                     <textarea asp-for="Comment" class="form-control rounded-3" rows="4" maxlength="1000"></textarea>
                     <span asp-validation-for="Comment" class="text-danger small"></span>
                 </div>
 
                 <div class="d-flex gap-2 pt-2">
                     <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                        <i class="bi bi-check-lg me-1"></i> Save Changes
+                        <i class="bi bi-check-lg me-1"></i> @SharedLocalizer["Confirm & Book"]
                     </button>
                     <a asp-area="Patient" asp-controller="Reviews" asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
-                        Cancel
+                        @SharedLocalizer["Cancel"]
                     </a>
                 </div>
             </form>

@@ -1,7 +1,9 @@
-﻿@model clinicManagementSystem.Models.Doctor
+@model clinicManagementSystem.Models.Doctor
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<SharedResource> SharedLocalizer
 
 @{
-    ViewData["Title"] = "Doctor Details";
+    ViewData["Title"] = SharedLocalizer["Doctor Profile"];
     Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
 
     double rating = ViewBag.DoctorRating != null ? Convert.ToDouble(ViewBag.DoctorRating) : 0.0;
@@ -11,7 +13,7 @@
     <div class="card shadow-lg border-0 rounded-4 overflow-hidden bg-white">
 
         <div class="bg-primary py-3 px-4 text-white">
-            <h4 class="mb-0 fw-bold">Doctor Profile</h4>
+            <h4 class="mb-0 fw-bold">@SharedLocalizer["Doctor Profile"]</h4>
         </div>
 
         <div class="card-body p-4 p-md-5">
@@ -51,11 +53,11 @@
                     <div class="d-grid gap-2 mt-3">
                         <a href="/Patient/Appointments/Book?doctorId=@Model.DoctorId"
                            class="btn btn-primary btn-lg fw-semibold shadow-sm rounded-3">
-                            <i class="bi bi-calendar-check me-1"></i> Book Appointment
+                            <i class="bi bi-calendar-check me-1"></i> @SharedLocalizer["Book Appointment Now"]
                         </a>
                         <a href="/Patient/Home/AllDoctors"
                            class="btn btn-outline-secondary fw-semibold rounded-3">
-                            Back to List
+                            @SharedLocalizer["Back"]
                         </a>
                     </div>
                 </div>
@@ -64,14 +66,14 @@
                     <div class="row g-3 mb-4">
                         <div class="col-sm-4">
                             <div class="p-3 bg-light rounded-3 border-start border-4 border-success">
-                                <span class="text-muted small d-block mb-1">Consultation Fee</span>
-                                <span class="fw-bold text-success fs-4">$@Model.ConsultationFee.ToString("F2")</span>
+                                <span class="text-muted small d-block mb-1">@SharedLocalizer["Fee"]</span>
+                                <span class="fw-bold text-success fs-4">@Model.ConsultationFee.ToString("F2") @SharedLocalizer["EGP"]</span>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="p-3 bg-light rounded-3 border-start border-4 border-primary">
-                                <span class="text-muted small d-block mb-1">Experience</span>
-                                <span class="fw-bold text-dark fs-4">@Model.YearsOfExperience Years</span>
+                                <span class="text-muted small d-block mb-1">@SharedLocalizer["Years Experience"]</span>
+                                <span class="fw-bold text-dark fs-4">@Model.YearsOfExperience @SharedLocalizer["Years"]</span>
                             </div>
                         </div>
 
@@ -84,9 +86,9 @@
                     </div>
 
                     <div class="mb-4">
-                        <h5 class="fw-bold text-secondary mb-2">About Doctor</h5>
+                        <h5 class="fw-bold text-secondary mb-2">@SharedLocalizer["About"]</h5>
                         <p class="text-muted leading-relaxed mb-0">
-                            @(string.IsNullOrEmpty(Model.Bio) ? "General physician dedicated to providing comprehensive medical care, accurate diagnosis, and personalized treatment." : Model.Bio)
+                            @(string.IsNullOrEmpty(Model.Bio) ? SharedLocalizer["Providing exceptional healthcare service excellence through qualified physicians and state-of-the-art technology."].Value : Model.Bio)
                         </p>
                     </div>
 
@@ -116,7 +118,7 @@
                         else
                         {
                             <div class="p-3 bg-light rounded-3 text-center">
-                                <p class="text-muted mb-0">No active schedules available right now.</p>
+                                <p class="text-muted mb-0">@SharedLocalizer["No working shifts available for this doctor."]</p>
                             </div>
                         }
                     </div>

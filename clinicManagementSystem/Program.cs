@@ -86,7 +86,7 @@ namespace clinicManagementSystem
 
             builder.Services.Configure<RequestLocalizationOptions>(options =>
             {
-                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("en-US");
+                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("ar-EG");
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
                 options.RequestCultureProviders.Insert(0, new Microsoft.AspNetCore.Localization.CookieRequestCultureProvider());
@@ -115,13 +115,13 @@ namespace clinicManagementSystem
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            var locOptions = app.Services.GetRequiredService<Microsoft.Extensions.Options.IOptions<RequestLocalizationOptions>>().Value;
+            app.UseRequestLocalization(locOptions);
+
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            var locOptions = app.Services.GetRequiredService<Microsoft.Extensions.Options.IOptions<RequestLocalizationOptions>>().Value;
-            app.UseRequestLocalization(locOptions);
 
             app.MapControllerRoute(
                 name: "areas",

@@ -1,11 +1,16 @@
-﻿@using clinicManagementSystem.Models
+@using clinicManagementSystem.Models
 @using clinicManagementSystem.Repositories.IRepositories
 @using System.Linq.Expressions
 @using System.Security.Claims
+@using Microsoft.Extensions.Localization
 @inject IRepository<Doctor> DoctorRepository
+@inject IStringLocalizer<clinicManagementSystem.SharedResource> SharedLocalizer
 
 @{
     Layout = null;
+
+    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+    var isRtl = currentCulture.StartsWith("ar", StringComparison.OrdinalIgnoreCase);
 
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
@@ -27,12 +32,12 @@
         );
     }
 
-    var doctorName = currentDoctor?.ApplicationUser?.FullName ?? "Doctor";
-    var departmentName = currentDoctor?.Department?.Name ?? "Medical Staff";
+    var doctorName = currentDoctor?.ApplicationUser?.FullName ?? SharedLocalizer["Doctor"].Value;
+    var departmentName = currentDoctor?.Department?.Name ?? SharedLocalizer["HealthCare"].Value;
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@currentCulture" dir="@(isRtl ? "rtl" : "ltr")">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,25 +45,26 @@
     <title>@ViewData["Title"] - HealthCare Portal</title>
 
     <!-- Bootstrap 5 -->
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @if (isRtl)
+    {
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    }
 
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
     <!-- Toastr -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
 
     <style>
         body {
             background-color: #f6f9fc;
             font-family: Arial, sans-serif;
         }
-
-        /* =========================
-                   SIDEBAR
-                   ========================= */
 
         .doctor-sidebar {
             width: 260px;
@@ -69,6 +75,13 @@
             background: #ffffff;
             border-right: 1px solid #e9eef5;
             z-index: 1030;
+        }
+
+        html[dir="rtl"] .doctor-sidebar {
+            left: auto;
+            right: 0;
+            border-right: none;
+            border-left: 1px solid #e9eef5;
         }
 
         .doctor-brand {
@@ -83,9 +96,9 @@
             border-bottom: 1px solid #eef2f7;
         }
 
-            .doctor-brand i {
-                font-size: 28px;
-            }
+        .doctor-brand i {
+            font-size: 28px;
+        }
 
         .doctor-user {
             padding: 22px 20px;
@@ -130,44 +143,41 @@
             text-decoration: none;
         }
 
-            .doctor-menu .nav-link i {
-                width: 20px;
-                text-align: center;
-                font-size: 17px;
-            }
+        .doctor-menu .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 17px;
+        }
 
-            .doctor-menu .nav-link:hover {
-                background: #f0f6ff;
-                color: #0d6efd;
-            }
+        .doctor-menu .nav-link:hover {
+            background: #f0f6ff;
+            color: #0d6efd;
+        }
 
-            .doctor-menu .nav-link.active {
-                background: #eaf3ff;
-                color: #0d6efd;
-                font-weight: 600;
-            }
+        .doctor-menu .nav-link.active {
+            background: #eaf3ff;
+            color: #0d6efd;
+            font-weight: 600;
+        }
 
         .doctor-logout {
             color: #dc3545 !important;
         }
 
-            .doctor-logout:hover {
-                background: #fff1f2 !important;
-                color: #dc3545 !important;
-            }
-
-        /* =========================
-                   MAIN
-                   ========================= */
+        .doctor-logout:hover {
+            background: #fff1f2 !important;
+            color: #dc3545 !important;
+        }
 
         .doctor-main {
             margin-left: 260px;
             min-height: 100vh;
         }
 
-        /* =========================
-                   TOPBAR
-                   ========================= */
+        html[dir="rtl"] .doctor-main {
+            margin-left: 0;
+            margin-right: 260px;
+        }
 
         .doctor-topbar {
             height: 75px;
@@ -194,32 +204,32 @@
             font-weight: 600;
         }
 
-            .doctor-user-menu i {
-                color: #0d6efd;
-                font-size: 24px;
-            }
+        .doctor-user-menu i {
+            color: #0d6efd;
+            font-size: 24px;
+        }
 
         .mobile-menu-btn {
             display: none;
         }
 
-        /* =========================
-                   MOBILE
-                   ========================= */
-
         @@media (max-width: 991.98px) {
-
             .doctor-sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.25s ease;
             }
 
-                .doctor-sidebar.show {
-                    transform: translateX(0);
-                }
+            html[dir="rtl"] .doctor-sidebar {
+                transform: translateX(100%);
+            }
+
+            .doctor-sidebar.show {
+                transform: translateX(0) !important;
+            }
 
             .doctor-main {
                 margin-left: 0;
+                margin-right: 0;
             }
 
             .mobile-menu-btn {
@@ -239,10 +249,7 @@
 
 <body>
 
-    <!-- =========================
-         SIDEBAR
-         ========================= -->
-
+    <!-- Sidebar -->
     <aside class="doctor-sidebar" id="doctorSidebar">
 
         <!-- Brand -->
@@ -250,308 +257,204 @@
            asp-controller="Dashboard"
            asp-action="Index"
            class="doctor-brand">
-
             <i class="bi bi-heart-pulse-fill me-2"></i>
-
-            <span>HealthCare</span>
-
+            <span>@SharedLocalizer["HealthCare"]</span>
         </a>
-
 
         <!-- Doctor -->
         <div class="doctor-user">
-
             <div class="d-flex align-items-center gap-3">
-
                 <div class="doctor-user-icon">
                     <i class="bi bi-person-fill"></i>
                 </div>
-
                 <div class="overflow-hidden">
-
                     <div class="fw-bold text-dark text-truncate">
                         @doctorName
                     </div>
-
                     <small class="text-muted">
                         @departmentName
                     </small>
-
                 </div>
-
             </div>
-
         </div>
-
 
         <!-- Menu -->
         <nav class="doctor-menu">
-
             <div class="doctor-menu-title">
-                Main Menu
+                @SharedLocalizer["Pages"]
             </div>
 
             <ul class="nav flex-column">
 
                 <!-- Dashboard -->
                 <li class="nav-item">
-
                     <a asp-area="Doctor"
                        asp-controller="Dashboard"
                        asp-action="Index"
                        class="nav-link @(currentController == "Dashboard" ? "active" : "")">
-
                         <i class="bi bi-grid-1x2-fill"></i>
-
-                        <span>Dashboard</span>
-
+                        <span>@SharedLocalizer["Dashboard"]</span>
                     </a>
-
                 </li>
-
 
                 <!-- Appointments -->
                 <li class="nav-item">
-
                     <a asp-area="Doctor"
                        asp-controller="Appointments"
                        asp-action="Index"
                        class="nav-link @(currentController == "Appointments" ? "active" : "")">
-
                         <i class="bi bi-calendar-check"></i>
-
-                        <span>My Appointments</span>
-
+                        <span>@SharedLocalizer["Appointments"]</span>
                     </a>
-
                 </li>
-
-
-                
-                
-
 
                 <!-- Medical Files -->
                 <li class="nav-item">
-
                     <a asp-area="Doctor"
                        asp-controller="MedicalFiles"
                        asp-action="Index"
                        class="nav-link @(currentController == "MedicalFiles" ? "active" : "")">
-
                         <i class="bi bi-file-earmark-medical"></i>
-
-                        <span>Medical Files</span>
-
+                        <span>@SharedLocalizer["Medical Files"]</span>
                     </a>
-
                 </li>
-
 
                 <!-- Reviews -->
                 <li class="nav-item">
-
                     <a asp-area="Doctor"
                        asp-controller="Reviews"
                        asp-action="Index"
                        class="nav-link @(currentController == "Reviews" ? "active" : "")">
-
                         <i class="bi bi-star"></i>
-
-                        <span>Reviews</span>
-
+                        <span>@SharedLocalizer["Reviews"]</span>
                     </a>
-
                 </li>
-
 
                 <!-- Schedule -->
                 <li class="nav-item">
-
                     <a asp-area="Doctor"
                        asp-controller="Schedule"
                        asp-action="Index"
                        class="nav-link @(currentController == "Schedule" ? "active" : "")">
-
                         <i class="bi bi-clock-history"></i>
-
-                        <span>My Schedule</span>
-
+                        <span>@SharedLocalizer["Opening Hours"]</span>
                     </a>
-
                 </li>
 
             </ul>
 
-
             <!-- Account -->
-
             <div class="doctor-menu-title mt-4">
-                Account
+                @SharedLocalizer["My Profile"]
             </div>
-
-
-            <!-- Logout -->
 
             <form asp-area="Identity"
                   asp-controller="Account"
                   asp-action="Logout"
                   method="post">
-
                 @Html.AntiForgeryToken()
-
                 <button type="submit"
                         class="nav-link doctor-logout border-0 bg-transparent w-100 text-start">
-
                     <i class="bi bi-box-arrow-right"></i>
-
-                    <span>Logout</span>
-
+                    <span>@SharedLocalizer["Logout"]</span>
                 </button>
-
             </form>
-
         </nav>
-
     </aside>
 
-
-    <!-- =========================
-         MAIN
-         ========================= -->
-
+    <!-- Main -->
     <div class="doctor-main">
 
         <!-- Topbar -->
-
         <header class="doctor-topbar">
 
             <div class="d-flex align-items-center gap-3">
-
                 <button type="button"
                         class="btn btn-light rounded-3 mobile-menu-btn"
                         id="sidebarToggle">
-
                     <i class="bi bi-list fs-4"></i>
-
                 </button>
 
                 <div>
-
                     <h6 class="fw-bold mb-0">
                         @ViewData["Title"]
                     </h6>
-
                     <small class="text-muted">
-                        Clinic Management System
+                        @SharedLocalizer["Clinic Management System"]
                     </small>
-
                 </div>
-
             </div>
 
+            <div class="d-flex align-items-center gap-3">
+                <partial name="_SelectLanguagePartial" />
 
-            <div class="dropdown">
+                <div class="dropdown">
+                    <button class="btn doctor-user-menu border-0 bg-transparent dropdown-toggle"
+                            type="button"
+                            id="doctorProfileDropdown"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                        <span class="d-none d-sm-inline">
+                            @doctorName
+                        </span>
+                    </button>
 
-                <button class="btn doctor-user-menu border-0 bg-transparent dropdown-toggle"
-                        type="button"
-                        id="doctorProfileDropdown"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false">
-
-                    <i class="bi bi-person-circle"></i>
-
-                    <span class="d-none d-sm-inline">
-                        Profile Info
-                    </span>
-
-                </button>
-
-                <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3"
-                    aria-labelledby="doctorProfileDropdown">
-
-                    <li>
-                        <a class="dropdown-item"
-                           asp-area="Identity"
-                           asp-controller="Profile"
-                           asp-action="Index">
-
-                            <i class="bi bi-person me-2"></i>
-                            Profile Info
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <hr class="dropdown-divider" />
-                    </li>
-
-                    <li>
-
-                        <form asp-area="Identity"
-                              asp-controller="Account"
-                              asp-action="Logout"
-                              method="post">
-
-                            @Html.AntiForgeryToken()
-
-                            <button type="submit"
-                                    class="dropdown-item text-danger">
-
-                                <i class="bi bi-box-arrow-right me-2"></i>
-                                Logout
-
-                            </button>
-
-                        </form>
-
-                    </li>
-
-                </ul>
-
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3"
+                        aria-labelledby="doctorProfileDropdown">
+                        <li>
+                            <a class="dropdown-item"
+                               asp-area="Identity"
+                               asp-controller="Profile"
+                               asp-action="Index">
+                                <i class="bi bi-person me-2"></i>
+                                @SharedLocalizer["My Profile"]
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                            <form asp-area="Identity"
+                                  asp-controller="Account"
+                                  asp-action="Logout"
+                                  method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit"
+                                        class="dropdown-item text-danger">
+                                    <i class="bi bi-box-arrow-right me-2"></i>
+                                    @SharedLocalizer["Logout"]
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             </div>
-
         </header>
 
-
         <!-- Page -->
-
         <main class="doctor-page-content">
-
+            <partial name="_NotificationPartial" />
             @RenderBody()
-
         </main>
-
     </div>
 
-
     <!-- Scripts -->
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 
     <script>
-
         document.addEventListener("DOMContentLoaded", function () {
-
             const sidebar = document.getElementById("doctorSidebar");
             const toggle = document.getElementById("sidebarToggle");
 
             if (toggle && sidebar) {
-
                 toggle.addEventListener("click", function () {
-
                     sidebar.classList.toggle("show");
-
                 });
-
             }
-
         });
-
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)

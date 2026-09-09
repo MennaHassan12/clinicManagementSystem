@@ -1,12 +1,12 @@
-﻿@model clinicManagementSystem.ViewModels.RegisterVM
+@model clinicManagementSystem.ViewModels.RegisterVM
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = SharedLocalizer["Register"];
     Layout = "_MainLayout";
 }
 
-<h2>Create Account</h2>
-<p class="subtitle">Fill in your details to access the diagnostic platform</p>
+<h2>@SharedLocalizer["Create Account"]</h2>
+<p class="subtitle">@SharedLocalizer["Fill in your details to access the diagnostic platform"]</p>
 @if (TempData["success_notification"] != null)
 {
     <div class="success-banner">@TempData["success_notification"]</div>
@@ -20,37 +20,37 @@
 
    
     <div class="form-group">
-        <label asp-for="FullName">Full Name</label>
+        <label asp-for="FullName">@SharedLocalizer["Full Name"]</label>
         <div class="input-field">
             <span class="icon icon-user"></span>
-            <input asp-for="FullName" placeholder="Enter your full name" autocomplete="name" />
+            <input asp-for="FullName" placeholder="@SharedLocalizer["Enter your full name"]" autocomplete="name" />
         </div>
         <span asp-validation-for="FullName" class="field-error"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Email">Email</label>
+        <label asp-for="Email">@SharedLocalizer["Email"]</label>
         <div class="input-field">
             <span class="icon icon-email"></span>
-            <input asp-for="Email" type="email" placeholder="Enter your email" autocomplete="email" />
+            <input asp-for="Email" type="email" placeholder="@SharedLocalizer["Enter your email"]" autocomplete="email" />
         </div>
         <span asp-validation-for="Email" class="field-error"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="PhoneNumber">Phone Number</label>
+        <label asp-for="PhoneNumber">@SharedLocalizer["Phone Number"]</label>
         <div class="input-field">
             <span class="icon icon-phone"></span>
-            <input asp-for="PhoneNumber" type="tel" placeholder="Enter your phone number" autocomplete="tel" />
+            <input asp-for="PhoneNumber" type="tel" placeholder="@SharedLocalizer["Enter your phone number"]" autocomplete="tel" />
         </div>
         <span asp-validation-for="PhoneNumber" class="field-error"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Password">Password</label>
+        <label asp-for="Password">@SharedLocalizer["Password"]</label>
         <div class="input-field">
             <span class="icon icon-lock"></span>
-            <input asp-for="Password" type="password" placeholder="Enter your password" autocomplete="new-password" id="passwordInput" />
+            <input asp-for="Password" type="password" placeholder="@SharedLocalizer["Enter your password"]" autocomplete="new-password" id="passwordInput" />
             <button type="button" class="toggle-password" onclick="togglePwd('passwordInput', this)">
                 <span class="icon icon-eye"></span>
             </button>
@@ -59,10 +59,10 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="ConfirmPassword">Confirm Password</label>
+        <label asp-for="ConfirmPassword">@SharedLocalizer["Confirm Password"]</label>
         <div class="input-field">
             <span class="icon icon-lock"></span>
-            <input asp-for="ConfirmPassword" type="password" placeholder="Re-enter your password" autocomplete="new-password" id="confirmPasswordInput" />
+            <input asp-for="ConfirmPassword" type="password" placeholder="@SharedLocalizer["Re-enter your password"]" autocomplete="new-password" id="confirmPasswordInput" />
             <button type="button" class="toggle-password" onclick="togglePwd('confirmPasswordInput', this)">
                 <span class="icon icon-eye"></span>
             </button>
@@ -70,12 +70,12 @@
         <span asp-validation-for="ConfirmPassword" class="field-error"></span>
     </div>
 
-    <button type="submit" class="btn-primary">SIGN UP</button>
+    <button type="submit" class="btn-primary">@SharedLocalizer["SIGN UP"]</button>
 
 </form>
 
 <div class="switch-link">
-    Already have an account? <a asp-action="Login" asp-controller="Account">Sign In</a>
+    @SharedLocalizer["Already have an account?"] <a asp-action="Login" asp-controller="Account">@SharedLocalizer["Sign In"]</a>
 </div>
 @section Scripts {
     @{

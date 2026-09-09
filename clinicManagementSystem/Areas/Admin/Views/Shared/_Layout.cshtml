@@ -1,7 +1,8 @@
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @using clinicManagementSystem.Models
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<clinicManagementSystem.SharedResource> SharedLocalizer
 @inject UserManager<ApplicationUser> UserManager
-
 
 @{
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
@@ -16,15 +17,20 @@
     <title>@ViewData["Title"] - HealthCare Portal</title>
 
     <!-- Bootstrap 5 -->
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @if (isRtl)
+    {
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
+    }
+    else
+    {
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    }
 
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
 
     <!-- Toastr -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
 
     <style>
         body {
@@ -41,6 +47,13 @@
             background: #ffffff;
             border-right: 1px solid #e9eef5;
             z-index: 1030;
+        }
+
+        html[dir="rtl"] .admin-sidebar {
+            left: auto;
+            right: 0;
+            border-right: none;
+            border-left: 1px solid #e9eef5;
         }
 
         .admin-brand {
@@ -132,6 +145,11 @@
             min-height: 100vh;
         }
 
+        html[dir="rtl"] .admin-main {
+            margin-left: 0;
+            margin-right: 260px;
+        }
+
         .admin-topbar {
             height: 75px;
             background: #ffffff;
@@ -167,18 +185,22 @@
         }
 
         @@media (max-width: 991.98px) {
-
             .admin-sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.25s ease;
             }
 
+            html[dir="rtl"] .admin-sidebar {
+                transform: translateX(100%);
+            }
+
             .admin-sidebar.show {
-                transform: translateX(0);
+                transform: translateX(0) !important;
             }
 
             .admin-main {
                 margin-left: 0;
+                margin-right: 0;
             }
 
             .mobile-menu-btn {
@@ -206,7 +228,7 @@
            asp-action="Index"
            class="admin-brand">
             <i class="bi bi-heart-pulse-fill me-2"></i>
-            <span>HealthCare</span>
+            <span>@SharedLocalizer["HealthCare"]</span>
         </a>
 
         <!-- User -->
@@ -219,10 +241,10 @@
 
                 <div class="overflow-hidden">
                     <div class="fw-bold text-dark text-truncate">
-                        @(User.Identity?.Name ?? "Administrator")
+                        @(User.Identity?.Name ?? SharedLocalizer["Administrator"].Value)
                     </div>
                     <small class="text-muted">
-                        Administrator
+                        @SharedLocalizer["Administrator"]
                     </small>
                 </div>
 
@@ -233,7 +255,7 @@
         <nav class="admin-menu">
 
             <div class="admin-menu-title">
-                Main Menu
+                @SharedLocalizer["Pages"]
             </div>
 
             <ul class="nav flex-column">
@@ -244,7 +266,7 @@
                        asp-action="Index"
                        class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
                         <i class="bi bi-grid-1x2-fill"></i>
-                        <span>Dashboard</span>
+                        <span>@SharedLocalizer["Dashboard"]</span>
                     </a>
                 </li>
 
@@ -252,9 +274,9 @@
                     <a asp-area="Admin"
                        asp-controller="Departments"
                        asp-action="Index"
-                       class="nav-link">
+                       class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Departments" ? "active" : "")">
                         <i class="bi bi-hospital"></i>
-                        <span>Departments</span>
+                        <span>@SharedLocalizer["Departments"]</span>
                     </a>
                 </li>
 
@@ -262,34 +284,29 @@
                     <a asp-area="Admin"
                        asp-controller="Doctors"
                        asp-action="Index"
-                       class="nav-link">
+                       class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Doctors" ? "active" : "")">
                         <i class="bi bi-person-badge"></i>
-                        <span>Doctors</span>
+                        <span>@SharedLocalizer["Doctors"]</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-    <a asp-area="Admin"
-       asp-controller="DoctorSchedules"
-       asp-action="Index"
-       class="nav-link">
-        <i class="bi bi-clock-history"></i>
-        <span>Doctor Schedules</span>
-    </a>
-</li>
-            <!-- Right -->
-            <ul class="navbar-nav ml-auto align-items-center">
-                <li class="nav-item me-2">
-                    <partial name="_SelectLanguagePartial" />
+                    <a asp-area="Admin"
+                       asp-controller="DoctorSchedules"
+                       asp-action="Index"
+                       class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "DoctorSchedules" ? "active" : "")">
+                        <i class="bi bi-clock-history"></i>
+                        <span>@SharedLocalizer["Opening Hours"]</span>
+                    </a>
                 </li>
 
                 <li class="nav-item">
                     <a asp-area="Admin"
                        asp-controller="Appointments"
                        asp-action="Index"
-                       class="nav-link">
+                       class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Appointments" ? "active" : "")">
                         <i class="bi bi-calendar-check"></i>
-                        <span>Appointments</span>
+                        <span>@SharedLocalizer["Appointments"]</span>
                     </a>
                 </li>
 
@@ -297,9 +314,9 @@
                     <a asp-area="Admin"
                        asp-controller="MedicalFiles"
                        asp-action="Index"
-                       class="nav-link">
+                       class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "MedicalFiles" ? "active" : "")">
                         <i class="bi bi-file-earmark-medical"></i>
-                        <span>Medical Files</span>
+                        <span>@SharedLocalizer["Medical Files"]</span>
                     </a>
                 </li>
 
@@ -307,16 +324,16 @@
                     <a asp-area="Admin"
                        asp-controller="Reviews"
                        asp-action="Index"
-                       class="nav-link">
+                       class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Reviews" ? "active" : "")">
                         <i class="bi bi-star"></i>
-                        <span>Reviews</span>
+                        <span>@SharedLocalizer["Reviews"]</span>
                     </a>
                 </li>
 
             </ul>
 
             <div class="admin-menu-title mt-4">
-                Account
+                @SharedLocalizer["My Profile"]
             </div>
 
             <form asp-area="Identity"
@@ -329,7 +346,7 @@
                 <button type="submit"
                         class="nav-link admin-logout border-0 bg-transparent w-100 text-start">
                     <i class="bi bi-box-arrow-right"></i>
-                    <span>Logout</span>
+                    <span>@SharedLocalizer["Logout"]</span>
                 </button>
 
             </form>
@@ -358,17 +375,20 @@
                     </h6>
 
                     <small class="text-muted">
-                        Clinic Management System
+                        @SharedLocalizer["Clinic Management System"]
                     </small>
                 </div>
 
             </div>
 
-            <div class="admin-user-menu">
-                <i class="bi bi-person-circle"></i>
-                <span class="d-none d-sm-inline">
-                    @(User.Identity?.Name ?? "Administrator")
-                </span>
+            <div class="d-flex align-items-center gap-3">
+                <partial name="_SelectLanguagePartial" />
+                <div class="admin-user-menu">
+                    <i class="bi bi-person-circle"></i>
+                    <span class="d-none d-sm-inline">
+                        @(User.Identity?.Name ?? SharedLocalizer["Administrator"].Value)
+                    </span>
+                </div>
             </div>
 
         </header>
