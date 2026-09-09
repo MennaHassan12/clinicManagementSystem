@@ -1,18 +1,18 @@
-﻿@model IEnumerable<clinicManagementSystem.Models.Appointment>
+@model IEnumerable<clinicManagementSystem.Models.Appointment>
 
 @{
-    ViewData["Title"] = "My Appointments";
+    ViewData["Title"] = SharedLocalizer["My Appointments"];
     Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-primary">My Booked Appointments</h2>
-            <p class="text-muted">Track and manage your medical appointments</p>
+            <h2 class="fw-bold text-primary">@SharedLocalizer["My Booked Appointments"]</h2>
+            <p class="text-muted">@SharedLocalizer["Track and manage your medical appointments"]</p>
         </div>
         <a href="/Patient/Home/AllDoctors" class="btn btn-primary shadow-sm rounded-pill px-4">
-            👨‍⚕️ Browse Doctors
+            👨‍⚕️ @SharedLocalizer["Browse Doctors"]
         </a>
     </div>
 
@@ -21,10 +21,10 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="bg-light">
                     <tr>
-                        <th class="py-3 px-4">DOCTOR</th>
-                        <th class="py-3 px-4">DATE & TIME</th>
-                        <th class="py-3 px-4">STATUS</th>
-                        <th class="py-3 px-4 text-end">ACTIONS</th>
+                        <th class="py-3 px-4">@SharedLocalizer["DOCTOR"]</th>
+                        <th class="py-3 px-4">@SharedLocalizer["DATE & TIME"]</th>
+                        <th class="py-3 px-4">@SharedLocalizer["STATUS"]</th>
+                        <th class="py-3 px-4 text-end">@SharedLocalizer["ACTIONS"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,19 +43,19 @@
                                 <td class="px-4">
                                     @if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Pending)
                                     {
-                                        <span class="badge bg-warning-subtle text-warning border border-warning px-3 py-2 rounded-pill">Pending</span>
+                                        <span class="badge bg-warning-subtle text-warning border border-warning px-3 py-2 rounded-pill">@SharedLocalizer["Pending"]</span>
                                     }
                                     else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Confirmed)
                                     {
-                                        <span class="badge bg-info-subtle text-info border border-info px-3 py-2 rounded-pill">Confirmed</span>
+                                        <span class="badge bg-info-subtle text-info border border-info px-3 py-2 rounded-pill">@SharedLocalizer["Confirmed"]</span>
                                     }
                                     else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Completed)
                                     {
-                                        <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill">Completed</span>
+                                        <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill">@SharedLocalizer["Completed"]</span>
                                     }
                                     else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Cancelled)
                                     {
-                                        <span class="badge bg-secondary-subtle text-secondary border px-3 py-2 rounded-pill">Cancelled</span>
+                                        <span class="badge bg-secondary-subtle text-secondary border px-3 py-2 rounded-pill">@SharedLocalizer["Cancelled"]</span>
                                     }
                                 </td>
                                 <td class="px-4 text-end">
@@ -63,8 +63,8 @@
                                     {
                                         <form asp-area="Patient" asp-controller="Appointments" asp-action="Cancel" asp-route-id="@item.AppointmentId" method="post" class="d-inline">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-outline-danger btn-sm px-3 rounded-pill" onclick="return confirm('Are you sure you want to cancel the appointment?');">
-                                                Cancel
+                                            <button type="submit" class="btn btn-outline-danger btn-sm px-3 rounded-pill" onclick="return confirm('@SharedLocalizer["Are you sure you want to cancel the appointment?"]');">
+                                                @SharedLocalizer["Cancel"]
                                             </button>
                                         </form>
                                     }
@@ -72,15 +72,15 @@
                                     {
                                         <form asp-area="Patient" asp-controller="Appointments" asp-action="Delete" asp-route-id="@item.AppointmentId" method="post" class="d-inline">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-danger btn-sm px-3 rounded-pill" onclick="return confirm('Are you sure you want to delete the appointment?');">
-                                                Delete
+                                            <button type="submit" class="btn btn-danger btn-sm px-3 rounded-pill" onclick="return confirm('@SharedLocalizer["Are you sure you want to delete the appointment?"]');">
+                                                @SharedLocalizer["Delete"]
                                             </button>
                                         </form>
                                     }
                                     else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Completed)
                                     {
                                         <a href="/Doctor/MedicalRecords/Details?appointmentId=@item.AppointmentId" class="btn btn-outline-primary btn-sm px-3 rounded-pill">
-                                            📄 View Prescription
+                                            📄 @SharedLocalizer["View Prescription"]
                                         </a>
 
                                         <a asp-area="Patient"
@@ -88,12 +88,12 @@
                                            asp-action="Create"
                                            asp-route-appointmentId="@item.AppointmentId"
                                            class="btn btn-outline-warning btn-sm px-3 rounded-pill ms-2">
-                                            ⭐ Add Review
+                                            ⭐ @SharedLocalizer["Add Review"]
                                         </a>
                                     }
                                     else
                                     {
-                                        <span class="text-muted small">Confirmed</span>
+                                        <span class="text-muted small">@SharedLocalizer["Confirmed"]</span>
                                     }
                                 </td>
                             </tr>
@@ -102,7 +102,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="4" class="text-center py-4 text-muted">No appointments found.</td>
+                            <td colspan="4" class="text-center py-4 text-muted">@SharedLocalizer["No appointments found."]</td>
                         </tr>
                     }
                 </tbody>

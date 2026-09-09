@@ -6,6 +6,7 @@ namespace clinicManagementSystem.Controllers
     public class LanguageController : Controller
     {
         [HttpPost]
+        [Route("Language/SetLanguage")]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
             Response.Cookies.Append(

@@ -74,6 +74,9 @@
   <data name="Login" xml:space="preserve">
     <value>تسجيل الدخول</value>
   </data>
+  <data name="Log In" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
   <data name="Register" xml:space="preserve">
     <value>حساب جديد</value>
   </data>
@@ -97,5 +100,476 @@
   </data>
   <data name="Patient Dashboard" xml:space="preserve">
     <value>لوحة المريض</value>
+  </data>
+  <data name="HealthCare" xml:space="preserve">
+    <value>الرعاية الصحية</value>
+  </data>
+  <data name="Pages" xml:space="preserve">
+    <value>الصفحات</value>
+  </data>
+  <data name="Departments" xml:space="preserve">
+    <value>الأقسام</value>
+  </data>
+  <data name="Services" xml:space="preserve">
+    <value>الخدمات</value>
+  </data>
+  <data name="About Us" xml:space="preserve">
+    <value>من نحن</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>من نحن</value>
+  </data>
+  <data name="Blog" xml:space="preserve">
+    <value>المدونة</value>
+  </data>
+  <data name="Contact Us" xml:space="preserve">
+    <value>اتصل بنا</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>اتصل بنا</value>
+  </data>
+  <data name="Medical Files" xml:space="preserve">
+    <value>الملفات الطبية</value>
+  </data>
+  <data name="Patient Portal" xml:space="preserve">
+    <value>بوابة المريض</value>
+  </data>
+  <data name="Manage bookings" xml:space="preserve">
+    <value>إدارة الحجوزات</value>
+  </data>
+  <data name="Records &amp; history" xml:space="preserve">
+    <value>السجلات والتاريخ الطبي</value>
+  </data>
+  <data name="Profile Settings" xml:space="preserve">
+    <value>إعدادات الملف الشخصي</value>
+  </data>
+  <data name="Opening Hours" xml:space="preserve">
+    <value>ساعات العمل</value>
+  </data>
+  <data name="Quick Links" xml:space="preserve">
+    <value>روابط سريعة</value>
+  </data>
+  <data name="Contact Info" xml:space="preserve">
+    <value>معلومات الاتصال</value>
+  </data>
+  <data name="Our Doctors" xml:space="preserve">
+    <value>أطباؤنا</value>
+  </data>
+  <data name="My Profile" xml:space="preserve">
+    <value>ملفي الشخصي</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>لوحة التحكم</value>
+  </data>
+  <data name="Reviews" xml:space="preserve">
+    <value>التقييمات</value>
+  </data>
+  <data name="Administrator" xml:space="preserve">
+    <value>المسؤول</value>
+  </data>
+  <data name="Doctor" xml:space="preserve">
+    <value>طبيب</value>
+  </data>
+  <data name="Patient" xml:space="preserve">
+    <value>مريض</value>
+  </data>
+  <data name="World-Class Care" xml:space="preserve">
+    <value>رعاية صحية عالمية</value>
+  </data>
+  <data name="Your Health Is Our Top Priority" xml:space="preserve">
+    <value>صحتك هي أولويتنا القصوى</value>
+  </data>
+  <data name="Discover expert physicians, schedule hassle-free appointments, and manage your medical records seamlessly in one place." xml:space="preserve">
+    <value>اكتشف أفضل الأطباء، واحجز مواعيدك بكل سهولة، وإدارة ملفاتك الطبية في مكان واحد.</value>
+  </data>
+  <data name="Book Appointment Now" xml:space="preserve">
+    <value>احجز موعداً الآن</value>
+  </data>
+  <data name="Modern Facilities" xml:space="preserve">
+    <value>مرافق حديثة ومتطورة</value>
+  </data>
+  <data name="Health Care For Whole Family" xml:space="preserve">
+    <value>رعاية صحية متكاملة لجميع أفراد الأسرة</value>
+  </data>
+  <data name="Providing exceptional healthcare service excellence through qualified physicians and state-of-the-art technology." xml:space="preserve">
+    <value>تقديم خدمات رعاية صحية متميزة من خلال أطباء مؤهلين وأحدث التقنيات الطبية.</value>
+  </data>
+  <data name="Knowing More About Our Healthcare" xml:space="preserve">
+    <value>تعرف أكثر على خدماتنا الصحية</value>
+  </data>
+  <data name="Dedicated to providing compassionate care and expert medical services to support your health journey." xml:space="preserve">
+    <value>نحن مكرسون لتقديم الرعاية الطبية الفائقة والخدمات المتخصصة لدعم صحتك.</value>
+  </data>
+  <data name="Years Experience" xml:space="preserve">
+    <value>سنوات من الخبرة</value>
+  </data>
+  <data name="Best Care For Your" xml:space="preserve">
+    <value>أفضل رعاية لـ</value>
+  </data>
+  <data name="Good Health" xml:space="preserve">
+    <value>صحتك الجيدة</value>
+  </data>
+  <data name="Certified Specialists" xml:space="preserve">
+    <value>أخصائيون معتمدون</value>
+  </data>
+  <data name="Top Tier Doctors" xml:space="preserve">
+    <value>نخبة من أفضل الأطباء</value>
+  </data>
+  <data name="Latest Equipment" xml:space="preserve">
+    <value>أحدث الأجهزة الطبية</value>
+  </data>
+  <data name="Discover More" xml:space="preserve">
+    <value>اكتشف المزيد</value>
+  </data>
+  <data name="Portal Features" xml:space="preserve">
+    <value>مميزات البوابة</value>
+  </data>
+  <data name="Our Core Services" xml:space="preserve">
+    <value>خدماتنا الأساسية</value>
+  </data>
+  <data name="Specialties" xml:space="preserve">
+    <value>التخصصات الطبية</value>
+  </data>
+  <data name="Our Medical Departments" xml:space="preserve">
+    <value>أقسامنا الطبية</value>
+  </data>
+  <data name="Meet Our Leading Specialists" xml:space="preserve">
+    <value>تعرف على نخبة أطبائنا</value>
+  </data>
+  <data name="Show All Doctors" xml:space="preserve">
+    <value>عرض جميع الأطباء</value>
+  </data>
+  <data name="Latest News &amp; Articles" xml:space="preserve">
+    <value>أحدث الأخبار والمقالات</value>
+  </data>
+  <data name="Our Health Blog" xml:space="preserve">
+    <value>مدونتنا الصحية</value>
+  </data>
+  <data name="Show All Articles" xml:space="preserve">
+    <value>عرض جميع المقالات</value>
+  </data>
+  <data name="Get In Touch" xml:space="preserve">
+    <value>تواصل معنا</value>
+  </data>
+  <data name="Send Us a Message" xml:space="preserve">
+    <value>أرسل لنا رسالة</value>
+  </data>
+  <data name="Your Name" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="Your Email" xml:space="preserve">
+    <value>البريد الإلكتروني</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>الرسالة</value>
+  </data>
+  <data name="Send Message" xml:space="preserve">
+    <value>إرسال الرسالة</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>العنوان</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>الهاتف</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>البريد الإلكتروني</value>
+  </data>
+  <data name="All Doctors" xml:space="preserve">
+    <value>جميع الأطباء</value>
+  </data>
+  <data name="Find Your Healthcare Provider" xml:space="preserve">
+    <value>ابحث عن طبيبك المفضل</value>
+  </data>
+  <data name="Explore our full directory of experienced medical professionals" xml:space="preserve">
+    <value>استكشف دليلنا الكامل للأطباء المتخصصين والخبراء</value>
+  </data>
+  <data name="Search by doctor name or keyword..." xml:space="preserve">
+    <value>ابحث باسم الطبيب أو بالكلمة المفتاحية...</value>
+  </data>
+  <data name="All Specialties" xml:space="preserve">
+    <value>جميع التخصصات</value>
+  </data>
+  <data name="Find" xml:space="preserve">
+    <value>بحث</value>
+  </data>
+  <data name="Reset Filters" xml:space="preserve">
+    <value>إعادة ضبط</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>عام</value>
+  </data>
+  <data name="Fee" xml:space="preserve">
+    <value>الكشف</value>
+  </data>
+  <data name="EGP" xml:space="preserve">
+    <value>ج.م</value>
+  </data>
+  <data name="View Details" xml:space="preserve">
+    <value>عرض التفاصيل</value>
+  </data>
+  <data name="Book Now" xml:space="preserve">
+    <value>احجز الآن</value>
+  </data>
+  <data name="No Doctors Found" xml:space="preserve">
+    <value>لم يتم العثور على أطباء</value>
+  </data>
+  <data name="Try searching with a different doctor name or specialty." xml:space="preserve">
+    <value>جرب البحث باسم طبيب آخر أو تخصص مختلف.</value>
+  </data>
+  <data name="Book an Appointment" xml:space="preserve">
+    <value>حجز موعد طبي</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>رجوع</value>
+  </data>
+  <data name="Doctor" xml:space="preserve">
+    <value>الطبيب</value>
+  </data>
+  <data name="Select Working Shift / Day" xml:space="preserve">
+    <value>اختر العيادة / الموعد المتاح</value>
+  </data>
+  <data name="No working shifts available for this doctor." xml:space="preserve">
+    <value>لا توجد مواعيد متاحة لهذا الطبيب حالياً.</value>
+  </data>
+  <data name="Patient Name" xml:space="preserve">
+    <value>اسم المريض</value>
+  </data>
+  <data name="Enter patient full name" xml:space="preserve">
+    <value>أدخل اسم المريض بالكامل</value>
+  </data>
+  <data name="Email Address" xml:space="preserve">
+    <value>البريد الإلكتروني</value>
+  </data>
+  <data name="Phone Number" xml:space="preserve">
+    <value>رقم الهاتف</value>
+  </data>
+  <data name="Enter phone number" xml:space="preserve">
+    <value>أدخل رقم الهاتف</value>
+  </data>
+  <data name="Date of Birth" xml:space="preserve">
+    <value>تاريخ الميلاد</value>
+  </data>
+  <data name="Select Date" xml:space="preserve">
+    <value>اختر التاريخ</value>
+  </data>
+  <data name="Select Time Slot" xml:space="preserve">
+    <value>اختر الوقت</value>
+  </data>
+  <data name="-- Choose Time Slot --" xml:space="preserve">
+    <value>-- اختر الموعد المناسب --</value>
+  </data>
+  <data name="No slots available for this schedule." xml:space="preserve">
+    <value>لا توجد مواعيد متاحة في هذا اليوم.</value>
+  </data>
+  <data name="Notes / Symptoms (Optional)" xml:space="preserve">
+    <value>ملاحظات / أعراض (اختياري)</value>
+  </data>
+  <data name="Describe your symptoms..." xml:space="preserve">
+    <value>اصف أعراضك المرضية...</value>
+  </data>
+  <data name="Confirm &amp; Book" xml:space="preserve">
+    <value>تأكيد الحجز</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="My Appointments" xml:space="preserve">
+    <value>مواعيدي</value>
+  </data>
+  <data name="My Booked Appointments" xml:space="preserve">
+    <value>مواعيدي المحجوزة</value>
+  </data>
+  <data name="Track and manage your medical appointments" xml:space="preserve">
+    <value>تتبع وإدارة مواعيدك الطبية</value>
+  </data>
+  <data name="Browse Doctors" xml:space="preserve">
+    <value>تصفح الأطباء</value>
+  </data>
+  <data name="DOCTOR" xml:space="preserve">
+    <value>الطبيب</value>
+  </data>
+  <data name="DATE &amp; TIME" xml:space="preserve">
+    <value>التاريخ والوقت</value>
+  </data>
+  <data name="STATUS" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="ACTIONS" xml:space="preserve">
+    <value>الإجراءات</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>قيد الانتظار</value>
+  </data>
+  <data name="Confirmed" xml:space="preserve">
+    <value>مؤكد</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>مكتمل</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>ملغي</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="View Prescription" xml:space="preserve">
+    <value>عرض الروشتة</value>
+  </data>
+  <data name="Add Review" xml:space="preserve">
+    <value>إضافة تقييم</value>
+  </data>
+  <data name="No appointments found." xml:space="preserve">
+    <value>لا توجد مواعيد محجوزة حالياً.</value>
+  </data>
+  <data name="Are you sure you want to cancel the appointment?" xml:space="preserve">
+    <value>هل أنت تأكد من رغبتك في إلغاء الموعد؟</value>
+  </data>
+  <data name="Are you sure you want to delete the appointment?" xml:space="preserve">
+    <value>هل أنت تأكد من رغبتك في حذف الموعد؟</value>
+  </data>
+  <data name="My Medical Files" xml:space="preserve">
+    <value>ملفاتي الطبية</value>
+  </data>
+  <data name="View your medical files and documents" xml:space="preserve">
+    <value>عرض الملفات والوثائق الطبية الخاصة بك</value>
+  </data>
+  <data name="No medical files found." xml:space="preserve">
+    <value>لا توجد ملفات طبية حالياً.</value>
+  </data>
+  <data name="Your medical documents will appear here after your doctor uploads them." xml:space="preserve">
+    <value>ستظهر مستنداتك الطبية هنا بعد أن يقوم الطبيب برفعها.</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>الملف</value>
+  </data>
+  <data name="Medical Record" xml:space="preserve">
+    <value>السجل الطبي</value>
+  </data>
+  <data name="Record" xml:space="preserve">
+    <value>سجل</value>
+  </data>
+  <data name="File Type" xml:space="preserve">
+    <value>نوع الملف</value>
+  </data>
+  <data name="Upload Date" xml:space="preserve">
+    <value>تاريخ الرفع</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>الإجراء</value>
+  </data>
+  <data name="View File" xml:space="preserve">
+    <value>عرض الملف</value>
+  </data>
+  <data name="Welcome Back" xml:space="preserve">
+    <value>مرحباً بعودتك</value>
+  </data>
+  <data name="Enter your credentials to access the diagnostic platform" xml:space="preserve">
+    <value>أدخل بياناتك للوصول إلى منصة الرعاية الطبية</value>
+  </data>
+  <data name="Enter your Email" xml:space="preserve">
+    <value>أدخل البريد الإلكتروني</value>
+  </data>
+  <data name="Forgot password?" xml:space="preserve">
+    <value>نسيت كلمة المرور؟</value>
+  </data>
+  <data name="Remember me" xml:space="preserve">
+    <value>تذكرني</value>
+  </data>
+  <data name="SIGN IN" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="OR" xml:space="preserve">
+    <value>أو</value>
+  </data>
+  <data name="Sign in with Google" xml:space="preserve">
+    <value>تسجيل الدخول عبر Google</value>
+  </data>
+  <data name="Don't have an account?" xml:space="preserve">
+    <value>ليس لديك حساب؟</value>
+  </data>
+  <data name="Didn't receive the confirmation email?" xml:space="preserve">
+    <value>لم تصلك رسالة التأكيد؟</value>
+  </data>
+  <data name="Resend email confirmation" xml:space="preserve">
+    <value>إعادة إرسال رسالة التأكيد</value>
+  </data>
+  <data name="Create Account" xml:space="preserve">
+    <value>إنشاء حساب جديد</value>
+  </data>
+  <data name="Fill in your details to access the diagnostic platform" xml:space="preserve">
+    <value>أدخل بياناتك لإنشاء حساب في المنصة الطبية</value>
+  </data>
+  <data name="Full Name" xml:space="preserve">
+    <value>الاسم بالكامل</value>
+  </data>
+  <data name="Enter your full name" xml:space="preserve">
+    <value>أدخل اسمك بالكامل</value>
+  </data>
+  <data name="Enter your email" xml:space="preserve">
+    <value>أدخل بريدك الإلكتروني</value>
+  </data>
+  <data name="Enter your phone number" xml:space="preserve">
+    <value>أدخل رقم هاتفك</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>كلمة المرور</value>
+  </data>
+  <data name="Enter your password" xml:space="preserve">
+    <value>أدخل كلمة المرور</value>
+  </data>
+  <data name="Confirm Password" xml:space="preserve">
+    <value>تأكيد كلمة المرور</value>
+  </data>
+  <data name="Re-enter your password" xml:space="preserve">
+    <value>أعد إدخال كلمة المرور</value>
+  </data>
+  <data name="SIGN UP" xml:space="preserve">
+    <value>إنشاء حساب</value>
+  </data>
+  <data name="Already have an account?" xml:space="preserve">
+    <value>لديك حساب بالفعل؟</value>
+  </data>
+  <data name="Doctor Profile" xml:space="preserve">
+    <value>الملف الشخصي للطبيب</value>
+  </data>
+  <data name="Medical Insights" xml:space="preserve">
+    <value>رؤى طبية</value>
+  </data>
+  <data name="Health Blog" xml:space="preserve">
+    <value>المدونة الصحية</value>
+  </data>
+  <data name="No Articles Found" xml:space="preserve">
+    <value>لم يتم العثور على مقالات</value>
+  </data>
+  <data name="Try adjusting your search criteria or category filter." xml:space="preserve">
+    <value>جرب تغيير كلمات البحث أو التصفية.</value>
+  </data>
+  <data name="By" xml:space="preserve">
+    <value>بقلم</value>
+  </data>
+  <data name="No Reviews Yet" xml:space="preserve">
+    <value>لا توجد تقييمات حتى الآن</value>
+  </data>
+  <data name="You haven't submitted any reviews for your completed appointments yet." xml:space="preserve">
+    <value>لم تقم بإضافة تقييمات لمواعيدك الطبية المكتملة بعد.</value>
+  </data>
+  <data name="No written comment" xml:space="preserve">
+    <value>بدون تعليق مكتوب</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>التقييم</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>التعليق</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>تعديل</value>
+  </data>
+  <data name="Member since" xml:space="preserve">
+    <value>عضو منذ</value>
+  </data>
+  <data name="Years" xml:space="preserve">
+    <value>سنوات</value>
   </data>
 </root>

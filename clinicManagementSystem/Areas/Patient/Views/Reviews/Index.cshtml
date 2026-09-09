@@ -1,7 +1,7 @@
-﻿@model IEnumerable<clinicManagementSystem.Models.Review>
+@model IEnumerable<clinicManagementSystem.Models.Review>
 
 @{
-    ViewData["Title"] = "My Reviews";
+    ViewData["Title"] = SharedLocalizer["Reviews"];
     Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
 }
 
@@ -27,12 +27,12 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-primary mb-1">My Doctor Reviews</h2>
-            <p class="text-muted mb-0">Manage feedback and ratings you submitted for your visits</p>
+            <h2 class="fw-bold text-primary mb-1">@SharedLocalizer["Reviews"]</h2>
+            <p class="text-muted mb-0">@SharedLocalizer["Track and manage your medical appointments"]</p>
         </div>
 
         <a asp-area="Patient" asp-controller="Reviews" asp-action="Create" class="btn btn-primary shadow-sm rounded-pill px-4">
-            <i class="bi bi-star-fill me-1"></i> Add Review
+            <i class="bi bi-star-fill me-1"></i> @SharedLocalizer["Add Review"]
         </a>
     </div>
 
@@ -41,16 +41,16 @@
         <div class="card shadow-sm border-0 rounded-4">
             <div class="card-body text-center py-5">
                 <i class="bi bi-chat-heart text-muted display-4 mb-3 d-block"></i>
-                <h5 class="fw-bold text-dark">No Reviews Yet</h5>
+                <h5 class="fw-bold text-dark">@SharedLocalizer["No Reviews Yet"]</h5>
                 <p class="text-muted mb-4">
-                    You haven't submitted any reviews for your completed appointments yet.
+                    @SharedLocalizer["You haven't submitted any reviews for your completed appointments yet."]
                 </p>
                 <div class="d-flex justify-content-center gap-2">
                     <a asp-area="Patient" asp-controller="Reviews" asp-action="Create" class="btn btn-primary rounded-pill px-4">
-                        <i class="bi bi-plus-lg me-1"></i> Write a Review
+                        <i class="bi bi-plus-lg me-1"></i> @SharedLocalizer["Add Review"]
                     </a>
                     <a asp-area="Patient" asp-controller="Appointments" asp-action="MyAppointments" class="btn btn-outline-secondary rounded-pill px-4">
-                        <i class="bi bi-calendar-check me-1"></i> My Appointments
+                        <i class="bi bi-calendar-check me-1"></i> @SharedLocalizer["My Appointments"]
                     </a>
                 </div>
             </div>
@@ -63,12 +63,12 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light">
                         <tr>
-                            <th class="py-3 px-4">DOCTOR</th>
-                            <th class="py-3 px-4">APPOINTMENT DATE</th>
-                            <th class="py-3 px-4">RATING</th>
-                            <th class="py-3 px-4">COMMENT</th>
-                            <th class="py-3 px-4">REVIEW DATE</th>
-                            <th class="py-3 px-4 text-end">ACTIONS</th>
+                            <th class="py-3 px-4">@SharedLocalizer["DOCTOR"]</th>
+                            <th class="py-3 px-4">@SharedLocalizer["DATE & TIME"]</th>
+                            <th class="py-3 px-4">@SharedLocalizer["Rating"]</th>
+                            <th class="py-3 px-4">@SharedLocalizer["Comment"]</th>
+                            <th class="py-3 px-4">@SharedLocalizer["Upload Date"]</th>
+                            <th class="py-3 px-4 text-end">@SharedLocalizer["ACTIONS"]</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,7 +80,7 @@
                                         @(review.Appointment?.Doctor?.ApplicationUser?.FullName ?? "Doctor #" + (review.Appointment?.DoctorId))
                                     </div>
                                     <small class="text-muted">
-                                        @(review.Appointment?.Doctor?.Department?.Name ?? "General Department")
+                                        @(review.Appointment?.Doctor?.Department?.Name ?? SharedLocalizer["General"].Value)
                                     </small>
                                 </td>
                                 <td class="px-4">
@@ -105,17 +105,17 @@
                                     </div>
                                 </td>
                                 <td class="px-4 text-break" style="max-width: 250px;">
-                                    @(string.IsNullOrWhiteSpace(review.Comment) ? Html.Raw("<span class='text-muted fst-italic'>No written comment</span>") : review.Comment)
+                                    @(string.IsNullOrWhiteSpace(review.Comment) ? Html.Raw("<span class='text-muted fst-italic'>" + SharedLocalizer["No written comment"].Value + "</span>") : review.Comment)
                                 </td>
                                 <td class="px-4 text-muted small">
                                     @review.ReviewDate.ToString("yyyy-MM-dd")
                                 </td>
                                 <td class="px-4 text-end text-nowrap">
                                     <a asp-area="Patient" asp-controller="Reviews" asp-action="Edit" asp-route-id="@review.ReviewId" class="btn btn-outline-warning btn-sm rounded-pill px-3 me-1">
-                                        <i class="bi bi-pencil me-1"></i> Edit
+                                        <i class="bi bi-pencil me-1"></i> @SharedLocalizer["Edit"]
                                     </a>
                                     <a asp-area="Patient" asp-controller="Reviews" asp-action="Delete" asp-route-id="@review.ReviewId" class="btn btn-outline-danger btn-sm rounded-pill px-3">
-                                        <i class="bi bi-trash me-1"></i> Delete
+                                        <i class="bi bi-trash me-1"></i> @SharedLocalizer["Delete"]
                                     </a>
                                 </td>
                             </tr>

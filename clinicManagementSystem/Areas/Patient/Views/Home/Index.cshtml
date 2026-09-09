@@ -1,4 +1,6 @@
-﻿@model IEnumerable<clinicManagementSystem.Models.Doctor>
+@model IEnumerable<clinicManagementSystem.Models.Doctor>
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<clinicManagementSystem.SharedResource> SharedLocalizer
 @{
     Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Home - Healthcare Portal";
@@ -20,18 +22,18 @@
                 <div class="row w-100">
                     <div class="col-lg-8 text-white hero-animate">
                         <span class="badge bg-primary rounded-pill px-3 py-2 text-uppercase fw-semibold mb-3 tracking-wide">
-                            World-Class Care
+                            @SharedLocalizer["World-Class Care"]
                         </span>
-                        <h1 class="display-3 fw-bold mb-3">Your Health Is Our Top Priority</h1>
+                        <h1 class="display-3 fw-bold mb-3">@SharedLocalizer["Your Health Is Our Top Priority"]</h1>
                         <p class="lead fs-4 text-light opacity-90 mb-4">
-                            Discover expert physicians, schedule hassle-free appointments, and manage your medical records seamlessly in one place.
+                            @SharedLocalizer["Discover expert physicians, schedule hassle-free appointments, and manage your medical records seamlessly in one place."]
                         </p>
                         <div class="d-flex gap-3 flex-wrap">
                             <a href="/Patient/Home/AllDoctors" class="btn btn-primary rounded-pill px-4 py-3 fw-semibold shadow-lg">
-                                Book Appointment Now
+                                @SharedLocalizer["Book Appointment Now"]
                             </a>
                             <a href="#contact" class="btn btn-outline-light rounded-pill px-4 py-3 fw-semibold">
-                                Contact Us
+                                @SharedLocalizer["Contact Us"]
                             </a>
                         </div>
                     </div>
@@ -45,18 +47,18 @@
                 <div class="row w-100">
                     <div class="col-lg-8 text-white hero-animate">
                         <span class="badge bg-info rounded-pill px-3 py-2 text-uppercase fw-semibold mb-3 tracking-wide">
-                            Modern Facilities
+                            @SharedLocalizer["Modern Facilities"]
                         </span>
-                        <h1 class="display-3 fw-bold mb-3">Health Care For Whole Family</h1>
+                        <h1 class="display-3 fw-bold mb-3">@SharedLocalizer["Health Care For Whole Family"]</h1>
                         <p class="lead fs-4 text-light opacity-90 mb-4">
-                            Providing exceptional healthcare service excellence through qualified physicians and state-of-the-art technology.
+                            @SharedLocalizer["Providing exceptional healthcare service excellence through qualified physicians and state-of-the-art technology."]
                         </p>
                         <div class="d-flex gap-3 flex-wrap">
                             <a href="/Patient/Home/AllDoctors" class="btn btn-primary rounded-pill px-4 py-3 fw-semibold shadow-lg">
-                                Book Appointment Now
+                                @SharedLocalizer["Book Appointment Now"]
                             </a>
                             <a href="#contact" class="btn btn-outline-light rounded-pill px-4 py-3 fw-semibold">
-                                Contact Us
+                                @SharedLocalizer["Contact Us"]
                             </a>
                         </div>
                     </div>
