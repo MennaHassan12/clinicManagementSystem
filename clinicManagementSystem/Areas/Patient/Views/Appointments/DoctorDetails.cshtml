@@ -5,6 +5,8 @@
 @{
     ViewData["Title"] = SharedLocalizer["Doctor Profile"];
     Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
+
+    double rating = ViewBag.DoctorRating != null ? Convert.ToDouble(ViewBag.DoctorRating) : 0.0;
 }
 
 <div class="container py-5">
@@ -21,27 +23,35 @@
                     <div class="position-relative d-inline-block mb-3">
                         @if (!string.IsNullOrEmpty(Model.Image))
                         {
-                            <img src="~/images/doctors/@Model.Image" 
-                                 class="rounded-4 object-fit-cover shadow-sm img-fluid" 
-                                 style="width: 220px; height: 240px;" 
-                                 alt="Doctor Image" />
+                            <img src="~/images/doctors/@Model.Image"
+                                 class="rounded-4 object-fit-cover shadow-sm img-fluid"
+                                 style="width: 220px; height: 240px;"
+                                 alt="Doctor Image"
+                                 onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/3774/3774299.png';" />
                         }
                         else
                         {
-                            <div class="bg-primary-subtle text-primary rounded-4 d-flex align-items-center justify-content-center fw-bold fs-1 shadow-sm" 
+                            <div class="bg-primary-subtle text-primary rounded-4 d-flex align-items-center justify-content-center fw-bold fs-1 shadow-sm"
                                  style="width: 220px; height: 240px; margin: 0 auto;">
                                 👨‍⚕️
                             </div>
                         }
                     </div>
 
-                    <h3 class="fw-bold text-dark mb-1">@SharedLocalizer["Doctor"] @(Model.ApplicationUser?.FullName ?? $"#{Model.DoctorId}")</h3>
-                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-2 fs-6 mb-3">
-                        @(Model.Department?.Name ?? SharedLocalizer["General"].Value)
-                    </span>
+                    <h3 class="fw-bold text-dark mb-1">Dr. @(Model.ApplicationUser?.FullName ?? $"#{Model.DoctorId}")</h3>
+
+                    <div class="d-flex justify-content-center align-items-center gap-2 mb-3">
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-2 fs-6">
+                            @(Model.Department?.Name ?? "General Practice")
+                        </span>
+
+                        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning-subtle rounded-pill px-3 py-2 fs-6 fw-bold">
+                            ★ @rating.ToString("0.0")
+                        </span>
+                    </div>
 
                     <div class="d-grid gap-2 mt-3">
-                        <a href="/Patient/Appointments/Book?doctorId=@Model.DoctorId" 
+                        <a href="/Patient/Appointments/Book?doctorId=@Model.DoctorId"
                            class="btn btn-primary btn-lg fw-semibold shadow-sm rounded-3">
                             <i class="bi bi-calendar-check me-1"></i> @SharedLocalizer["Book Appointment Now"]
                         </a>
@@ -54,16 +64,23 @@
 
                 <div class="col-lg-8 ps-lg-4">
                     <div class="row g-3 mb-4">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="p-3 bg-light rounded-3 border-start border-4 border-success">
                                 <span class="text-muted small d-block mb-1">@SharedLocalizer["Fee"]</span>
                                 <span class="fw-bold text-success fs-4">@Model.ConsultationFee.ToString("F2") @SharedLocalizer["EGP"]</span>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="p-3 bg-light rounded-3 border-start border-4 border-primary">
                                 <span class="text-muted small d-block mb-1">@SharedLocalizer["Years Experience"]</span>
                                 <span class="fw-bold text-dark fs-4">@Model.YearsOfExperience @SharedLocalizer["Years"]</span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="p-3 bg-light rounded-3 border-start border-4 border-warning">
+                                <span class="text-muted small d-block mb-1">Overall Rating</span>
+                                <span class="fw-bold text-warning fs-4">★ @rating.ToString("0.0") / 5</span>
                             </div>
                         </div>
                     </div>
@@ -76,8 +93,9 @@
                     </div>
 
                     <hr class="my-4 text-muted opacity-25" />
+
                     <div>
-                        <h5 class="fw-bold text-secondary mb-3">@SharedLocalizer["Opening Hours"]</h5>
+                        <h5 class="fw-bold text-secondary mb-3">Available Shifts</h5>
                         @if (Model.DoctorSchedules != null && Model.DoctorSchedules.Any(s => s.IsAvailable))
                         {
                             <div class="row g-3">
@@ -89,7 +107,7 @@
                                                 🗓️ @schedule.DayOfWeek
                                             </div>
                                             <div class="small text-dark fw-semibold">
-                                                @DateTime.Today.Add(schedule.StartTime).ToString("hh:mm tt") - 
+                                                @DateTime.Today.Add(schedule.StartTime).ToString("hh:mm tt") -
                                                 @DateTime.Today.Add(schedule.EndTime).ToString("hh:mm tt")
                                             </div>
                                         </div>
