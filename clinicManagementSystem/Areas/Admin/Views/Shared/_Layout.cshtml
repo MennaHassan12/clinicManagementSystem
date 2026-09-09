@@ -1,3 +1,8 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using clinicManagementSystem.Models
+@inject UserManager<ApplicationUser> UserManager
+
+
 @{
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
     var isRtl = currentCulture.StartsWith("ar", StringComparison.OrdinalIgnoreCase);
@@ -5,41 +10,273 @@
 <!DOCTYPE html>
 <html lang="@currentCulture" dir="@(isRtl ? "rtl" : "ltr")">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@ViewData["Title"] - Clinic Management System</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <title>@ViewData["Title"] - HealthCare Portal</title>
 
-    <!-- Toastr CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+
+    <!-- Toastr -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" />
+
+    <style>
+        body {
+            background-color: #f6f9fc;
+            font-family: Arial, sans-serif;
+        }
+
+        .admin-sidebar {
+            width: 260px;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #ffffff;
+            border-right: 1px solid #e9eef5;
+            z-index: 1030;
+        }
+
+        .admin-brand {
+            height: 75px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            text-decoration: none;
+            color: #0d6efd;
+            font-size: 21px;
+            font-weight: 700;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .admin-brand i {
+            font-size: 28px;
+        }
+
+        .admin-user {
+            padding: 22px 20px;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .admin-user-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
+            border-radius: 50%;
+            font-size: 22px;
+        }
+
+        .admin-menu {
+            padding: 18px 14px;
+        }
+
+        .admin-menu-title {
+            font-size: 11px;
+            color: #98a2b3;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 0 12px;
+            margin-bottom: 10px;
+        }
+
+        .admin-menu .nav-link {
+            color: #667085;
+            padding: 11px 14px;
+            border-radius: 12px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+        }
+
+        .admin-menu .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .admin-menu .nav-link:hover {
+            background: #f0f6ff;
+            color: #0d6efd;
+        }
+
+        .admin-menu .nav-link.active {
+            background: #eaf3ff;
+            color: #0d6efd;
+            font-weight: 600;
+        }
+
+        .admin-logout {
+            color: #dc3545 !important;
+        }
+
+        .admin-logout:hover {
+            background: #fff1f2 !important;
+            color: #dc3545 !important;
+        }
+
+        .admin-main {
+            margin-left: 260px;
+            min-height: 100vh;
+        }
+
+        .admin-topbar {
+            height: 75px;
+            background: #ffffff;
+            border-bottom: 1px solid #e9eef5;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+        }
+
+        .admin-page-content {
+            padding: 28px 30px;
+        }
+
+        .admin-user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #344054;
+            font-weight: 600;
+        }
+
+        .admin-user-menu i {
+            color: #0d6efd;
+            font-size: 24px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+        }
+
+        @@media (max-width: 991.98px) {
+
+            .admin-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+            }
+
+            .admin-sidebar.show {
+                transform: translateX(0);
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: inline-flex;
+            }
+
+            .admin-topbar {
+                padding: 0 18px;
+            }
+
+            .admin-page-content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
 </head>
-<body class="hold-transition sidebar-mini">
-    <div class="wrapper">
 
-        <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+<body>
 
-            <!-- Left -->
-            <ul class="navbar-nav">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+
+        <a asp-area="Admin"
+           asp-controller="Dashboard"
+           asp-action="Index"
+           class="admin-brand">
+            <i class="bi bi-heart-pulse-fill me-2"></i>
+            <span>HealthCare</span>
+        </a>
+
+        <!-- User -->
+        <div class="admin-user">
+            <div class="d-flex align-items-center gap-3">
+
+                <div class="admin-user-icon">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div class="overflow-hidden">
+                    <div class="fw-bold text-dark text-truncate">
+                        @(User.Identity?.Name ?? "Administrator")
+                    </div>
+                    <small class="text-muted">
+                        Administrator
+                    </small>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Menu -->
+        <nav class="admin-menu">
+
+            <div class="admin-menu-title">
+                Main Menu
+            </div>
+
+            <ul class="nav flex-column">
+
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button">
-                        <i class="fas fa-bars"></i>
+                    <a asp-area="Admin"
+                       asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                        <i class="bi bi-grid-1x2-fill"></i>
+                        <span>Dashboard</span>
                     </a>
                 </li>
 
-                <li class="nav-item d-none d-sm-inline-block">
-                    <span class="nav-link font-weight-bold text-primary">
-                        Clinic Management System
-                    </span>
+                <li class="nav-item">
+                    <a asp-area="Admin"
+                       asp-controller="Departments"
+                       asp-action="Index"
+                       class="nav-link">
+                        <i class="bi bi-hospital"></i>
+                        <span>Departments</span>
+                    </a>
                 </li>
-            </ul>
 
+                <li class="nav-item">
+                    <a asp-area="Admin"
+                       asp-controller="Doctors"
+                       asp-action="Index"
+                       class="nav-link">
+                        <i class="bi bi-person-badge"></i>
+                        <span>Doctors</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+    <a asp-area="Admin"
+       asp-controller="DoctorSchedules"
+       asp-action="Index"
+       class="nav-link">
+        <i class="bi bi-clock-history"></i>
+        <span>Doctor Schedules</span>
+    </a>
+</li>
             <!-- Right -->
             <ul class="navbar-nav ml-auto align-items-center">
                 <li class="nav-item me-2">
@@ -47,180 +284,128 @@
                 </li>
 
                 <li class="nav-item">
-                    <span class="nav-link">
-                        <i class="fas fa-user-shield mr-1"></i>
-                        Administrator
-                    </span>
+                    <a asp-area="Admin"
+                       asp-controller="Appointments"
+                       asp-action="Index"
+                       class="nav-link">
+                        <i class="bi bi-calendar-check"></i>
+                        <span>Appointments</span>
+                    </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link text-danger">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
+                    <a asp-area="Admin"
+                       asp-controller="MedicalFiles"
+                       asp-action="Index"
+                       class="nav-link">
+                        <i class="bi bi-file-earmark-medical"></i>
+                        <span>Medical Files</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a asp-area="Admin"
+                       asp-controller="Reviews"
+                       asp-action="Index"
+                       class="nav-link">
+                        <i class="bi bi-star"></i>
+                        <span>Reviews</span>
                     </a>
                 </li>
 
             </ul>
 
+            <div class="admin-menu-title mt-4">
+                Account
+            </div>
+
+            <form asp-area="Identity"
+                  asp-controller="Account"
+                  asp-action="Logout"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <button type="submit"
+                        class="nav-link admin-logout border-0 bg-transparent w-100 text-start">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </button>
+
+            </form>
+
         </nav>
-        <!-- /.navbar -->
-        <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
-                <img src="~/dist/img/AdminLTELogo.png" alt="Clinic Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">Clinic Management System</span>
-            </a>
 
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- Sidebar user panel -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="~/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-                    </div>
-                    <div class="info">
-                        <a href="#" class="d-block">Administrator</a>
-                    </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="admin-main">
+
+        <!-- Topbar -->
+        <header class="admin-topbar">
+
+            <div class="d-flex align-items-center gap-3">
+
+                <button type="button"
+                        class="btn btn-light rounded-3 mobile-menu-btn"
+                        id="sidebarToggle">
+                    <i class="bi bi-list fs-4"></i>
+                </button>
+
+                <div>
+                    <h6 class="fw-bold mb-0">
+                        @ViewData["Title"]
+                    </h6>
+
+                    <small class="text-muted">
+                        Clinic Management System
+                    </small>
                 </div>
 
-                <!-- SidebarSearch Form -->
-                <div class="form-inline">
-                    <div class="input-group" data-widget="sidebar-search">
-                        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-sidebar">
-                                <i class="fas fa-search fa-fw"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column"
-                        data-widget="treeview"
-                        role="menu"
-                        data-accordion="false">
-
-                        <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>Dashboard</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="Department" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-hospital"></i>
-                                <p>Departments</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="Doctor" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-user-md"></i>
-                                <p>Doctors</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="Patient" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-user-injured"></i>
-                                <p>Patients</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="Appointment" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-calendar-check"></i>
-                                <p>Appointments</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="MedicalFile" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-folder-open"></i>
-                                <p>Medical Files</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a asp-area="Admin" asp-controller="Review" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-star"></i>
-                                <p>Reviews</p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item mt-3">
-                            <form asp-area="Identity" asp-controller="Account" asp-action="Logout" method="post" class="nav-link p-0 border-0 bg-transparent">
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-link nav-link text-danger p-0">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    Logout
-                                </button>
-                            </form>
-                        </li>
-
-                    </ul>
-                </nav>
-            </div>
-        </aside>
-
-        <!-- Content Wrapper -->
-        <div class="content-wrapper">
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">@ViewData["Title"]</h1>
-                        </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">@ViewData["Title"]</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
             </div>
 
-            <!-- Main content -->
-            <div class="content">
-                <div class="container-fluid">
-                    @RenderBody()
-                </div>
+            <div class="admin-user-menu">
+                <i class="bi bi-person-circle"></i>
+                <span class="d-none d-sm-inline">
+                    @(User.Identity?.Name ?? "Administrator")
+                </span>
             </div>
-        </div>
 
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <div class="p-3">
-                <h5>Title</h5>
-                <p>Sidebar content</p>
-            </div>
-        </aside>
+        </header>
 
-        <!-- Main Footer -->
-        <footer class="main-footer">
-            <strong>© 2026 Clinic Management System</strong>
-            <div class="float-right d-none d-sm-inline">
-                Developed by FCAI Team
-            </div>
-        </footer>
+        <!-- Page -->
+        <main class="admin-page-content">
+
+            <partial name="_NotificationPartial" />
+
+            @RenderBody()
+
+        </main>
+
     </div>
 
-    <!-- REQUIRED SCRIPTS -->
-    <script src="~/plugins/jquery/jquery.min.js"></script>
-    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/dist/js/adminlte.min.js"></script>
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Toastr JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 
-    <!-- Render Notifications Partial -->
-    <partial name="_NotificationPartial" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const sidebar = document.getElementById("adminSidebar");
+            const toggle = document.getElementById("sidebarToggle");
+
+            if (toggle) {
+                toggle.addEventListener("click", function () {
+                    sidebar.classList.toggle("show");
+                });
+            }
+
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
