@@ -170,6 +170,148 @@
     </div>
 </section>
 
+@{
+
+    var doctorRatings = ViewBag.DoctorRatings as Dictionary<int, double>
+                        ?? new Dictionary<int, double>();
+}
+
+<!-- Top Rated Doctors Section -->
+<section class="py-5 bg-light">
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <span class="text-primary fw-bold small text-uppercase tracking-wider">Certified Specialists</span>
+                <h2 class="display-6 fw-bold text-dark mb-0">Meet Our Top Rated Specialists</h2>
+            </div>
+            <a href="/Patient/Appointments/AllDoctors" class="btn btn-outline-primary rounded-pill px-4 fw-semibold">
+                Show All Doctors <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+
+        <div class="position-relative px-md-5">
+            <div class="swiper topDoctorsSwiper py-3">
+                <div class="swiper-wrapper">
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var doctor in Model)
+                        {
+
+                            var rawName = doctor.ApplicationUser != null && !string.IsNullOrEmpty(doctor.ApplicationUser.FullName)
+                                ? doctor.ApplicationUser.FullName.Trim()
+                                : "Medical Specialist";
+
+                            if (rawName.StartsWith("Dr. ", StringComparison.OrdinalIgnoreCase))
+                            {
+                                rawName = rawName.Substring(4).Trim();
+                            }
+                            else if (rawName.StartsWith("Dr.", StringComparison.OrdinalIgnoreCase))
+                            {
+                                rawName = rawName.Substring(3).Trim();
+                            }
+                            else if (rawName.StartsWith("Dr ", StringComparison.OrdinalIgnoreCase))
+                            {
+                                rawName = rawName.Substring(3).Trim();
+                            }
+
+                            var displayName = $"Dr. {rawName}";
+
+
+                            var rating = doctorRatings.TryGetValue(doctor.DoctorId, out var doctorRating)
+                                ? doctorRating
+                                : 0;
+
+
+                            string imageSrc = "";
+                            if (!string.IsNullOrEmpty(doctor.Image))
+                            {
+                                if (doctor.Image.StartsWith("http") || doctor.Image.StartsWith("/"))
+                                {
+                                    imageSrc = doctor.Image;
+                                }
+                                else
+                                {
+                                    imageSrc = $"/images/doctors/{doctor.Image}";
+                                }
+                            }
+
+                            <div class="swiper-slide">
+
+                                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mx-auto my-2" style="max-width: 850px;">
+                                    <div class="row g-0 align-items-center">
+
+
+                                        <div class="col-md-4 bg-primary bg-opacity-10 text-center py-4 px-3 d-flex align-items-center justify-content-center" style="min-height: 220px;">
+                                            @if (!string.IsNullOrEmpty(imageSrc))
+                                            {
+                                                <img src="@imageSrc"
+                                                     class="rounded-circle border border-4 border-white shadow-sm"
+                                                     style="width: 130px; height: 130px; object-fit: cover;"
+                                                     alt="@displayName"
+                                                     onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+
+                                                <div class="rounded-circle bg-white border align-items-center justify-content-center shadow-sm"
+                                                     style="width: 130px; height: 130px; flex-shrink: 0; display: none;">
+                                                    <i class="bi bi-person-fill text-secondary fs-1"></i>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="rounded-circle bg-white d-flex align-items-center justify-content-center border shadow-sm"
+                                                     style="width: 130px; height: 130px; flex-shrink: 0;">
+                                                    <i class="bi bi-person-fill text-secondary fs-1"></i>
+                                                </div>
+                                            }
+                                        </div>
+
+
+                                        <div class="col-md-8">
+                                            <div class="card-body p-4 text-start">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <div>
+                                                        <h3 class="fw-bold text-dark mb-1">@displayName</h3>
+                                                        <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-1 rounded-pill">
+                                                            @(doctor.Department?.Name ?? "General")
+                                                        </span>
+                                                    </div>
+                                                    <div class="bg-warning bg-opacity-10 text-warning px-3 py-1 rounded-pill fw-bold">
+                                                        ★ @rating.ToString("0.0")
+                                                    </div>
+                                                </div>
+
+                                                <div class="text-muted small mb-3">
+                                                    <p class="mb-1"><i class="bi bi-award me-1 text-primary"></i> @doctor.YearsOfExperience Years Experience</p>
+                                                    <p class="mb-0"><i class="bi bi-cash me-1 text-success"></i> Fee: @doctor.ConsultationFee EGP</p>
+                                                </div>
+
+                                                <div class="d-flex gap-2 pt-2">
+                                                    <a href="/Patient/Appointments/DoctorDetails/@doctor.DoctorId" class="btn btn-outline-secondary rounded-pill px-3 py-2 fw-bold">
+                                                        View Details
+                                                    </a>
+                                                    <a href="/Patient/Appointments/Book?doctorId=@doctor.DoctorId" class="btn btn-primary rounded-pill px-4 py-2 fw-bold">
+                                                        Book Now
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+
+            <div class="swiper-button-next text-primary"></div>
+            <div class="swiper-button-prev text-primary"></div>
+            <div class="swiper-pagination mt-2 position-relative"></div>
+        </div>
+    </div>
+</section>
+
     <section id="services" class="py-5 bg-light">
         <div class="container py-4">
             <div class="text-center mb-5">
@@ -420,21 +562,7 @@
         </div>
     </section>
 
-<!-- 4. Doctors Section -->
-<section class="py-5 bg-white">
-    <div class="container py-4">
-        <div class="d-flex justify-content-between align-items-end mb-4 flex-wrap gap-3">
-            <div>
-                <h2 class="display-6 fw-bold text-dark mt-1 mb-0">Meet Our Leading Specialists</h2>
-            </div>
-            <a href="/Patient/Home/AllDoctors" class="btn btn-outline-primary rounded-pill px-4 fw-semibold">
-                Show All Doctors <i class="bi bi-arrow-right ms-1"></i>
-            </a>
-        </div>
 
-        @await Html.PartialAsync("_DoctorListPartial", Model)
-    </div>
-</section>
 <!-- Blog Section -->
 <section class="py-5 bg-light" id="blog">
     <div class="container py-4">
@@ -574,43 +702,65 @@
 </section>
 
 @section Scripts {
+    <!-- Swiper JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
     <script>
-                    document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initialize Hero Carousel
+            var heroElem = document.getElementById('heroCarousel');
+            if (heroElem) {
+                new bootstrap.Carousel(heroElem, {
+                    interval: 5000,
+                    ride: 'carousel',
+                    pause: false
+                });
+            }
 
-                        var heroCarousel = new bootstrap.Carousel(document.getElementById('heroCarousel'), {
-                            interval: 5000,
-                            ride: 'carousel',
-                            pause: false
-                        });
+        var doctorsSwiper = new Swiper('.topDoctorsSwiper', {
+        slidesPerView: 1, 
+        spaceBetween: 30,
+        loop: true,
+        autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+        },
+        navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+        }
+        });
 
-
-                        var counterStarted = false;
-                        var counterElement = document.getElementById("yearsCounter");
-
-                        if (counterElement) {
-                            var targetNumber = parseInt(counterElement.getAttribute("data-target")) || 15;
-
-                            function startCounter() {
-                                var currentNumber = 0;
-                                var duration = 1800; 
-                                var stepTime = Math.abs(Math.floor(duration / targetNumber));
-
-                                var timer = setInterval(function () {
-                                    currentNumber += 1;
-                                    counterElement.textContent = currentNumber;
-                                    if (currentNumber >= targetNumber) {
-                                        clearInterval(timer);
-                                    }
-                                }, stepTime);
-                            }
-            window.addEventListener("scroll", function () {
-                                var position = counterElement.getBoundingClientRect();
-                                if (position.top < window.innerHeight && position.bottom >= 0 && !counterStarted) {
-                                    counterStarted = true;
-                                    startCounter();
-                                }
-                            });
+            // Counter 
+            var counterStarted = false;
+            var counterElement = document.getElementById("yearsCounter");
+            if (counterElement) {
+                var targetNumber = parseInt(counterElement.getAttribute("data-target")) || 15;
+                function startCounter() {
+                    var currentNumber = 0;
+                    var duration = 1800;
+                    var stepTime = Math.abs(Math.floor(duration / targetNumber));
+                    var timer = setInterval(function () {
+                        currentNumber += 1;
+                        counterElement.textContent = currentNumber;
+                        if (currentNumber >= targetNumber) {
+                            clearInterval(timer);
                         }
-                    });
+                    }, stepTime);
+                }
+
+                window.addEventListener("scroll", function () {
+                    var position = counterElement.getBoundingClientRect();
+                    if (position.top < window.innerHeight && position.bottom >= 0 && !counterStarted) {
+                        counterStarted = true;
+                        startCounter();
+                    }
+                });
+            }
+        });
     </script>
 }
