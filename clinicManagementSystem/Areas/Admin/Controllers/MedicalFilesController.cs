@@ -81,6 +81,44 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             return File(fileBytes, contentType);
         }
         // =========================
+        // DOWNLOAD FILE
+        // =========================
+        [HttpGet]
+        public async Task<IActionResult> Download(int id)
+        {
+            var medicalFile = await _medicalFileRepository.GetOneAsync(
+                f => f.MedicalFileId == id,
+                tracked: false
+            );
+
+            if (medicalFile == null)
+            {
+                return NotFound("Medical file not found.");
+            }
+
+            var filePath = Path.Combine(
+                _environment.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"),
+                medicalFile.FilePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+            );
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("File could not be found on server.");
+            }
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+            var contentType = medicalFile.FileType?.ToLowerInvariant() switch
+            {
+                ".pdf" => "application/pdf",
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                _ => "application/octet-stream"
+            };
+
+            return File(fileBytes, contentType, medicalFile.FileName);
+        }
+        // =========================
         // CREATE - GET
         // =========================
         public async Task<IActionResult> Create()

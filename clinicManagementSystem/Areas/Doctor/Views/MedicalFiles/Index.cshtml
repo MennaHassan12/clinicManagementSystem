@@ -146,22 +146,32 @@
                                     <!-- Actions -->
                                     <td class="text-center">
 
-                                        <a href="@Url.Action("Edit", "MedicalFiles", new { area = "Doctor", id = file.MedicalFileId })"
+                                        <a href="@Url.Action("ViewFile", "MedicalFiles", new { area = "Doctor", id = file.MedicalFileId })"
+                                           target="_blank"
                                            class="btn btn-sm btn-outline-primary rounded-3 me-1"
-                                           title="Edit">
-                                            <i class="fas fa-edit"></i>
+                                           title="View File">
+
+                                            <i class="fas fa-eye"></i>
                                         </a>
 
-                                        <a href="@Url.Content(file.FilePath)"
-                                           target="_blank"
-                                           class="btn btn-sm btn-outline-info rounded-3 me-1"
-                                           title="View File">
-                                            <i class="fas fa-eye"></i>
+                                        <a href="@Url.Action("Download", "MedicalFiles", new { area = "Doctor", id = file.MedicalFileId })"
+                                           class="btn btn-sm btn-outline-success rounded-3 me-1"
+                                           title="Download">
+
+                                            <i class="fas fa-download"></i>
+                                        </a>
+
+                                        <a href="@Url.Action("Edit", "MedicalFiles", new { area = "Doctor", id = file.MedicalFileId })"
+                                           class="btn btn-sm btn-outline-warning rounded-3 me-1"
+                                           title="Edit">
+
+                                            <i class="fas fa-edit"></i>
                                         </a>
 
                                         <a href="@Url.Action("Delete", "MedicalFiles", new { area = "Doctor", id = file.MedicalFileId })"
                                            class="btn btn-sm btn-outline-danger rounded-3"
                                            title="Delete">
+
                                             <i class="fas fa-trash"></i>
                                         </a>
 

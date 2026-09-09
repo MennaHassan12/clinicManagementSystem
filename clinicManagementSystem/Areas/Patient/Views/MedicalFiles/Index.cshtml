@@ -66,121 +66,95 @@
             }
             else
             {
-                <div class="table-responsive">
+                var appointments = Model
+                .Where(f => f.MedicalRecord?.Appointment != null)
+                .GroupBy(f => f.MedicalRecord!.Appointment!.AppointmentId)
+                .Select(g => g.First())
+                .ToList();
 
-                    <table class="table table-hover align-middle">
+                <div class="row g-4">
 
-                        <thead class="table-light">
+                    @foreach (var file in appointments)
+                    {
+                        var appointment = file.MedicalRecord?.Appointment;
+                        var doctor = appointment?.Doctor;
 
-                            <tr>
+                        <div class="col-md-6 col-lg-4">
 
-                                <th>
-                                    File
-                                </th>
+                            <div class="card h-100 border-0 shadow-sm rounded-4">
 
-                                <th>
-                                    Medical Record
-                                </th>
+                                <div class="card-body p-4">
 
-                                <th>
-                                    File Type
-                                </th>
+                                    <!-- DOCTOR -->
+                                    <div class="d-flex align-items-center mb-3">
 
-                                <th>
-                                    Upload Date
-                                </th>
+                                        <div class="bg-primary-subtle rounded-circle p-3 me-3">
+                                            <i class="fas fa-user-md text-primary fa-lg"></i>
+                                        </div>
 
-                                <th class="text-center">
-                                    Action
-                                </th>
+                                        <div>
+                                            <h5 class="fw-bold mb-1">
+                                                @(doctor?.ApplicationUser?.FullName ?? "Doctor")
+                                            </h5>
 
-                            </tr>
+                                            <small class="text-muted">
+                                                @(doctor?.Department?.Name ?? "Department")
+                                            </small>
+                                        </div>
 
-                        </thead>
+                                    </div>
 
+                                    <hr />
 
-                        <tbody>
+                                    <!-- APPOINTMENT -->
+                                    <div class="mb-3">
 
-                            @foreach (var file in Model)
-                            {
-                                <tr>
+                                        <div class="text-muted small mb-1">
+                                            <i class="fas fa-calendar-alt me-2"></i>
+                                            Appointment
+                                        </div>
 
-                                    <!-- FILE NAME -->
-                                    <td>
+                                        <div class="fw-semibold">
+                                            @appointment!.AppointmentDate.ToString("dd/MM/yyyy")
+                                        </div>
 
-                                        <i class="fas fa-file-medical text-primary me-2"></i>
+                                    </div>
 
-                                        <span class="fw-semibold">
-                                            @file.FileName
+                                    <!-- NUMBER OF FILES -->
+                                    <div class="mb-4">
+
+                                        <div class="text-muted small mb-1">
+                                            <i class="fas fa-file-medical me-2"></i>
+                                            Medical Files
+                                        </div>
+
+                                        <span class="badge bg-info px-3 py-2 rounded-pill">
+                                            @Model.Count(f =>
+                                                     f.MedicalRecord?.Appointment?.AppointmentId
+                                                     == appointment.AppointmentId)
+                                            File(s)
                                         </span>
 
-                                    </td>
+                                    </div>
 
+                                    <!-- BUTTON -->
+                                    <a asp-area="Patient"
+                                       asp-controller="MedicalFiles"
+                                       asp-action="ForAppointment"
+                                       asp-route-appointmentId="@appointment.AppointmentId"
+                                       class="btn btn-outline-primary w-100 rounded-3">
 
-                                    <!-- MEDICAL RECORD -->
-                                    <td>
+                                        <i class="fas fa-folder-open me-2"></i>
+                                        View Medical Files
 
-                                        <span class="badge bg-info">
-                                            Record #@file.MedicalRecordId
-                                        </span>
+                                    </a>
 
-                                    </td>
+                                </div>
 
+                            </div>
 
-                                    <!-- FILE TYPE -->
-                                    <td>
-
-                                        @if (file.FileType == ".pdf")
-                                        {
-                                            <span class="badge bg-danger">
-                                                PDF
-                                            </span>
-                                        }
-                                        else if (
-                                        file.FileType == ".jpg" ||
-                                        file.FileType == ".jpeg" ||
-                                        file.FileType == ".png")
-                                        {
-                                            <span class="badge bg-success">
-                                                Image
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">
-                                                @file.FileType
-                                            </span>
-                                        }
-
-                                    </td>
-
-
-                                    <!-- DATE -->
-                                    <td>
-
-                                        @file.UploadDate.ToString("dd/MM/yyyy")
-
-                                    </td>
-
-
-                                    <!-- ACTION -->
-                                    <td class="text-center">
-
-                                        <a href="@Url.Content(file.FilePath)"
-                                           target="_blank"
-                                           class="btn btn-sm btn-outline-primary rounded-3 px-3">
-                                            <i class="fas fa-eye me-1"></i>
-                                            View File
-                                        </a>
-
-                                    </td>
-
-                                </tr>
-                            }
-
-                        </tbody>
-
-                    </table>
+                        </div>
+                    }
 
                 </div>
             }
