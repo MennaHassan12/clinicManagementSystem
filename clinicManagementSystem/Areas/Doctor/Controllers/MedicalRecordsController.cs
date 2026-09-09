@@ -11,7 +11,8 @@ using clinicManagementSystem.Utilities;
 namespace clinicManagementSystem.Areas.Doctor.Controllers
 {
     [Area("Doctor")]
-    [Authorize(Policy = "RequireDoctorRole")]
+    [Authorize(Roles = "Doctor,Patient")]
+
     public class MedicalRecordsController : Controller
     {
         private readonly IRepository<MedicalRecord> _recordRepo;
@@ -35,6 +36,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "RequireDoctorRole")]
+
         public async Task<IActionResult> Create(int appointmentId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -72,6 +75,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "RequireDoctorRole")]
+
         public async Task<IActionResult> Create(CreateMedicalRecordVM model)
         {
             try
