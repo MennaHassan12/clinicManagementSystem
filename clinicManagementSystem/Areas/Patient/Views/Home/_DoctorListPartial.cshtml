@@ -1,5 +1,9 @@
 @model IEnumerable<clinicManagementSystem.Models.Doctor>
 
+@{
+    var doctorRatings = ViewBag.DoctorRatings as Dictionary<int, double>
+                        ?? new Dictionary<int, double>();
+}
 <div class="row row-cols-1 row-cols-md-2 g-4">
     @if (Model != null && Model.Any())
     {
@@ -26,7 +30,9 @@
 
             var displayName = $"Dr. {rawName}";
 
-
+            var rating = doctorRatings.TryGetValue(doctor.DoctorId, out var doctorRating)
+            ? doctorRating
+            : 0;
             string imageSrc = "";
             if (!string.IsNullOrEmpty(doctor.Image))
             {
@@ -75,6 +81,10 @@
                             </small>
                             <small class="text-muted d-block mb-2">
                                 <i class="bi bi-cash me-1"></i> @SharedLocalizer["Fee"]: @doctor.ConsultationFee @SharedLocalizer["EGP"]
+                            </small>
+                            <small class="text-muted d-block mb-2">
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                Rating: <strong>@rating.ToString("0.0")</strong> / 5
                             </small>
                         </div>
                     </div>

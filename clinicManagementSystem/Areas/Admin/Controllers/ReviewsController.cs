@@ -23,6 +23,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                     r => r.Appointment!,
                     r => r.Appointment.Doctor,
                     r => r.Appointment.Doctor.ApplicationUser,
+                    r => r.Appointment.Doctor.Department,
                     r => r.Appointment.Patient,
                     r => r.Appointment.Patient.ApplicationUser
                 },
@@ -42,6 +43,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                     r => r.Appointment!,
                     r => r.Appointment.Doctor,
                     r => r.Appointment.Doctor.ApplicationUser,
+                
                     r => r.Appointment.Patient,
                     r => r.Appointment.Patient.ApplicationUser
                 },

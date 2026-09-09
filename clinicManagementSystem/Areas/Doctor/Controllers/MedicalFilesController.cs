@@ -30,9 +30,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             _environment = environment;
         }
 
-        // =========================
-        // GET CURRENT DOCTOR
-        // =========================
+        // ========================= 
+        // GET CURRENT DOCTOR 
+        // ========================= 
 
         private async Task<Models.Doctor?> GetCurrentDoctorAsync()
         {
@@ -45,9 +45,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             );
         }
 
-        // =========================
-        // INDEX
-        // =========================
+        // ========================= 
+        // INDEX 
+        // ========================= 
 
         public async Task<IActionResult> Index()
         {
@@ -58,7 +58,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 return View(new List<MedicalFile>());
             }
 
-            // Only show medical files linked to THIS doctor's medical records / appointments
+            // Only show medical files linked to THIS doctor's medical records / appointments 
             var medicalFiles = await _medicalFileRepository.GetAsync(
                 expression: f =>
                     f.MedicalRecord != null &&
@@ -75,10 +75,106 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
             return View(medicalFiles);
         }
+        // ========================= 
+        // VIEW FILE 
+        // ========================= 
+        [HttpGet]
+        public async Task<IActionResult> ViewFile(int id)
+        {
+            var doctor = await GetCurrentDoctorAsync();
 
-        // =========================
-        // CREATE - GET
-        // =========================
+            if (doctor == null)
+            {
+                return NotFound("Doctor profile not found.");
+            }
+
+            var medicalFile = await _medicalFileRepository.GetOneAsync(
+                f => f.MedicalFileId == id &&
+                     f.MedicalRecord != null &&
+                     f.MedicalRecord.Appointment != null &&
+                     f.MedicalRecord.Appointment.DoctorId == doctor.DoctorId,
+                tracked: false
+            );
+
+            if (medicalFile == null)
+            {
+                return NotFound("Medical file not found or unauthorized access.");
+            }
+
+            var filePath = Path.Combine(
+                _environment.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"),
+                medicalFile.FilePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+            );
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("File could not be found on server.");
+            }
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+            var contentType = medicalFile.FileType?.ToLowerInvariant() switch
+            {
+                ".pdf" => "application/pdf",
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                _ => "application/octet-stream"
+            };
+
+            return File(fileBytes, contentType);
+        }
+
+        // ========================= 
+        // DOWNLOAD FILE 
+        // ========================= 
+        [HttpGet]
+        public async Task<IActionResult> Download(int id)
+        {
+            var doctor = await GetCurrentDoctorAsync();
+
+            if (doctor == null)
+            {
+                return NotFound("Doctor profile not found.");
+            }
+
+            var medicalFile = await _medicalFileRepository.GetOneAsync(
+                f => f.MedicalFileId == id &&
+                     f.MedicalRecord != null &&
+                     f.MedicalRecord.Appointment != null &&
+                     f.MedicalRecord.Appointment.DoctorId == doctor.DoctorId,
+                tracked: false
+            );
+
+            if (medicalFile == null)
+            {
+                return NotFound("Medical file not found or unauthorized access.");
+            }
+
+            var filePath = Path.Combine(
+                _environment.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"),
+                medicalFile.FilePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar)
+            );
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("File could not be found on server.");
+            }
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+            var contentType = medicalFile.FileType?.ToLowerInvariant() switch
+            {
+                ".pdf" => "application/pdf",
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                _ => "application/octet-stream"
+            };
+
+            return File(fileBytes, contentType, medicalFile.FileName);
+        }
+        // ========================= 
+        // CREATE - GET 
+        // ========================= 
 
         public async Task<IActionResult> Create()
         {
@@ -93,20 +189,22 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             });
         }
 
-        // =========================
-        // CREATE - POST
-        // =========================
+        // ========================= 
+        // CREATE - POST 
+        // ========================= 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
             DateTime UploadDate,
-            IFormFile? uploadedFile)
+            IFormFile[] uploadedFiles)
         {
             var doctor = await GetCurrentDoctorAsync();
-            if (doctor == null) return NotFound("Doctor profile not found.");
 
-            // Get MedicalRecordId directly from Form
+            if (doctor == null)
+                return NotFound("Doctor profile not found.");
+
+            // Get MedicalRecordId directly from Form 
             var medicalRecordIdValue =
                 Request.Form["MedicalRecordId"].ToString();
 
@@ -117,16 +215,18 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 medicalRecordId = 0;
             }
 
-            // =========================
-            // CHECK MEDICAL RECORD
-            // =========================
+            // ========================= 
+            // CHECK MEDICAL RECORD 
+            // ========================= 
 
             if (medicalRecordId <= 0)
             {
                 TempData["Error"] =
                     "Please select a medical record.";
 
-                await LoadMedicalRecords(doctor.DoctorId, medicalRecordId);
+                await LoadMedicalRecords(
+                    doctor.DoctorId,
+                    medicalRecordId);
 
                 return View(new MedicalFileVM
                 {
@@ -135,7 +235,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 });
             }
 
-            // Verify this medical record belongs to this doctor
+            // Verify this medical record belongs to this doctor 
             var medicalRecord = await _medicalRecordRepository.GetOneAsync(
                 r => r.MedicalRecordId == medicalRecordId &&
                      r.Appointment != null &&
@@ -149,19 +249,6 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                     "Invalid medical record or you don't have permission.";
 
                 await LoadMedicalRecords(doctor.DoctorId);
-                return View(new MedicalFileVM { UploadDate = UploadDate });
-            }
-
-            // =========================
-            // CHECK FILE
-            // =========================
-
-            if (uploadedFile == null || uploadedFile.Length == 0)
-            {
-                TempData["Error"] =
-                    "Please select a file.";
-
-                await LoadMedicalRecords(doctor.DoctorId, medicalRecordId);
 
                 return View(new MedicalFileVM
                 {
@@ -170,59 +257,106 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 });
             }
 
-            // =========================
-            // CHECK EXTENSION
-            // =========================
+            // ========================= 
+            // CHECK FILES 
+            // ========================= 
+
+            if (uploadedFiles == null || uploadedFiles.Length == 0)
+            {
+                TempData["Error"] =
+                    "Please select at least one file.";
+
+                await LoadMedicalRecords(
+                    doctor.DoctorId,
+                    medicalRecordId);
+
+                return View(new MedicalFileVM
+                {
+                    MedicalRecordId = medicalRecordId,
+                    UploadDate = UploadDate
+                });
+            }
+
+            // ========================= 
+            // ALLOWED EXTENSIONS 
+            // ========================= 
 
             var allowedExtensions = new[]
             {
-                ".pdf",
-                ".jpg",
-                ".jpeg",
-                ".png"
-            };
+        ".pdf",
+        ".jpg",
+        ".jpeg",
+        ".png"
+    };
 
-            var extension = Path
-                .GetExtension(uploadedFile.FileName)
-                .ToLowerInvariant();
-
-            if (!allowedExtensions.Contains(extension))
-            {
-                TempData["Error"] =
-                    "Only PDF, JPG, JPEG and PNG files are allowed.";
-
-                await LoadMedicalRecords(doctor.DoctorId, medicalRecordId);
-
-                return View(new MedicalFileVM
-                {
-                    MedicalRecordId = medicalRecordId,
-                    UploadDate = UploadDate
-                });
-            }
-
-            // =========================
-            // CHECK FILE SIZE
-            // =========================
+            // ========================= 
+            // MAX FILE SIZE 
+            // ========================= 
 
             const long maxFileSize = 10 * 1024 * 1024;
 
-            if (uploadedFile.Length > maxFileSize)
+            // ========================= 
+            // VALIDATE ALL FILES FIRST 
+            // ========================= 
+
+            foreach (var uploadedFile in uploadedFiles)
             {
-                TempData["Error"] =
-                    "File size must not exceed 10 MB.";
-
-                await LoadMedicalRecords(doctor.DoctorId, medicalRecordId);
-
-                return View(new MedicalFileVM
+                if (uploadedFile == null || uploadedFile.Length == 0)
                 {
-                    MedicalRecordId = medicalRecordId,
-                    UploadDate = UploadDate
-                });
+                    TempData["Error"] =
+                        "One of the selected files is empty.";
+
+                    await LoadMedicalRecords(
+                        doctor.DoctorId,
+                        medicalRecordId);
+
+                    return View(new MedicalFileVM
+                    {
+                        MedicalRecordId = medicalRecordId,
+                        UploadDate = UploadDate
+                    });
+                }
+
+                var extension =
+                    Path.GetExtension(uploadedFile.FileName)
+                        .ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    TempData["Error"] =
+                        "Only PDF, JPG, JPEG and PNG files are allowed.";
+
+                    await LoadMedicalRecords(
+                        doctor.DoctorId,
+                        medicalRecordId);
+
+                    return View(new MedicalFileVM
+                    {
+                        MedicalRecordId = medicalRecordId,
+                        UploadDate = UploadDate
+                    });
+                }
+
+                if (uploadedFile.Length > maxFileSize)
+                {
+                    TempData["Error"] =
+                        $"File '{Path.GetFileName(uploadedFile.FileName)}' exceeds 10 MB.";
+
+                    await LoadMedicalRecords(
+                        doctor.DoctorId,
+                        medicalRecordId);
+
+                    return View(new MedicalFileVM
+                    {
+                        MedicalRecordId = medicalRecordId,
+                        UploadDate = UploadDate
+                    });
+                }
             }
 
-            // =========================
-            // SAVE FILE
-            // =========================
+            // ========================= 
+            // SAVE FILES 
+            // ========================= 
 
             try
             {
@@ -237,60 +371,71 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                     Directory.CreateDirectory(uploadsFolder);
                 }
 
-                var uniqueFileName =
-                    $"{Guid.NewGuid()}{extension}";
-
-                var physicalFilePath = Path.Combine(
-                    uploadsFolder,
-                    uniqueFileName
-                );
-
-                using (var stream = new FileStream(
-                    physicalFilePath,
-                    FileMode.Create))
+                foreach (var uploadedFile in uploadedFiles)
                 {
-                    await uploadedFile.CopyToAsync(stream);
+                    var extension =
+                        Path.GetExtension(uploadedFile.FileName)
+                            .ToLowerInvariant();
+
+                    var uniqueFileName =
+                        $"{Guid.NewGuid()}{extension}";
+
+                    var physicalFilePath =
+                        Path.Combine(
+                            uploadsFolder,
+                            uniqueFileName
+                        );
+
+                    using (var stream = new FileStream(
+                        physicalFilePath,
+                        FileMode.Create))
+                    {
+                        await uploadedFile.CopyToAsync(stream);
+                    }
+
+                    // ========================= 
+                    // CREATE MEDICAL FILE 
+                    // ========================= 
+
+                    var medicalFile = new MedicalFile
+                    {
+                        MedicalRecordId = medicalRecordId,
+
+                        FileName =
+                            Path.GetFileName(uploadedFile.FileName),
+
+                        FilePath =
+                            $"/uploads/medical-files/{uniqueFileName}",
+
+                        FileType =
+                            extension,
+
+                        UploadDate =
+                            UploadDate == default
+                                ? DateTime.Now
+                                : UploadDate
+                    };
+
+                    await _medicalFileRepository
+                        .CreateAsync(medicalFile);
                 }
 
-                // =========================
-                // CREATE MEDICAL FILE
-                // =========================
-
-                var medicalFile = new MedicalFile
-                {
-                    MedicalRecordId = medicalRecordId,
-
-                    FileName =
-                        Path.GetFileName(uploadedFile.FileName),
-
-                    FilePath =
-                        $"/uploads/medical-files/{uniqueFileName}",
-
-                    FileType = extension,
-
-                    UploadDate =
-                        UploadDate == default
-                            ? DateTime.Now
-                            : UploadDate
-                };
-
-                await _medicalFileRepository
-                    .CreateAsync(medicalFile);
-
-                await _medicalFileRepository
-                    .CommitAsync();
+                // Commit all files together 
+                await _medicalFileRepository.CommitAsync();
 
                 TempData["Success"] =
-                    "Medical file uploaded successfully.";
+                    $"{uploadedFiles.Length} medical file(s) uploaded successfully.";
 
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 TempData["Error"] =
-                    $"Failed to upload medical file: {ex.Message}";
+                    $"Failed to upload medical files: {ex.Message}";
 
-                await LoadMedicalRecords(doctor.DoctorId, medicalRecordId);
+                await LoadMedicalRecords(
+                    doctor.DoctorId,
+                    medicalRecordId);
 
                 return View(new MedicalFileVM
                 {
@@ -300,9 +445,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             }
         }
 
-        // =========================
-        // EDIT - GET
-        // =========================
+        // ========================= 
+        // EDIT - GET 
+        // ========================= 
 
         public async Task<IActionResult> Edit(int id)
         {
@@ -330,9 +475,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             return View(medicalFile);
         }
 
-        // =========================
-        // EDIT - POST
-        // =========================
+        // ========================= 
+        // EDIT - POST 
+        // ========================= 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -345,9 +490,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             var doctor = await GetCurrentDoctorAsync();
             if (doctor == null) return NotFound("Doctor profile not found.");
 
-            // =========================
-            // GET EXISTING FILE (doctor-scoped)
-            // =========================
+            // ========================= 
+            // GET EXISTING FILE (doctor-scoped) 
+            // ========================= 
 
             var existingFile =
                 await _medicalFileRepository.GetOneAsync(
@@ -362,9 +507,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 return NotFound();
             }
 
-            // =========================
-            // CHECK MEDICAL RECORD
-            // =========================
+            // ========================= 
+            // CHECK MEDICAL RECORD 
+            // ========================= 
 
             if (MedicalRecordId <= 0)
             {
@@ -376,7 +521,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 return View(existingFile);
             }
 
-            // Verify new medical record also belongs to this doctor
+            // Verify new medical record also belongs to this doctor 
             var medicalRecord = await _medicalRecordRepository.GetOneAsync(
                 r => r.MedicalRecordId == MedicalRecordId &&
                      r.Appointment != null &&
@@ -393,25 +538,25 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 return View(existingFile);
             }
 
-            // =========================
-            // UPDATE MEDICAL RECORD
-            // =========================
+            // ========================= 
+            // UPDATE MEDICAL RECORD 
+            // ========================= 
 
             existingFile.MedicalRecordId =
                 MedicalRecordId;
 
-            // =========================
-            // UPDATE DATE
-            // =========================
+            // ========================= 
+            // UPDATE DATE 
+            // ========================= 
 
             existingFile.UploadDate =
                 UploadDate == default
                     ? DateTime.Now
                     : UploadDate;
 
-            // =========================
-            // REPLACE FILE
-            // =========================
+            // ========================= 
+            // REPLACE FILE 
+            // ========================= 
 
             if (uploadedFile != null &&
                 uploadedFile.Length > 0)
@@ -429,7 +574,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                         uploadedFile.FileName)
                     .ToLowerInvariant();
 
-                // Check extension
+                // Check extension 
                 if (!allowedExtensions.Contains(extension))
                 {
                     TempData["Error"] =
@@ -440,7 +585,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                     return View(existingFile);
                 }
 
-                // Check size
+                // Check size 
                 const long maxFileSize =
                     10 * 1024 * 1024;
 
@@ -454,9 +599,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                     return View(existingFile);
                 }
 
-                // =========================
-                // UPLOADS FOLDER
-                // =========================
+                // ========================= 
+                // UPLOADS FOLDER 
+                // ========================= 
 
                 var uploadsFolder =
                     Path.Combine(
@@ -471,9 +616,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                         uploadsFolder);
                 }
 
-                // =========================
-                // NEW FILE NAME
-                // =========================
+                // ========================= 
+                // NEW FILE NAME 
+                // ========================= 
 
                 var uniqueFileName =
                     $"{Guid.NewGuid()}{extension}";
@@ -484,9 +629,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                         uniqueFileName
                     );
 
-                // =========================
-                // SAVE NEW FILE
-                // =========================
+                // ========================= 
+                // SAVE NEW FILE 
+                // ========================= 
 
                 using (var stream =
                     new FileStream(
@@ -496,9 +641,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                     await uploadedFile.CopyToAsync(stream);
                 }
 
-                // =========================
-                // DELETE OLD FILE
-                // =========================
+                // ========================= 
+                // DELETE OLD FILE 
+                // ========================= 
 
                 if (!string.IsNullOrEmpty(
                     existingFile.FilePath))
@@ -524,9 +669,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                     }
                 }
 
-                // =========================
-                // UPDATE FILE DATA
-                // =========================
+                // ========================= 
+                // UPDATE FILE DATA 
+                // ========================= 
 
                 existingFile.FileName =
                     Path.GetFileName(
@@ -539,9 +684,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                     extension;
             }
 
-            // =========================
-            // SAVE DATABASE CHANGES
-            // =========================
+            // ========================= 
+            // SAVE DATABASE CHANGES 
+            // ========================= 
 
             _medicalFileRepository.Update(
                 existingFile);
@@ -554,9 +699,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // =========================
-        // DELETE - GET
-        // =========================
+        // ========================= 
+        // DELETE - GET 
+        // ========================= 
 
         public async Task<IActionResult> Delete(int id)
         {
@@ -584,9 +729,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             return View(medicalFile);
         }
 
-        // =========================
-        // DELETE - POST
-        // =========================
+        // ========================= 
+        // DELETE - POST 
+        // ========================= 
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -608,9 +753,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 return NotFound();
             }
 
-            // =========================
-            // DELETE PHYSICAL FILE
-            // =========================
+            // ========================= 
+            // DELETE PHYSICAL FILE 
+            // ========================= 
 
             if (!string.IsNullOrEmpty(medicalFile.FilePath))
             {
@@ -639,9 +784,9 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // =========================
-        // LOAD MEDICAL RECORDS (doctor-scoped)
-        // =========================
+        // ========================= 
+        // LOAD MEDICAL RECORDS (doctor-scoped) 
+        // ========================= 
 
         private async Task LoadMedicalRecords(
             int doctorId,

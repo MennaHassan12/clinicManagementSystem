@@ -103,37 +103,50 @@
                                     </td>
 
                                     <td class="text-center">
+                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
 
-                                        <a asp-area="Admin"
-                                           asp-controller="MedicalFiles"
-                                           asp-action="ViewFile"
-                                           asp-route-id="@file.MedicalFileId"
-                                           class="btn btn-sm btn-outline-primary rounded-2 me-1"
-                                           title="View">
+                                            <a asp-area="Admin"
+                                               asp-controller="MedicalFiles"
+                                               asp-action="ViewFile"
+                                               asp-route-id="@file.MedicalFileId"
+                                               target="_blank"
+                                               class="btn btn-sm btn-outline-primary rounded-3 px-3"
+                                               title="View Medical File">
+                                                <i class="fas fa-eye me-1"></i>
+                                                View
+                                            </a>
 
-                                            <i class="fas fa-eye"></i>
-                                        </a>
+                                            <a asp-area="Admin"
+                                               asp-controller="MedicalFiles"
+                                               asp-action="Download"
+                                               asp-route-id="@file.MedicalFileId"
+                                               class="btn btn-sm btn-outline-success rounded-3 px-3"
+                                               title="Download Medical File">
+                                                <i class="fas fa-download me-1"></i>
+                                                Download
+                                            </a>
 
-                                        <a asp-area="Admin"
-                                           asp-controller="MedicalFiles"
-                                           asp-action="Edit"
-                                           asp-route-id="@file.MedicalFileId"
-                                           class="btn btn-sm btn-outline-warning rounded-2 me-1"
-                                           title="Edit">
+                                            <a asp-area="Admin"
+                                               asp-controller="MedicalFiles"
+                                               asp-action="Edit"
+                                               asp-route-id="@file.MedicalFileId"
+                                               class="btn btn-sm btn-outline-warning rounded-3 px-3"
+                                               title="Edit Medical File">
+                                                <i class="fas fa-pen me-1"></i>
+                                                Edit
+                                            </a>
 
-                                            <i class="fas fa-pen"></i>
-                                        </a>
+                                            <a asp-area="Admin"
+                                               asp-controller="MedicalFiles"
+                                               asp-action="Delete"
+                                               asp-route-id="@file.MedicalFileId"
+                                               class="btn btn-sm btn-outline-danger rounded-3 px-3"
+                                               title="Delete Medical File">
+                                                <i class="fas fa-trash me-1"></i>
+                                                Delete
+                                            </a>
 
-                                        <a asp-area="Admin"
-                                           asp-controller="MedicalFiles"
-                                           asp-action="Delete"
-                                           asp-route-id="@file.MedicalFileId"
-                                           class="btn btn-sm btn-outline-danger rounded-2"
-                                           title="Delete">
-
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-
+                                        </div>
                                     </td>
 
                                 </tr>

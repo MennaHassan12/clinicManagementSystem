@@ -16,6 +16,7 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         private readonly IRepository<Department> _departmentRepo;
         private readonly IRepository<BlogPost> _blogRepo;
         private readonly IRepository<DoctorModel> _doctorRepo;
+        private readonly IRepository<Review> _reviewRepo;
         private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
 
@@ -23,12 +24,14 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
             IRepository<Department> departmentRepo,
             IRepository<BlogPost> blogRepo,
             IRepository<DoctorModel> doctorRepo,
+            IRepository<Review> reviewRepo,
             IConfiguration configuration,
             IEmailSender emailSender)
         {
             _departmentRepo = departmentRepo;
             _blogRepo = blogRepo;
             _doctorRepo = doctorRepo;
+            _reviewRepo = reviewRepo;
             _configuration = configuration;
             _emailSender = emailSender;
         }
@@ -43,11 +46,15 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
                 .Take(3)
                 .ToList();
 
-            var featuredDoctors = await _doctorRepo.GetAsync(
-                includes: [d => d.ApplicationUser, d => d.Department]
-            );
+            var doctors = await GetDoctorsWithRatingsAsync();
 
-            return View(featuredDoctors.Take(4).ToList());
+            var topDoctors = doctors
+                .OrderByDescending(d => GetDoctorRating(d.DoctorId))
+                .ThenByDescending(d => d.YearsOfExperience)
+                .Take(4)
+                .ToList();
+
+            return View(topDoctors);
         }
 
         public async Task<IActionResult> AllDoctors(string? searchTerm, int? departmentId)
@@ -56,14 +63,30 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
             ViewBag.CurrentSearch = searchTerm;
             ViewBag.CurrentDepartment = departmentId;
 
+            await GetDoctorsWithRatingsAsync();
+
             var doctors = await FilterDoctorsAsync(searchTerm, departmentId);
+
+            doctors = doctors
+                .OrderByDescending(d => GetDoctorRating(d.DoctorId))
+                .ThenByDescending(d => d.YearsOfExperience)
+                .ToList();
+
             return View(doctors);
         }
 
         [HttpGet]
         public async Task<IActionResult> SearchDoctors(string? searchTerm, int? departmentId)
         {
+            await GetDoctorsWithRatingsAsync();
+
             var doctors = await FilterDoctorsAsync(searchTerm, departmentId);
+
+            doctors = doctors
+                .OrderByDescending(d => GetDoctorRating(d.DoctorId))
+                .ThenByDescending(d => d.YearsOfExperience)
+                .ToList();
+
             return PartialView("_DoctorListPartial", doctors);
         }
 
@@ -132,6 +155,38 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
                                  (!departmentId.HasValue || departmentId.Value <= 0 || d.DepartmentId == departmentId.Value),
                 includes: [d => d.ApplicationUser, d => d.Department]
             );
+        }
+
+        private Dictionary<int, double> _doctorRatings = new();
+
+        private async Task<IEnumerable<DoctorModel>> GetDoctorsWithRatingsAsync()
+        {
+            var doctors = await _doctorRepo.GetAsync(
+                includes: [d => d.ApplicationUser, d => d.Department]
+            );
+
+            var reviews = await _reviewRepo.GetAsync(
+                includes: [r => r.Appointment]
+            );
+
+            _doctorRatings = reviews
+                .Where(r => r.Appointment != null)
+                .GroupBy(r => r.Appointment!.DoctorId)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Average(r => (double)r.Rating)
+                );
+
+            ViewBag.DoctorRatings = _doctorRatings;
+
+            return doctors;
+        }
+
+        private double GetDoctorRating(int doctorId)
+        {
+            return _doctorRatings.TryGetValue(doctorId, out var rating)
+                ? rating
+                : 0;
         }
     }
 }
