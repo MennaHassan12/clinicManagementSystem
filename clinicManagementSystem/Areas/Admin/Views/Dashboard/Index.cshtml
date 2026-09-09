@@ -1,154 +1,364 @@
-﻿@{
-    ViewData["Title"] = "Dashboard";
+﻿@model clinicManagementSystem.Areas.Admin.ViewModels.AdminDashboardVM
+@{
+    ViewData["Title"] = "Departments";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row">
+<div class="container-fluid py-3">
 
-    <div class="col-lg-2 col-md-4 col-6">
-        <div class="small-box bg-info">
-            <div class="inner">
-                <h3>150</h3>
-                <p>Patients</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-user-injured"></i>
-            </div>
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Admin Dashboard</h2>
+            <p class="text-muted mb-0">
+                Overview of your clinic management system
+            </p>
+        </div>
+
+        <div class="text-muted">
+            <i class="bi bi-calendar3 me-1"></i>
+            @DateTime.Now.ToString("dd MMM yyyy")
         </div>
     </div>
 
-    <div class="col-lg-2 col-md-4 col-6">
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3>20</h3>
-                <p>Doctors</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-user-md"></i>
+    <!-- Statistics -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-xl-2 col-md-4 col-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted mb-2">Patients</p>
+                            <h3 class="fw-bold mb-0">@Model.TotalPatients</h3>
+                        </div>
+                        <div class="fs-2 text-primary">
+                            <i class="bi bi-people"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div class="col-xl-2 col-md-4 col-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted mb-2">Doctors</p>
+                            <h3 class="fw-bold mb-0">@Model.TotalDoctors</h3>
+                        </div>
+                        <div class="fs-2 text-success">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted mb-2">Departments</p>
+                            <h3 class="fw-bold mb-0">@Model.TotalDepartments</h3>
+                        </div>
+                        <div class="fs-2 text-info">
+                            <i class="bi bi-hospital"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted mb-2">Appointments</p>
+                            <h3 class="fw-bold mb-0">@Model.TotalAppointments</h3>
+                        </div>
+                        <div class="fs-2 text-warning">
+                            <i class="bi bi-calendar-check"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted mb-2">Medical Files</p>
+                            <h3 class="fw-bold mb-0">@Model.TotalMedicalFiles</h3>
+                        </div>
+                        <div class="fs-2 text-danger">
+                            <i class="bi bi-file-earmark-medical"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-2 col-md-4 col-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p class="text-muted mb-2">Reviews</p>
+                            <h3 class="fw-bold mb-0">@Model.TotalReviews</h3>
+                            <small class="text-muted">
+                                ★ @Model.AverageRating.ToString("0.0") / 5
+                            </small>
+                        </div>
+                        <div class="fs-2 text-warning">
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <div class="col-lg-2 col-md-4 col-6">
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>8</h3>
-                <p>Departments</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-hospital"></i>
+    <!-- Today's Appointments -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="fw-bold mb-1">Today's Appointments</h5>
+                            <p class="text-muted mb-0">
+                                @Model.TodayAppointments appointment(s) today
+                            </p>
+                        </div>
+                        <i class="bi bi-calendar2-week fs-3 text-primary"></i>
+                    </div>
+                </div>
+
+                <div class="card-body px-4">
+                    @if (Model.TodayAppointmentsList.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Doctor</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var appointment in Model.TodayAppointmentsList)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    @(appointment.Patient?.ApplicationUser?.FullName ?? "Unknown")
+                                                </strong>
+                                            </td>
+
+                                            <td>
+                                                @(appointment.Doctor?.ApplicationUser?.FullName ?? "Unknown")
+                                            </td>
+
+                                            <td>
+                                                @appointment.AppointmentTime.ToString("hh\\:mm")
+                                            </td>
+
+                                            <td>
+                                                @switch (appointment.Status)
+                                                {
+                                                    case AppointmentStatus.Confirmed:
+                                                        <span class="badge rounded-pill bg-success-subtle text-success">
+                                                            Confirmed
+                                                        </span>
+                                                        break;
+
+                                                    case AppointmentStatus.Pending:
+                                                        <span class="badge rounded-pill bg-warning-subtle text-warning">
+                                                            Pending
+                                                        </span>
+                                                        break;
+
+                                                    case AppointmentStatus.Completed:
+                                                        <span class="badge rounded-pill bg-info-subtle text-info">
+                                                            Completed
+                                                        </span>
+                                                        break;
+
+                                                    case AppointmentStatus.Cancelled:
+                                                        <span class="badge rounded-pill bg-danger-subtle text-danger">
+                                                            Cancelled
+                                                        </span>
+                                                        break;
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-calendar-x fs-1 text-muted"></i>
+                            <p class="text-muted mt-3 mb-0">
+                                No appointments scheduled for today.
+                            </p>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
+
+        <!-- Today's Status -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <h5 class="fw-bold mb-0">Today's Overview</h5>
+                </div>
+
+                <div class="card-body px-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="text-muted">
+                            <i class="bi bi-check-circle me-2"></i>
+                            Confirmed
+                        </span>
+                        <strong>@Model.TodayConfirmed</strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="text-muted">
+                            <i class="bi bi-clock me-2"></i>
+                            Pending
+                        </span>
+                        <strong>@Model.TodayPending</strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="text-muted">
+                            <i class="bi bi-check2-all me-2"></i>
+                            Completed
+                        </span>
+                        <strong>@Model.TodayCompleted</strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">
+                            <i class="bi bi-x-circle me-2"></i>
+                            Cancelled
+                        </span>
+                        <strong>@Model.TodayCancelled</strong>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <div class="col-lg-2 col-md-4 col-6">
-        <div class="small-box bg-danger">
-            <div class="inner">
-                <h3>50</h3>
-                <p>Appointments</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-calendar-check"></i>
-            </div>
-        </div>
-    </div>
+    <!-- Departments + Reviews -->
+    <div class="row g-4">
 
-    <div class="col-lg-2 col-md-4 col-6">
-        <div class="small-box bg-primary">
-            <div class="inner">
-                <h3>95</h3>
-                <p>Medical Files</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-folder-open"></i>
-            </div>
-        </div>
-    </div>
+        <!-- Departments -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <h5 class="fw-bold mb-1">Departments</h5>
+                    <p class="text-muted mb-0">
+                        Doctors by department
+                    </p>
+                </div>
 
-    <div class="col-lg-2 col-md-4 col-6">
-        <div class="small-box bg-secondary">
-            <div class="inner">
-                <h3>18</h3>
-                <p>Reviews</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-star"></i>
+                <div class="card-body px-4">
+
+                    @foreach (var department in Model.DepartmentStats)
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span>
+                                <i class="bi bi-hospital me-2 text-primary"></i>
+                                @department.DepartmentName
+                            </span>
+
+                            <span class="badge rounded-pill bg-primary-subtle text-primary">
+                                @department.DoctorCount doctors
+                            </span>
+                        </div>
+                    }
+
+                    @if (!Model.DepartmentStats.Any())
+                    {
+                        <p class="text-muted text-center py-3">
+                            No departments available.
+                        </p>
+                    }
+
+                </div>
             </div>
         </div>
+
+        <!-- Recent Reviews -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white border-0 pt-4 px-4">
+                    <h5 class="fw-bold mb-1">Recent Reviews</h5>
+                    <p class="text-muted mb-0">
+                        Latest patient feedback
+                    </p>
+                </div>
+
+                <div class="card-body px-4">
+
+                    @foreach (var review in Model.RecentReviews)
+                    {
+                        <div class="border-bottom pb-3 mb-3">
+
+                            <div class="d-flex justify-content-between">
+                                <strong>
+                                    @(review.Appointment?.Patient?.ApplicationUser?.FullName ?? "Patient")
+                                </strong>
+
+                                <span class="text-warning">
+                                    ★ @review.Rating
+                                </span>
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(review.Comment))
+                            {
+                                <p class="text-muted mb-1 mt-2">
+                                    @review.Comment
+                                </p>
+                            }
+
+                            <small class="text-muted">
+                                @review.ReviewDate.ToString("dd MMM yyyy")
+                            </small>
+
+                        </div>
+                    }
+
+                    @if (!Model.RecentReviews.Any())
+                    {
+                        <p class="text-muted text-center py-3">
+                            No reviews available.
+                        </p>
+                    }
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </div>
-
-<div class="row">
-
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header bg-primary">
-                <h3 class="card-title">Today's Appointments</h3>
-            </div>
-
-            <div class="card-body p-0">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Patient</th>
-                            <th>Doctor</th>
-                            <th>Time</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <td>Ahmed Ali</td>
-                            <td>Dr. Mohamed</td>
-                            <td>10:00 AM</td>
-                            <td><span class="badge badge-success">Confirmed</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Sara Hassan</td>
-                            <td>Dr. Nada</td>
-                            <td>11:30 AM</td>
-                            <td><span class="badge badge-warning">Pending</span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Omar Adel</td>
-                            <td>Dr. Ahmed</td>
-                            <td>1:00 PM</td>
-                            <td><span class="badge badge-info">Completed</span></td>
-                        </tr>
-                    </tbody>
-
-                </table>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="col-md-4">
-
-        <div class="card">
-
-            <div class="card-header bg-success">
-                <h3 class="card-title">System Overview</h3>
-            </div>
-
-            <div class="card-body">
-
-                <p><strong>Total Patients:</strong> 150</p>
-                <p><strong>Total Doctors:</strong> 20</p>
-                <p><strong>Departments:</strong> 8</p>
-                <p><strong>Appointments Today:</strong> 50</p>
-                <p><strong>Reviews:</strong> 18</p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-    

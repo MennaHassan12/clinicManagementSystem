@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Manage All Appointments";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 
     int totalAppointments = Model?.Count() ?? 0;
     int pendingCount = Model?.Count(a => a.Status == clinicManagementSystem.Models.AppointmentStatus.Pending) ?? 0;

@@ -1,51 +1,430 @@
-﻿@{
+﻿@model clinicManagementSystem.Areas.Doctor.ViewModels.DoctorDashboardVM
+
+@{
     ViewData["Title"] = "Doctor Dashboard";
     Layout = "~/Areas/Doctor/Views/Shared/_Layout.cshtml";
 }
 
-<div class="content-header">
-    <div class="container-fluid">
-        
-        <p>Welcome, Doctor.</p>
-    </div>
-</div>
+<div class="container-fluid py-4">
 
-<div class="row">
+    <!-- Welcome -->
+    <div class="mb-4">
+        <h2 class="fw-bold text-dark mb-1">
+            Welcome, Dr. @Model.DoctorName
+        </h2>
 
-    <div class="col-lg-4">
-        <div class="small-box bg-info">
-            <div class="inner">
-                <h3>12</h3>
-                <p>Today's Appointments</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-calendar-check"></i>
-            </div>
-        </div>
+        <p class="text-muted mb-0">
+            @Model.DepartmentName
+        </p>
     </div>
 
-    <div class="col-lg-4">
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3>56</h3>
-                <p>My Patients</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-user-injured"></i>
+
+    <!-- Main Statistics -->
+    <div class="row g-4 mb-4">
+
+        <!-- Today's Appointments -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+                            <p class="text-muted mb-2">
+                                Today's Appointments
+                            </p>
+
+                            <h2 class="fw-bold mb-0">
+                                @Model.TodayAppointments
+                            </h2>
+                        </div>
+
+                        <div class="bg-primary bg-opacity-10 rounded-4 p-3">
+                            <i class="fas fa-calendar-check text-primary fs-4"></i>
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
         </div>
+
+
+        <!-- My Patients -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+                            <p class="text-muted mb-2">
+                                My Patients
+                            </p>
+
+                            <h2 class="fw-bold mb-0">
+                                @Model.MyPatients
+                            </h2>
+                        </div>
+
+                        <div class="bg-success bg-opacity-10 rounded-4 p-3">
+                            <i class="fas fa-users text-success fs-4"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Pending Appointments -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+                            <p class="text-muted mb-2">
+                                Pending Appointments
+                            </p>
+
+                            <h2 class="fw-bold mb-0">
+                                @Model.PendingAppointments
+                            </h2>
+                        </div>
+
+                        <div class="bg-warning bg-opacity-10 rounded-4 p-3">
+                            <i class="fas fa-clock text-warning fs-4"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Average Rating -->
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+                            <p class="text-muted mb-2">
+                                Average Rating
+                            </p>
+
+                            <h2 class="fw-bold mb-0">
+                                @Model.AverageRating.ToString("0.0")
+                                <small class="text-warning">★</small>
+                            </h2>
+                        </div>
+
+                        <div class="bg-warning bg-opacity-10 rounded-4 p-3">
+                            <i class="fas fa-star text-warning fs-4"></i>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <div class="col-lg-4">
-        <div class="small-box bg-warning">
-            <div class="inner">
-                <h3>8</h3>
-                <p>Pending Reports</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-file-medical"></i>
+
+    <!-- Appointment Status -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-bold mb-1">
+                        Appointment Overview
+                    </h5>
+
+                    <p class="text-muted mb-0 small">
+                        Overview of your appointment statuses
+                    </p>
+                </div>
+
+                <div class="card-body px-4 pb-4">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-3">
+                            <div class="p-3 bg-warning bg-opacity-10 rounded-3">
+                                <div class="text-muted small">
+                                    Pending
+                                </div>
+                                <div class="fs-4 fw-bold">
+                                    @Model.PendingAppointments
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="p-3 bg-primary bg-opacity-10 rounded-3">
+                                <div class="text-muted small">
+                                    Confirmed
+                                </div>
+                                <div class="fs-4 fw-bold">
+                                    @Model.ConfirmedAppointments
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="p-3 bg-success bg-opacity-10 rounded-3">
+                                <div class="text-muted small">
+                                    Completed
+                                </div>
+                                <div class="fs-4 fw-bold">
+                                    @Model.CompletedAppointments
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="p-3 bg-danger bg-opacity-10 rounded-3">
+                                <div class="text-muted small">
+                                    Cancelled
+                                </div>
+                                <div class="fs-4 fw-bold">
+                                    @Model.CancelledAppointments
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
         </div>
+
+
+        <!-- Reviews -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-header bg-white border-0 p-4">
+                    <h5 class="fw-bold mb-1">
+                        Reviews
+                    </h5>
+
+                    <p class="text-muted mb-0 small">
+                        Your patient feedback
+                    </p>
+                </div>
+
+                <div class="card-body px-4">
+
+                    <div class="text-center py-3">
+
+                        <div class="display-5 fw-bold">
+                            @Model.AverageRating.ToString("0.0")
+                        </div>
+
+                        <div class="text-warning fs-4">
+                            ★★★★★
+                        </div>
+
+                        <div class="text-muted small mt-2">
+                            @Model.TotalReviews total reviews
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Today's Appointments -->
+    <div class="row g-4">
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-header bg-white border-0 p-4">
+
+                    <h5 class="fw-bold mb-1">
+                        Today's Appointments
+                    </h5>
+
+                    <p class="text-muted mb-0 small">
+                        Your appointments scheduled for today
+                    </p>
+
+                </div>
+
+                <div class="card-body p-0">
+
+                    @if (Model.TodayAppointmentsList.Any())
+                    {
+                        <div class="table-responsive">
+
+                            <table class="table align-middle mb-0">
+
+                                <thead class="table-light">
+
+                                    <tr>
+                                        <th class="px-4">Time</th>
+                                        <th>Patient</th>
+                                        <th>Status</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    @foreach (var appointment in Model.TodayAppointmentsList)
+                                    {
+                                        <tr>
+
+                                            <td class="px-4 fw-semibold">
+                                                @appointment.AppointmentTime.ToString("hh\\:mm")
+                                            </td>
+
+                                            <td>
+                                                @(appointment.Patient?.ApplicationUser?.FullName ?? "Unknown Patient")
+                                            </td>
+
+                                            <td>
+
+                                                @if (appointment.Status == AppointmentStatus.Pending)
+                                                {
+                                                    <span class="badge bg-warning text-dark rounded-pill px-3">
+                                                        Pending
+                                                    </span>
+                                                }
+                                                else if (appointment.Status == AppointmentStatus.Confirmed)
+                                                {
+                                                    <span class="badge bg-primary rounded-pill px-3">
+                                                        Confirmed
+                                                    </span>
+                                                }
+                                                else if (appointment.Status == AppointmentStatus.Completed)
+                                                {
+                                                    <span class="badge bg-success rounded-pill px-3">
+                                                        Completed
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger rounded-pill px-3">
+                                                        Cancelled
+                                                    </span>
+                                                }
+
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+
+                            <i class="fas fa-calendar-times text-muted fs-1 mb-3"></i>
+
+                            <h6 class="fw-bold">
+                                No appointments today
+                            </h6>
+
+                            <p class="text-muted small mb-0">
+                                You don't have any appointments scheduled for today.
+                            </p>
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Quick Summary -->
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-header bg-white border-0 p-4">
+
+                    <h5 class="fw-bold mb-1">
+                        Quick Summary
+                    </h5>
+
+                    <p class="text-muted mb-0 small">
+                        Your overall activity
+                    </p>
+
+                </div>
+
+                <div class="card-body px-4">
+
+                    <div class="d-flex justify-content-between py-3 border-bottom">
+                        <span class="text-muted">
+                            Total Appointments
+                        </span>
+
+                        <span class="fw-bold">
+                            @Model.TotalAppointments
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-between py-3 border-bottom">
+                        <span class="text-muted">
+                            Total Patients
+                        </span>
+
+                        <span class="fw-bold">
+                            @Model.MyPatients
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-between py-3 border-bottom">
+                        <span class="text-muted">
+                            Completed
+                        </span>
+
+                        <span class="fw-bold text-success">
+                            @Model.CompletedAppointments
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-between py-3">
+                        <span class="text-muted">
+                            Reviews
+                        </span>
+
+                        <span class="fw-bold">
+                            @Model.TotalReviews
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
 </div>
