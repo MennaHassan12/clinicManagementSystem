@@ -79,7 +79,7 @@
 
                         <div class="col-sm-4">
                             <div class="p-3 bg-light rounded-3 border-start border-4 border-warning">
-                                <span class="text-muted small d-block mb-1">Overall Rating</span>
+                                <span class="text-muted small d-block mb-1">@SharedLocalizer["Rating"]</span>
                                 <span class="fw-bold text-warning fs-4">★ @rating.ToString("0.0") / 5</span>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                     <hr class="my-4 text-muted opacity-25" />
 
                     <div>
-                        <h5 class="fw-bold text-secondary mb-3">Available Shifts</h5>
+                        <h5 class="fw-bold text-secondary mb-3">@SharedLocalizer["Opening Hours"]</h5>
                         @if (Model.DoctorSchedules != null && Model.DoctorSchedules.Any(s => s.IsAvailable))
                         {
                             <div class="row g-3">
