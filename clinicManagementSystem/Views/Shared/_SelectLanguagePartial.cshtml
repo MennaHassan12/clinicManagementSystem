@@ -1,0 +1,39 @@
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Options
+@using Microsoft.Extensions.Localization
+
+@inject IOptions<RequestLocalizationOptions> LocOptions
+@inject IStringLocalizer<clinicManagementSystem.SharedResource> SharedLocalizer
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var currentCulture = requestCulture?.RequestCulture.UICulture.Name ?? "en-US";
+    var isArabic = currentCulture.StartsWith("ar", StringComparison.OrdinalIgnoreCase);
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path}{Context.Request.QueryString}";
+}
+
+<form id="selectLanguageForm" asp-area="" asp-controller="Language" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" method="post" class="d-inline-flex align-items-center">
+    <div class="dropdown">
+        <button class="btn btn-outline-primary btn-sm dropdown-toggle d-flex align-items-center gap-1" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe" viewBox="0 0 16 16">
+              <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A8 8 0 0 0 5.145 4H7.5zM4.09 4a9.3 9.3 0 0 1 .64-1.539 7 7 0 0 1 .597-.933A7.026 7.026 0 0 0 2.255 4zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a7 7 0 0 0-.656 2.5zm.312 1.5h2.247c-.174.782-.282 1.623-.312 2.5H1.674a7 7 0 0 0 .656 2.5zm1.328 3.5h2.352v2.423c-.67-.204-1.335-.82-1.887-1.855A8 8 0 0 1 5.145 12zM8.5 14.423V12h2.355c-.552 1.035-1.218 1.65-1.887 1.855M10.855 12H8.5V9.5h2.646c-.03.877-.138 1.718-.312 2.5M11.146 8.5H8.5V6h2.646c.174.782.282 1.623.312 2.5m-3.646-3.5V2.577c.67.204 1.335.82 1.887 1.855H8.5zM11.91 4h2.327a7 7 0 0 0-3.072-2.472c.241.285.441.597.597.933M13.67 5h-2.247c.174.782.282 1.623.312 2.5h2.59a7 7 0 0 0-.655-2.5m.655 3.5h-2.59c-.03.877-.138 1.718-.312 2.5h2.247a7 7 0 0 0 .656-2.5m-2.413 3.5c-.156.336-.356.648-.597.933A7 7 0 0 0 13.91 12h-2.327z"/>
+            </svg>
+            <span>@(isArabic ? "العربية" : "English")</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="languageDropdown">
+            <li>
+                <button type="submit" name="culture" value="en-US" class="dropdown-item d-flex align-items-center justify-content-between @(!isArabic ? "active fw-bold" : "")">
+                    <span>English</span>
+                    @if (!isArabic) { <span class="ms-2">✓</span> }
+                </button>
+            </li>
+            <li>
+                <button type="submit" name="culture" value="ar-EG" class="dropdown-item d-flex align-items-center justify-content-between @(isArabic ? "active fw-bold" : "")">
+                    <span>العربية</span>
+                    @if (isArabic) { <span class="ms-2">✓</span> }
+                </button>
+            </li>
+        </ul>
+    </div>
+</form>

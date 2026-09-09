@@ -2,8 +2,13 @@
 @using clinicManagementSystem.Models
 @inject UserManager<ApplicationUser> UserManager
 
+
+@{
+    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+    var isRtl = currentCulture.StartsWith("ar", StringComparison.OrdinalIgnoreCase);
+}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@currentCulture" dir="@(isRtl ? "rtl" : "ltr")">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -272,6 +277,11 @@
         <span>Doctor Schedules</span>
     </a>
 </li>
+            <!-- Right -->
+            <ul class="navbar-nav ml-auto align-items-center">
+                <li class="nav-item me-2">
+                    <partial name="_SelectLanguagePartial" />
+                </li>
 
                 <li class="nav-item">
                     <a asp-area="Admin"
