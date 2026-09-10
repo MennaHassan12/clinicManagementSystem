@@ -22,15 +22,7 @@
             </p>
         </div>
 
-        <a asp-area="Admin"
-           asp-controller="MedicalFiles"
-           asp-action="Index"
-           class="btn btn-outline-secondary rounded-3">
-
-            <i class="fas fa-arrow-left me-1"></i>
-            Back to Medical Files
-
-        </a>
+       
 
     </div>
 
@@ -150,22 +142,23 @@
 
 
                 <!-- Buttons -->
-                <div class="d-flex justify-content-end gap-2">
+                <div class="d-flex justify-content-start gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary px-4 rounded-pill">
+
+                        Save Changes
+
+                    </button>
 
                     <a asp-area="Admin"
                        asp-controller="MedicalFiles"
                        asp-action="Index"
-                       class="btn btn-secondary px-4">
+                       class="btn btn-outline-secondary rounded-pill px-4">
                         Cancel
                     </a>
 
-                    <button type="submit"
-                            class="btn btn-primary px-4">
-
-                        <i class="fas fa-save me-1"></i>
-                        Save Changes
-
-                    </button>
+                   
 
                 </div>
 

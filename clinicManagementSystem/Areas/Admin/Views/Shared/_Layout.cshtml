@@ -329,7 +329,15 @@
                         <span>@SharedLocalizer["Reviews"]</span>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a asp-area="Admin"
+                       asp-controller="Blog"
+                       asp-action="Index"
+                       class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Blog" ? "active" : "")">
+                        <i class="bi bi-journal-text"></i>
+                        <span>@SharedLocalizer["Blogs"]</span>
+                    </a>
+                </li>
             </ul>
 
             <div class="admin-menu-title mt-4">
