@@ -2,22 +2,21 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
-    ViewData["Title"] = SharedLocalizer["Forgot password?"];
+    ViewData["Title"] = "Verify Code";
     Layout = "_MainLayout";
 }
 
-<h2>@SharedLocalizer["Forgot password?"]</h2>
-<p class="subtitle">@SharedLocalizer["Enter your Email"]</p>
+<h2>Verify Code</h2>
+<p class="subtitle">Enter the 6-digit code sent to Your Email</p>
 
-@if (TempData["success_notification"] != null)
-{
-    <div class="success-banner">@TempData["success_notification"]</div>
-}
 
 <form asp-action="ValidateOTP" asp-controller="Account" method="post" id="otpForm">
     @Html.AntiForgeryToken()
 
+    
     <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+    
 
     <input asp-for="Email" type="hidden" />
 
@@ -28,17 +27,17 @@
         <span asp-validation-for="Otp" class="field-error" style="text-align:center;"></span>
     </div>
 
-    <button type="submit" class="btn-primary">@SharedLocalizer["Confirm & Book"]</button>
+    <button type="submit" class="btn-primary">VERIFY CODE</button>
 </form>
 
 <div class="resend-link">
-    @SharedLocalizer["Didn't receive the confirmation email?"]
-    <a asp-action="ForgetPassword" asp-controller="Account">@SharedLocalizer["Resend email confirmation"]</a>
+    Didn't get the code?
+    <a asp-action="ForgetPassword" asp-controller="Account">Resend code</a>
 </div>
 <form asp-action="ResendOTP" asp-controller="Account" method="post">
     @Html.AntiForgeryToken()
     <input type="hidden" name="email" value="@Model.Email" />
-    <button type="submit" class="btn-secondary">@SharedLocalizer["Resend email confirmation"]</button>
+    <button type="submit" class="btn-secondary">RESEND CODE</button>
 </form>
 
 @section Scripts {

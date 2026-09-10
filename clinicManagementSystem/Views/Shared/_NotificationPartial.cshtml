@@ -1,31 +1,45 @@
-﻿@if (TempData["success_notification"] is not null)
+﻿@{
+    var successJs = TempData["success_notification"] is not null
+        ? System.Text.Json.JsonSerializer.Serialize(TempData["success_notification"]!.ToString()).Trim('"')
+        : string.Empty;
+    var errorJs = TempData["error_notification"] is not null
+        ? System.Text.Json.JsonSerializer.Serialize(TempData["error_notification"]!.ToString()).Trim('"')
+        : string.Empty;
+    var warningJs = TempData["warning_notification"] is not null
+        ? System.Text.Json.JsonSerializer.Serialize(TempData["warning_notification"]!.ToString()).Trim('"')
+        : string.Empty;
+    var infoJs = TempData["info_notification"] is not null
+        ? System.Text.Json.JsonSerializer.Serialize(TempData["info_notification"]!.ToString()).Trim('"')
+        : string.Empty;
+}
+@if (TempData["success_notification"] is not null)
 {
     <script>
-        toastr.success('@TempData["success_notification"]');
+        toastr.success('@Html.Raw(successJs)');
     </script>
 }
 else if (TempData["error_notification"] is not null)
 {
     <script>
-        toastr.error('@TempData["error_notification"]');
+        toastr.error('@Html.Raw(errorJs)');
     </script>
 }
 else if (TempData["warning_notification"] is not null)
 {
     <script>
-        toastr.warning('@TempData["warning_notification"]');
+        toastr.warning('@Html.Raw(warningJs)');
     </script>
 }
 else if (TempData["info_notification"] is not null)
 {
     <script>
-        toastr.info('@TempData["info_notification"]');
+        toastr.info('@Html.Raw(infoJs)');
     </script>
 }
 
 <script>
     window.addEventListener("pageshow", function (event) {
-        var historyTraversal = event.persisted || 
+        var historyTraversal = event.persisted ||
             (typeof window.performance != "undefined" && window.performance.navigation.type === 2);
         if (historyTraversal) {
             window.location.reload();
