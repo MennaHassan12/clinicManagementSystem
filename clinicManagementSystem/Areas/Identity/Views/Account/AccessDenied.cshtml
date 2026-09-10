@@ -19,10 +19,10 @@
     If you believe this is a mistake, please contact the administrator.
 </p>
 
-<a asp-area="Patient" asp-controller="Home" asp-action="Index"
-   class="btn-primary text-decoration-none d-block text-center">
-    Back to Home
-</a>
+<button type="button" id="backToPreviousBtn"
+        class="btn-primary text-decoration-none d-block w-100 text-center border-0">
+    Back to Previous Page
+</button>
 
 <div class="switch-link">
     Want to use another account?
@@ -31,6 +31,16 @@
         <button type="submit" class="logout-link-button">Logout</button>
     </form>
 </div>
+
+<script>
+    document.getElementById("backToPreviousBtn").addEventListener("click", function () {
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            window.location.href = '@Url.Action("Index", "Home", new { area = "Patient" })';
+        }
+    });
+</script>
 
 <style>
     .access-message {
