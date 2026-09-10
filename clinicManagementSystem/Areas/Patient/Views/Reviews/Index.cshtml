@@ -32,7 +32,7 @@
         </div>
 
         <a asp-area="Patient" asp-controller="Reviews" asp-action="Create" class="btn btn-primary shadow-sm rounded-pill px-4">
-            <i class="bi bi-star-fill me-1"></i> @SharedLocalizer["Add Review"]
+             @SharedLocalizer["Add Review"]
         </a>
     </div>
 
@@ -112,10 +112,10 @@
                                 </td>
                                 <td class="px-4 text-end text-nowrap">
                                     <a asp-area="Patient" asp-controller="Reviews" asp-action="Edit" asp-route-id="@review.ReviewId" class="btn btn-outline-warning btn-sm rounded-pill px-3 me-1">
-                                        <i class="bi bi-pencil me-1"></i> @SharedLocalizer["Edit"]
+                                         @SharedLocalizer["Edit"]
                                     </a>
-                                    <a asp-area="Patient" asp-controller="Reviews" asp-action="Delete" asp-route-id="@review.ReviewId" class="btn btn-outline-danger btn-sm rounded-pill px-3">
-                                        <i class="bi bi-trash me-1"></i> @SharedLocalizer["Delete"]
+                                    <a asp-area="Patient" asp-controller="Reviews" asp-action="Delete" asp-route-id="@review.ReviewId" class="btn btn-danger btn-sm rounded-pill px-3">
+                                        @SharedLocalizer["Delete"]
                                     </a>
                                 </td>
                             </tr>

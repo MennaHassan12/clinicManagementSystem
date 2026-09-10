@@ -22,7 +22,7 @@
         <a asp-area="Admin"
            asp-controller="Departments"
            asp-action="Create"
-           class="btn btn-primary px-4 py-2 rounded-3 fw-semibold shadow-sm">
+           class="btn btn-primary px-4 py-2 rounded-pill fw-semibold shadow-sm">
             <i class="fas fa-plus me-1"></i>
             Add New Department
         </a>
@@ -203,22 +203,21 @@
                                     </td>
                                     <td>
                                         <span class="badge bg-info rounded-pill px-3 py-2">
-                                            👨‍⚕️ @(department.Doctors?.Count ?? 0) Doctors
+                                             @(department.Doctors?.Count ?? 0) Doctors
                                         </span>
                                     </td>
 
 
                                     <td class="text-end pe-4">
 
-                                        <div class="btn-group">
+                                        <div class="d-inline-flex gap-1">
 
                                             <!-- Edit -->
                                             <a asp-area="Admin"
                                                asp-controller="Departments"
                                                asp-action="Edit"
                                                asp-route-id="@department.DepartmentId"
-                                               class="btn btn-sm btn-outline-warning">
-                                                <i class="fas fa-edit me-1"></i>
+                                               class="btn btn-sm btn-outline-warning rounded-pill">
                                                 Edit
                                             </a>
 
@@ -228,8 +227,7 @@
                                                asp-controller="Departments"
                                                asp-action="Delete"
                                                asp-route-id="@department.DepartmentId"
-                                               class="btn btn-sm btn-outline-danger">
-                                                <i class="fas fa-trash me-1"></i>
+                                               class="btn btn-sm btn-danger rounded-pill">
                                                 Delete
                                             </a>
 
