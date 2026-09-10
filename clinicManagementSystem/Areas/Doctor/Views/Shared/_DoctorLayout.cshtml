@@ -88,13 +88,15 @@
 
     <!-- Main Content -->
     <main role="main" class="flex-grow-1">
-        <partial name="_NotificationPartial" />
         @RenderBody()
     </main>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
+    <partial name="_NotificationPartial" />
+
     <script src="~/js/register.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
