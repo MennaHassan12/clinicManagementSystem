@@ -10,7 +10,7 @@ using System.Security.Claims;
 namespace clinicManagementSystem.Areas.Doctor.Controllers
 {
     [Area(SD.DOCTOR_AREA)]
-    [Authorize]
+    [Authorize(Policy = "RequireDoctorRole")]
     public class MedicalFilesController : Controller
     {
         private readonly IRepository<MedicalFile> _medicalFileRepository;

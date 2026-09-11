@@ -10,7 +10,7 @@ using DoctorModel = clinicManagementSystem.Models.Doctor;
 namespace clinicManagementSystem.Areas.Doctor.Controllers
 {
     [Area(SD.DOCTOR_AREA)]
-    [Authorize]
+    [Authorize(Policy = "RequireDoctorRole")]
     public class ReviewsController : Controller
     {
         private readonly IRepository<Review> _reviewRepository;
