@@ -1,8 +1,16 @@
 ﻿@model clinicManagementSystem.Models.MedicalRecord
-
 @{
     ViewData["Title"] = "Medical Record Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    if (User.IsInRole("Doctor"))
+    {
+        Layout = "~/Areas/Doctor/Views/Shared/_Layout.cshtml";
+    }
+
+    else
+    {
+        Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
+    }
 }
 
 <div class="container py-4">

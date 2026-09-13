@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
     [Area(SD.ADMIN_AREA)]
-    [Authorize]
+    [Authorize(Policy = "RequireAdminOrSuperAdmin")]
     public class MedicalFilesController : Controller
     {
         private readonly IRepository<MedicalFile> _medicalFileRepository;

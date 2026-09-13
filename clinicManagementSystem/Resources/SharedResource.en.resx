@@ -566,7 +566,457 @@
   <data name="Member since" xml:space="preserve">
     <value>Member since</value>
   </data>
-  <data name="Years" xml:space="preserve">
-    <value>Years</value>
+  <data name="Admin Dashboard" xml:space="preserve">
+    <value>Admin Dashboard</value>
+  </data>
+  <data name="Doctor Dashboard" xml:space="preserve">
+    <value>Doctor Dashboard</value>
+  </data>
+  <data name="Patient Dashboard" xml:space="preserve">
+    <value>Patient Dashboard</value>
+  </data>
+  <data name="Overview of your clinic management system" xml:space="preserve">
+    <value>Overview of your clinic management system</value>
+  </data>
+  <data name="Overview of your appointment statuses" xml:space="preserve">
+    <value>Overview of your appointment statuses</value>
+  </data>
+  <data name="Today's Appointments" xml:space="preserve">
+    <value>Today's Appointments</value>
+  </data>
+  <data name="appointment(s) today" xml:space="preserve">
+    <value>appointment(s) today</value>
+  </data>
+  <data name="Today's Overview" xml:space="preserve">
+    <value>Today's Overview</value>
+  </data>
+  <data name="Overview and management of all clinic appointments" xml:space="preserve">
+    <value>Overview and management of all clinic appointments</value>
+  </data>
+  <data name="Appointment Dashboard" xml:space="preserve">
+    <value>Appointment Dashboard</value>
+  </data>
+  <data name="Book New Appointment" xml:space="preserve">
+    <value>Book New Appointment</value>
+  </data>
+  <data name="TOTAL BOOKINGS" xml:space="preserve">
+    <value>TOTAL BOOKINGS</value>
+  </data>
+  <data name="Total Appointments" xml:space="preserve">
+    <value>Total Appointments</value>
+  </data>
+  <data name="Total Patients" xml:space="preserve">
+    <value>Total Patients</value>
+  </data>
+  <data name="Total Doctors" xml:space="preserve">
+    <value>Total Doctors</value>
+  </data>
+  <data name="Total Departments" xml:space="preserve">
+    <value>Total Departments</value>
+  </data>
+  <data name="Total Medical Files" xml:space="preserve">
+    <value>Total Medical Files</value>
+  </data>
+  <data name="Total Reviews" xml:space="preserve">
+    <value>Total Reviews</value>
+  </data>
+  <data name="My Patients" xml:space="preserve">
+    <value>My Patients</value>
+  </data>
+  <data name="Pending Appointments" xml:space="preserve">
+    <value>Pending Appointments</value>
+  </data>
+  <data name="Confirmed Appointments" xml:space="preserve">
+    <value>Confirmed Appointments</value>
+  </data>
+  <data name="Completed Appointments" xml:space="preserve">
+    <value>Completed Appointments</value>
+  </data>
+  <data name="Cancelled Appointments" xml:space="preserve">
+    <value>Cancelled Appointments</value>
+  </data>
+  <data name="Average Rating" xml:space="preserve">
+    <value>Average Rating</value>
+  </data>
+  <data name="Doctors by department" xml:space="preserve">
+    <value>Doctors by department</value>
+  </data>
+  <data name="Latest patient feedback" xml:space="preserve">
+    <value>Latest patient feedback</value>
+  </data>
+  <data name="No appointments scheduled for today." xml:space="preserve">
+    <value>No appointments scheduled for today.</value>
+  </data>
+  <data name="No departments available." xml:space="preserve">
+    <value>No departments available.</value>
+  </data>
+  <data name="No reviews available." xml:space="preserve">
+    <value>No reviews available.</value>
+  </data>
+  <data name="Quick Summary" xml:space="preserve">
+    <value>Quick Summary</value>
+  </data>
+  <data name="Your overall activity" xml:space="preserve">
+    <value>Your overall activity</value>
+  </data>
+  <data name="Your appointments scheduled for today" xml:space="preserve">
+    <value>Your appointments scheduled for today</value>
+  </data>
+  <data name="Search patient, doctor, or notes..." xml:space="preserve">
+    <value>Search patient, doctor, or notes...</value>
+  </data>
+  <data name="Search doctor or patient..." xml:space="preserve">
+    <value>Search doctor or patient...</value>
+  </data>
+  <data name="Search department..." xml:space="preserve">
+    <value>Search department...</value>
+  </data>
+  <data name="Search by title, author, or content..." xml:space="preserve">
+    <value>Search by title, author, or content...</value>
+  </data>
+  <data name="-- All Doctors --" xml:space="preserve">
+    <value>-- All Doctors --</value>
+  </data>
+  <data name="-- All Departments --" xml:space="preserve">
+    <value>-- All Departments --</value>
+  </data>
+  <data name="-- All Statuses --" xml:space="preserve">
+    <value>-- All Statuses --</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="PATIENT" xml:space="preserve">
+    <value>PATIENT</value>
+  </data>
+  <data name="DOCTOR &amp; DEPT" xml:space="preserve">
+    <value>DOCTOR &amp; DEPT</value>
+  </data>
+  <data name="DATE &amp; TIME" xml:space="preserve">
+    <value>DATE &amp; TIME</value>
+  </data>
+  <data name="NOTES" xml:space="preserve">
+    <value>NOTES</value>
+  </data>
+  <data name="STATUS" xml:space="preserve">
+    <value>STATUS</value>
+  </data>
+  <data name="ACTIONS" xml:space="preserve">
+    <value>ACTIONS</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Add New Doctor" xml:space="preserve">
+    <value>Add New Doctor</value>
+  </data>
+  <data name="Add New Department" xml:space="preserve">
+    <value>Add New Department</value>
+  </data>
+  <data name="Add New Schedule" xml:space="preserve">
+    <value>Add New Schedule</value>
+  </data>
+  <data name="Upload New File" xml:space="preserve">
+    <value>Upload New File</value>
+  </data>
+  <data name="Create New Post" xml:space="preserve">
+    <value>Create New Post</value>
+  </data>
+  <data name="Doctor Name" xml:space="preserve">
+    <value>Doctor Name</value>
+  </data>
+  <data name="Department Name" xml:space="preserve">
+    <value>Department Name</value>
+  </data>
+  <data name="Specialization" xml:space="preserve">
+    <value>Specialization</value>
+  </data>
+  <data name="Working Days" xml:space="preserve">
+    <value>Working Days</value>
+  </data>
+  <data name="Working Hours" xml:space="preserve">
+    <value>Working Hours</value>
+  </data>
+  <data name="File Name" xml:space="preserve">
+    <value>File Name</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="Published Date" xml:space="preserve">
+    <value>Published Date</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Save Changes" xml:space="preserve">
+    <value>Save Changes</value>
+  </data>
+  <data name="Back to List" xml:space="preserve">
+    <value>Back to List</value>
+  </data>
+  <data name="Welcome, Dr." xml:space="preserve">
+    <value>Welcome, Dr.</value>
+  </data>
+  <data name="Appointment Overview" xml:space="preserve">
+    <value>Appointment Overview</value>
+  </data>
+  <data name="Your patient feedback" xml:space="preserve">
+    <value>Your patient feedback</value>
+  </data>
+  <data name="No appointments today" xml:space="preserve">
+    <value>No appointments today</value>
+  </data>
+  <data name="You don't have any appointments scheduled for today." xml:space="preserve">
+    <value>You don't have any appointments scheduled for today.</value>
+  </data>
+  <data name="PENDING" xml:space="preserve">
+    <value>PENDING</value>
+  </data>
+  <data name="CONFIRMED" xml:space="preserve">
+    <value>CONFIRMED</value>
+  </data>
+  <data name="COMPLETED" xml:space="preserve">
+    <value>COMPLETED</value>
+  </data>
+  <data name="Confirm Appointment" xml:space="preserve">
+    <value>Confirm Appointment</value>
+  </data>
+  <data name="Cancel Appointment" xml:space="preserve">
+    <value>Cancel Appointment</value>
+  </data>
+  <data name="No appointments found matching your search criteria." xml:space="preserve">
+    <value>No appointments found matching your search criteria.</value>
+  </data>
+  <data name="Manage All Appointments" xml:space="preserve">
+    <value>Manage All Appointments</value>
+  </data>
+  <data name="Blogs" xml:space="preserve">
+    <value>Blogs</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="Unknown Patient" xml:space="preserve">
+    <value>Unknown Patient</value>
+  </data>
+  <data name="Medical Record Details" xml:space="preserve">
+    <value>Medical Record Details</value>
+  </data>
+  <data name="Diagnosis" xml:space="preserve">
+    <value>Diagnosis</value>
+  </data>
+  <data name="Prescription" xml:space="preserve">
+    <value>Prescription</value>
+  </data>
+  <data name="Treatment Plan" xml:space="preserve">
+    <value>Treatment Plan</value>
+  </data>
+  <data name="Symptoms" xml:space="preserve">
+    <value>Symptoms</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
+  <data name="Create Medical Record" xml:space="preserve">
+    <value>Create Medical Record</value>
+  </data>
+  <data name="Meet Our Top Rated Specialists" xml:space="preserve">
+    <value>Meet Our Top Rated Specialists</value>
+  </data>
+  <data name="Explore how our healthcare portal helps patients connect with qualified doctors and manage records effortlessly." xml:space="preserve">
+    <value>Explore how our healthcare portal helps patients connect with qualified doctors and manage records effortlessly.</value>
+  </data>
+  <data name="Easy Doctor Booking" xml:space="preserve">
+    <value>Easy Doctor Booking</value>
+  </data>
+  <data name="Instant appointment scheduling" xml:space="preserve">
+    <value>Instant appointment scheduling</value>
+  </data>
+  <data name="Medical Departments" xml:space="preserve">
+    <value>Medical Departments</value>
+  </data>
+  <data name="Explore doctors by specialty" xml:space="preserve">
+    <value>Explore doctors by specialty</value>
+  </data>
+  <data name="Digital Medical Records" xml:space="preserve">
+    <value>Digital Medical Records</value>
+  </data>
+  <data name="Access your history &amp; diagnoses" xml:space="preserve">
+    <value>Access your history &amp; diagnoses</value>
+  </data>
+  <data name="Verified Doctor Profiles" xml:space="preserve">
+    <value>Verified Doctor Profiles</value>
+  </data>
+  <data name="Explore qualifications &amp; experience" xml:space="preserve">
+    <value>Explore qualifications &amp; experience</value>
+  </data>
+  <data name="Appointment Status" xml:space="preserve">
+    <value>Appointment Status</value>
+  </data>
+  <data name="Track &amp; manage active bookings" xml:space="preserve">
+    <value>Track &amp; manage active bookings</value>
+  </data>
+  <data name="Patient Assistance" xml:space="preserve">
+    <value>Patient Assistance</value>
+  </data>
+  <data name="Send inquiries to administration" xml:space="preserve">
+    <value>Send inquiries to administration</value>
+  </data>
+  <data name="Feature 01" xml:space="preserve">
+    <value>Feature 01</value>
+  </data>
+  <data name="Feature 02" xml:space="preserve">
+    <value>Feature 02</value>
+  </data>
+  <data name="Feature 03" xml:space="preserve">
+    <value>Feature 03</value>
+  </data>
+  <data name="Feature 04" xml:space="preserve">
+    <value>Feature 04</value>
+  </data>
+  <data name="Feature 05" xml:space="preserve">
+    <value>Feature 05</value>
+  </data>
+  <data name="Feature 06" xml:space="preserve">
+    <value>Feature 06</value>
+  </data>
+  <data name="Book Appointments in Seconds" xml:space="preserve">
+    <value>Book Appointments in Seconds</value>
+  </data>
+  <data name="Select your desired doctor, choose available date and time slots, and confirm your booking instantly through the portal." xml:space="preserve">
+    <value>Select your desired doctor, choose available date and time slots, and confirm your booking instantly through the portal.</value>
+  </data>
+  <data name="Real-time slot reservation" xml:space="preserve">
+    <value>Real-time slot reservation</value>
+  </data>
+  <data name="Choose preferred specialists easily" xml:space="preserve">
+    <value>Choose preferred specialists easily</value>
+  </data>
+  <data name="Find a Specialist" xml:space="preserve">
+    <value>Find a Specialist</value>
+  </data>
+  <data name="Explore Various Departments" xml:space="preserve">
+    <value>Explore Various Departments</value>
+  </data>
+  <data name="Browse through clinical specialties including Cardiology, Ophthalmology, Pediatrics, Neurology, and more." xml:space="preserve">
+    <value>Browse through clinical specialties including Cardiology, Ophthalmology, Pediatrics, Neurology, and more.</value>
+  </data>
+  <data name="Categorized doctor profiles" xml:space="preserve">
+    <value>Categorized doctor profiles</value>
+  </data>
+  <data name="Detailed department summaries" xml:space="preserve">
+    <value>Detailed department summaries</value>
+  </data>
+  <data name="View Departments" xml:space="preserve">
+    <value>View Departments</value>
+  </data>
+  <data name="Secure Patient Records" xml:space="preserve">
+    <value>Secure Patient Records</value>
+  </data>
+  <data name="Access your clinical consultations, diagnoses history, and assigned medical records seamlessly from your dashboard." xml:space="preserve">
+    <value>Access your clinical consultations, diagnoses history, and assigned medical records seamlessly from your dashboard.</value>
+  </data>
+  <data name="Structured patient data" xml:space="preserve">
+    <value>Structured patient data</value>
+  </data>
+  <data name="Fast and organized lookup" xml:space="preserve">
+    <value>Fast and organized lookup</value>
+  </data>
+  <data name="Learn More" xml:space="preserve">
+    <value>Learn More</value>
+  </data>
+  <data name="Qualified Medical Experts" xml:space="preserve">
+    <value>Qualified Medical Experts</value>
+  </data>
+  <data name="View detailed doctor profiles, academic qualifications, sub-specialties, and consultation details before making a choice." xml:space="preserve">
+    <value>View detailed doctor profiles, academic qualifications, sub-specialties, and consultation details before making a choice.</value>
+  </data>
+  <data name="Verified credentials &amp; backgrounds" xml:space="preserve">
+    <value>Verified credentials &amp; backgrounds</value>
+  </data>
+  <data name="Transparent consultation details" xml:space="preserve">
+    <value>Transparent consultation details</value>
+  </data>
+  <data name="Track Appointment Status" xml:space="preserve">
+    <value>Track Appointment Status</value>
+  </data>
+  <data name="View all your upcoming and past clinic visits with real-time status updates (Pending, Confirmed, Cancelled)." xml:space="preserve">
+    <value>View all your upcoming and past clinic visits with real-time status updates (Pending, Confirmed, Cancelled).</value>
+  </data>
+  <data name="Clear status indicators" xml:space="preserve">
+    <value>Clear status indicators</value>
+  </data>
+  <data name="Comprehensive visit log" xml:space="preserve">
+    <value>Comprehensive visit log</value>
+  </data>
+  <data name="Manage Bookings" xml:space="preserve">
+    <value>Manage Bookings</value>
+  </data>
+  <data name="Get Help &amp; Support" xml:space="preserve">
+    <value>Get Help &amp; Support</value>
+  </data>
+  <data name="Have inquiries or encounter technical issues? Reach out directly to clinic support using our contact channel." xml:space="preserve">
+    <value>Have inquiries or encounter technical issues? Reach out directly to clinic support using our contact channel.</value>
+  </data>
+  <data name="Fast response times" xml:space="preserve">
+    <value>Fast response times</value>
+  </data>
+  <data name="Direct message submission" xml:space="preserve">
+    <value>Direct message submission</value>
+  </data>
+  <data name="Providing specialized care across various medical fields with state-of-the-art facilities." xml:space="preserve">
+    <value>Providing specialized care across various medical fields with state-of-the-art facilities.</value>
+  </data>
+  <data name="Specialized medical treatments with advanced equipment." xml:space="preserve">
+    <value>Specialized medical treatments with advanced equipment.</value>
+  </data>
+  <data name="No blog posts available at the moment." xml:space="preserve">
+    <value>No blog posts available at the moment.</value>
+  </data>
+  <data name="Have questions? Reach out to our medical support team." xml:space="preserve">
+    <value>Have questions? Reach out to our medical support team.</value>
+  </data>
+  <data name="123 Health Street, Cairo, Egypt" xml:space="preserve">
+    <value>123 Health Street, Cairo, Egypt</value>
+  </data>
+  <data name="+20 123 456 7890" xml:space="preserve">
+    <value>+20 123 456 7890</value>
+  </data>
+  <data name="Mon - Wed:" xml:space="preserve">
+    <value>Mon - Wed:</value>
+  </data>
+  <data name="Thu - Fri:" xml:space="preserve">
+    <value>Thu - Fri:</value>
+  </data>
+  <data name="Sat - Sun:" xml:space="preserve">
+    <value>Sat - Sun:</value>
+  </data>
+  <data name="Holidays:" xml:space="preserve">
+    <value>Holidays:</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="Medical Specialist" xml:space="preserve">
+    <value>Medical Specialist</value>
   </data>
 </root>

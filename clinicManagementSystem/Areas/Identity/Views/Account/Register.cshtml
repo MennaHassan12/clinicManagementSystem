@@ -7,10 +7,6 @@
 
 <h2>@SharedLocalizer["Create Account"]</h2>
 <p class="subtitle">@SharedLocalizer["Fill in your details to access the diagnostic platform"]</p>
-@if (TempData["success_notification"] != null)
-{
-    <div class="success-banner">@TempData["success_notification"]</div>
-}
 
 
 <form asp-action="Register" asp-controller="Account" method="post">
@@ -75,7 +71,7 @@
 </form>
 
 <div class="switch-link">
-    @SharedLocalizer["Already have an account?"] <a asp-action="Login" asp-controller="Account">@SharedLocalizer["Sign In"]</a>
+    @SharedLocalizer["Already have an account?"] <a asp-action="Login" asp-controller="Account">@SharedLocalizer["Log In"]</a>
 </div>
 @section Scripts {
     @{
@@ -83,5 +79,3 @@
     }
     <partial name="_NotificationPartial" />
 }
-
- 

@@ -50,11 +50,11 @@
                 <span asp-validation-for="ImageFile" class="text-danger small d-block mt-1"></span>
             </div>
 
-            <div class="pt-3">
-                <button type="submit" class="btn btn-primary px-4 py-2 font-weight-bold mr-2">
+            <div class="pt-3 d-flex gap-2" >
+                <button type="submit" class="btn btn-primary px-4 py-2 font-weight-bold rounded-pill mr-2">
                     Publish Article
                 </button>
-                <a asp-area="Admin" asp-controller="Blog" asp-action="Index" class="btn btn-secondary px-4 py-2 font-weight-bold">
+                <a asp-area="Admin" asp-controller="Blog" asp-action="Index" class="btn btn-outline-secondary px-4 py-2 font-weight-bold rounded-pill">
                     Cancel
                 </a>
             </div>

@@ -21,9 +21,8 @@
         </div>
 
         <a href="@Url.Action("Create", "MedicalFiles", new { area = "Doctor" })"
-           class="btn btn-primary rounded-3 px-3">
+           class="btn btn-primary rounded-pill px-3">
 
-            <i class="fas fa-plus me-1"></i>
             Add Medical File
 
         </a>
@@ -147,44 +146,41 @@
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-2 flex-wrap">
 
-                                            <a asp-area="Admin"
+                                            <a asp-area="Doctor"
                                                asp-controller="MedicalFiles"
                                                asp-action="ViewFile"
                                                asp-route-id="@file.MedicalFileId"
                                                target="_blank"
-                                               class="btn btn-sm btn-outline-primary rounded-3 px-3"
+                                               class="btn btn-sm btn-outline-primary rounded-pill px-3"
                                                title="View Medical File">
                                                 <i class="fas fa-eye me-1"></i>
                                                 View
                                             </a>
 
-                                            <a asp-area="Admin"
+                                            <a asp-area="Doctor"
                                                asp-controller="MedicalFiles"
                                                asp-action="Download"
                                                asp-route-id="@file.MedicalFileId"
-                                               class="btn btn-sm btn-outline-success rounded-3 px-3"
+                                               class="btn btn-sm btn-outline-success rounded-pill px-3"
                                                title="Download Medical File">
-                                                <i class="fas fa-download me-1"></i>
                                                 Download
                                             </a>
 
-                                            <a asp-area="Admin"
+                                            <a asp-area="Doctor"
                                                asp-controller="MedicalFiles"
                                                asp-action="Edit"
                                                asp-route-id="@file.MedicalFileId"
-                                               class="btn btn-sm btn-outline-warning rounded-3 px-3"
+                                               class="btn btn-sm btn-outline-warning rounded-pill px-3"
                                                title="Edit Medical File">
-                                                <i class="fas fa-pen me-1"></i>
                                                 Edit
                                             </a>
 
-                                            <a asp-area="Admin"
+                                            <a asp-area="Doctor"
                                                asp-controller="MedicalFiles"
                                                asp-action="Delete"
                                                asp-route-id="@file.MedicalFileId"
-                                               class="btn btn-sm btn-outline-danger rounded-3 px-3"
+                                               class="btn btn-sm btn-danger rounded-pill px-3"
                                                title="Delete Medical File">
-                                                <i class="fas fa-trash me-1"></i>
                                                 Delete
                                             </a>
 

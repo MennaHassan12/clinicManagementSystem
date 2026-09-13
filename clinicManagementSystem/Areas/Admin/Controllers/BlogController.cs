@@ -6,10 +6,13 @@ using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
 using clinicManagementSystem.ViewModels;
 using DoctorModel = clinicManagementSystem.Models.Doctor;
+using Microsoft.AspNetCore.Authorization;
 
 namespace clinicManagementSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Policy = "RequireAdminOrSuperAdmin")]
+
     public class BlogController : Controller
     {
         private readonly IRepository<BlogPost> _blogRepo;

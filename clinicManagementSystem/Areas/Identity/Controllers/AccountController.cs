@@ -40,11 +40,11 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
             if (_accountService.IsLogined(User))
             {
-                return RedirectToAction("Index", "Home", new  { area = SD.PATIENT_AREA });
+                return await RedirectToHomeByRole();
             }
             return View();
         }
@@ -95,18 +95,20 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
             {
                 TempData["error_notification"] = String.Join(",", result.Errors.Select(e => e.Description));
             }
-
-            TempData["success_notification"] = "Email confirmed successfully, You can now log in.";
+            else
+            {
+                TempData["success_notification"] = "Email confirmed successfully, You can now log in.";
+            }
             return RedirectToAction("Login");
         }
 
         [HttpGet]
-        public IActionResult Login(string? returnUrl = null)
+        public async Task<IActionResult> Login(string? returnUrl = null)
         {
 
             if (_accountService.IsLogined(User))
             {
-                return RedirectToAction("Index", "Home", new { area = SD.PATIENT_AREA });
+                return await RedirectToHomeByRole();
             }
             return View(new LoginVM { ReturnUrl = returnUrl });
         }
@@ -144,26 +146,27 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
             }
 
             TempData["success_notification"] = $"Welcome Back {user.FullName}";
+
+            if (!string.IsNullOrEmpty(loginVM.ReturnUrl) && Url.IsLocalUrl(loginVM.ReturnUrl))
+                return LocalRedirect(loginVM.ReturnUrl);
+
             var roles = await _userManager.GetRolesAsync(user);
 
-            if (roles.Contains("SuperAdmin") || roles.Contains("Admin"))
+            if (roles.Contains(SD.ROLE_SUPER_ADMIN) || roles.Contains(SD.ROLE_ADMIN))
             {
                 return RedirectToAction("Index", "Dashboard",
                     new { area = SD.ADMIN_AREA });
             }
 
-            if (roles.Contains("Doctor"))
+            if (roles.Contains(SD.ROLE_DOCTOR))
             {
                 return RedirectToAction("Index", "Dashboard", new { area = SD.DOCTOR_AREA });
             }
 
-            if (roles.Contains("Patient"))
+            if (roles.Contains(SD.ROLE_PATIENT))
             {
                 return RedirectToAction("Index", "Home", new { area = SD.PATIENT_AREA});
             }
-
-            if (!string.IsNullOrEmpty(loginVM.ReturnUrl) && Url.IsLocalUrl(loginVM.ReturnUrl))
-                return Redirect(loginVM.ReturnUrl);
 
             return RedirectToAction("Index", "Home", new { area = SD.PATIENT_AREA });
         }
@@ -185,7 +188,7 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
             if (user is not null && !user.EmailConfirmed)
                 await _accountService.SendMailAsync(user, Url, Request, EmailType.ResendConfirmation);
 
-            TempData["success_notification"] = $"Resend Email Confirmation successfully, please check yoy email";
+            TempData["success_notification"] = $"Resend Email Confirmation successfully, please check your email";
 
             return RedirectToAction(nameof(Login));
         }
@@ -466,6 +469,8 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
 
                     return RedirectToAction(nameof(Login));
                 }
+
+                await _userManager.AddToRoleAsync(user, SD.ROLE_PATIENT);
             }
 
             var existingLogins =
@@ -500,6 +505,24 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
                 isPersistent: false);
 
             return LocalRedirect(returnUrl ?? "/");
+        }
+
+        private async Task<IActionResult> RedirectToHomeByRole()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user is not null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles.Contains(SD.ROLE_SUPER_ADMIN) || roles.Contains(SD.ROLE_ADMIN))
+                    return RedirectToAction("Index", "Dashboard", new { area = SD.ADMIN_AREA });
+
+                if (roles.Contains(SD.ROLE_DOCTOR))
+                    return RedirectToAction("Index", "Dashboard", new { area = SD.DOCTOR_AREA });
+            }
+
+            return RedirectToAction("Index", "Home", new { area = SD.PATIENT_AREA });
         }
     }
 }

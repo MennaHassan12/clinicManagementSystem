@@ -29,7 +29,7 @@
         <a asp-area="Patient"
            asp-controller="MedicalFiles"
            asp-action="Index"
-           class="btn btn-outline-secondary rounded-3">
+           class="btn btn-primary shadow-sm rounded-pill px-4">
 
             <i class="fas fa-arrow-left me-1"></i>
             Back to Medical Files
@@ -173,7 +173,7 @@
                                        asp-action="ViewFile"
                                        asp-route-id="@file.MedicalFileId"
                                        target="_blank"
-                                       class="btn btn-sm btn-outline-primary rounded-3 px-3 me-1">
+                                       class="btn  btn-outline-primary rounded-pill px-3 me-1">
 
                                         <i class="fas fa-eye me-1"></i>
                                         View
@@ -184,7 +184,7 @@
                                        asp-controller="MedicalFiles"
                                        asp-action="Download"
                                        asp-route-id="@file.MedicalFileId"
-                                       class="btn btn-sm btn-outline-success rounded-3 px-3">
+                                       class="btn  btn-outline-success rounded-pill px-3">
 
                                         <i class="fas fa-download me-1"></i>
                                         Download
