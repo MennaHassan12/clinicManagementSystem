@@ -632,8 +632,245 @@
     </div>
 </section>
 
+<!-- Patient Reviews Section -->
+<section class="py-5 bg-light">
+    <div class="container py-4">
+
+        <!-- Section Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <span class="text-primary fw-bold small text-uppercase tracking-wider">
+                    Patient Feedback
+                </span>
+
+                <h2 class="display-6 fw-bold text-dark mb-0">
+                    What Our Patients Say
+                </h2>
+            </div>
+
+            <a href="/Patient/Home/AllReviews"
+               class="btn btn-outline-primary rounded-pill px-4 fw-semibold">
+                Show All Reviews
+                <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+
+        @{
+            var homeReviews =
+                ViewBag.HomeReviews as IEnumerable<clinicManagementSystem.Models.Review>
+                ?? Enumerable.Empty<clinicManagementSystem.Models.Review>();
+        }
+
+        @if (homeReviews.Any())
+        {
+                <div class="position-relative px-md-5">
+
+                    <div class="swiper patientReviewsSwiper py-3">
+
+                        <div class="swiper-wrapper">
+
+                        @foreach (var review in homeReviews)
+                        {
+                            var doctor = review.Appointment?.Doctor;
+
+                            var rawName = doctor?.ApplicationUser?.FullName;
+
+                            if (string.IsNullOrWhiteSpace(rawName))
+                            {
+                                rawName = "Medical Specialist";
+                            }
+                            else
+                            {
+                                rawName = rawName.Trim();
+
+                                if (rawName.StartsWith("Dr. ", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    rawName = rawName.Substring(4).Trim();
+                                }
+                                else if (rawName.StartsWith("Dr.", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    rawName = rawName.Substring(3).Trim();
+                                }
+                                else if (rawName.StartsWith("Dr ", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    rawName = rawName.Substring(3).Trim();
+                                }
+                            }
+
+                            var displayName = $"Dr. {rawName}";
+
+                            var rating = review.Rating;
+
+                            string imageSrc = "";
+
+                            if (!string.IsNullOrEmpty(doctor?.Image))
+                            {
+                                if (doctor.Image.StartsWith("http") ||
+                                    doctor.Image.StartsWith("/"))
+                                {
+                                    imageSrc = doctor.Image;
+                                }
+                                else
+                                {
+                                    imageSrc = $"/images/doctors/{doctor.Image}";
+                                }
+                            }
+
+                                    <div class="swiper-slide">
+
+                                        <!-- Review Card -->
+                                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mx-auto my-2"
+                                             style="max-width: 850px;">
+
+                                            <div class="row g-0 align-items-center">
+
+                                                <!-- Doctor Image -->
+                                                <div class="col-md-4 bg-primary bg-opacity-10 text-center py-4 px-3 d-flex align-items-center justify-content-center"
+                                                     style="min-height: 250px;">
+
+                                            @if (!string.IsNullOrEmpty(imageSrc))
+                                            {
+                                                            <img src="@imageSrc"
+                                                                 class="rounded-circle border border-4 border-white shadow-sm"
+                                                                 style="width:130px;height:130px;object-fit:cover;"
+                                                                 alt="@displayName"
+                                                                 onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+
+                                                            <div class="rounded-circle bg-white border align-items-center justify-content-center shadow-sm"
+                                                                 style="width:130px;height:130px;flex-shrink:0;display:none;">
+
+                                                                <i class="bi bi-person-fill text-secondary fs-1"></i>
+
+                                                            </div>
+                                            }
+                                            else
+                                            {
+                                                            <div class="rounded-circle bg-white d-flex align-items-center justify-content-center border shadow-sm"
+                                                                 style="width:130px;height:130px;flex-shrink:0;">
+
+                                                                <i class="bi bi-person-fill text-secondary fs-1"></i>
+
+                                                            </div>
+                                            }
+
+                                                </div>
 
 
+                                                <!-- Review Content -->
+                                                <div class="col-md-8">
+
+                                                    <div class="card-body p-4 text-start">
+
+                                                        <!-- Doctor Name + Rating -->
+                                                        <div class="d-flex justify-content-between align-items-start mb-3">
+
+                                                            <div>
+
+                                                                <h3 class="fw-bold text-dark mb-1">
+                                                            @displayName
+                                                                </h3>
+
+                                                                <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-1 rounded-pill">
+                                                            @(doctor?.Department?.Name ?? "General")
+                                                                </span>
+
+                                                            </div>
+
+                                                            <div class="bg-warning bg-opacity-10 text-warning px-3 py-1 rounded-pill fw-bold">
+                                                                ★ @rating.0
+                                                            </div>
+
+                                                        </div>
+
+        <!-- Patient Comment -->
+        <div class="mb-3">
+
+            <div class="text-primary fw-semibold small mb-2">
+                <i class="bi bi-chat-left-text me-1"></i>
+                Patient Comment
+            </div>
+
+            <p class="text-muted fs-6 mb-0" style="line-height:1.7;">
+                                                        @(string.IsNullOrWhiteSpace(review.Comment)
+                                                                ? "The patient left a rating without a written comment."
+                                                                : review.Comment)
+            </p>
+
+        </div>
+
+
+                                                        <!-- Stars -->
+                                                        <div class="d-flex align-items-center gap-1 mb-3">
+
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= review.Rating)
+                                                        {
+                                                                            <i class="bi bi-star-fill text-warning"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                                            <i class="bi bi-star text-warning"></i>
+                                                        }
+                                                    }
+
+                                                            <span class="text-muted small ms-2">
+                                                        @review.Rating / 5
+                                                            </span>
+
+                                                        </div>
+
+
+                                                        <!-- Review Date -->
+                                                        <small class="text-muted">
+                                                            <i class="bi bi-calendar3 me-1"></i>
+                                                    @review.ReviewDate.ToString("MMM dd, yyyy")
+                                                        </small>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                        }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Navigation -->
+                    <div class="swiper-button-next text-primary review-next"></div>
+                    <div class="swiper-button-prev text-primary review-prev"></div>
+
+                    <!-- Pagination -->
+                    <div class="swiper-pagination review-pagination"></div>
+
+                </div>
+        }
+        else
+        {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-chat-square-text fs-1 text-muted d-block mb-2"></i>
+
+                    <h5 class="text-muted fw-bold">
+                        No Reviews Found
+                    </h5>
+
+                    <p class="text-muted small">
+                        There are no patient reviews available yet.
+                    </p>
+
+                </div>
+        }
+
+    </div>
+</section>
 <!-- 5. Contact Us Section -->
 <section id="contact" class="py-5 bg-light border-top">
     <div class="container py-4">
@@ -736,7 +973,33 @@
         clickable: true,
         }
         });
+                        // Initialize Patient Reviews Swiper
+                var homeReviewsCount = document.querySelectorAll(
+                    '.patientReviewsSwiper .swiper-slide'
+                ).length;
 
+                if (homeReviewsCount > 0) {
+                    new Swiper('.patientReviewsSwiper', {
+                        slidesPerView: 1,
+                        spaceBetween: 30,
+                        loop: homeReviewsCount > 1,
+
+                        autoplay: homeReviewsCount > 1 ? {
+                            delay: 5000,
+                            disableOnInteraction: false
+                        } : false,
+
+                        navigation: {
+                            nextEl: '.review-next',
+                            prevEl: '.review-prev'
+                        },
+
+                        pagination: {
+                            el: '.review-pagination',
+                            clickable: true
+                        }
+                    });
+                }
             // Counter 
             var counterStarted = false;
             var counterElement = document.getElementById("yearsCounter");

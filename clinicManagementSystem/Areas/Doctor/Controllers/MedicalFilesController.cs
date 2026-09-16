@@ -54,7 +54,7 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             var doctor = await GetCurrentDoctorAsync();
             if (doctor == null)
             {
-                TempData["Error"] = "Doctor profile not found.";
+                TempData["error_notification"] = "Doctor profile not found.";
                 return View(new List<MedicalFile>());
             }
 
@@ -221,8 +221,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
             if (medicalRecordId <= 0)
             {
-                TempData["Error"] =
-                    "Please select a medical record.";
+                TempData["error_notification"] =
+    "Please select a medical record.";
 
                 await LoadMedicalRecords(
                     doctor.DoctorId,
@@ -245,8 +245,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
             if (medicalRecord == null)
             {
-                TempData["Error"] =
-                    "Invalid medical record or you don't have permission.";
+                TempData["error_notification"] =
+    "Invalid medical record or you don't have permission.";
 
                 await LoadMedicalRecords(doctor.DoctorId);
 
@@ -263,8 +263,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
             if (uploadedFiles == null || uploadedFiles.Length == 0)
             {
-                TempData["Error"] =
-                    "Please select at least one file.";
+                TempData["error_notification"] =
+    "Please select at least one file.";
 
                 await LoadMedicalRecords(
                     doctor.DoctorId,
@@ -303,8 +303,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             {
                 if (uploadedFile == null || uploadedFile.Length == 0)
                 {
-                    TempData["Error"] =
-                        "One of the selected files is empty.";
+                    TempData["error_notification"] =
+    "One of the selected files is empty.";
 
                     await LoadMedicalRecords(
                         doctor.DoctorId,
@@ -323,8 +323,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
                 if (!allowedExtensions.Contains(extension))
                 {
-                    TempData["Error"] =
-                        "Only PDF, JPG, JPEG and PNG files are allowed.";
+                    TempData["error_notification"] =
+    "Only PDF, JPG, JPEG and PNG files are allowed.";
 
                     await LoadMedicalRecords(
                         doctor.DoctorId,
@@ -339,8 +339,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
                 if (uploadedFile.Length > maxFileSize)
                 {
-                    TempData["Error"] =
-                        $"File '{Path.GetFileName(uploadedFile.FileName)}' exceeds 10 MB.";
+                    TempData["error_notification"] =
+    $"File '{Path.GetFileName(uploadedFile.FileName)}' exceeds 10 MB.";
 
                     await LoadMedicalRecords(
                         doctor.DoctorId,
@@ -423,15 +423,15 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 // Commit all files together 
                 await _medicalFileRepository.CommitAsync();
 
-                TempData["Success"] =
-                    $"{uploadedFiles.Length} medical file(s) uploaded successfully.";
+                TempData["success_notification"] =
+    $"{uploadedFiles.Length} medical file(s) uploaded successfully.";
 
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                TempData["Error"] =
-                    $"Failed to upload medical files: {ex.Message}";
+                TempData["error_notification"] =
+    $"Failed to upload medical files: {ex.Message}";
 
                 await LoadMedicalRecords(
                     doctor.DoctorId,
@@ -513,8 +513,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
             if (MedicalRecordId <= 0)
             {
-                TempData["Error"] =
-                    "Please select a medical record.";
+                TempData["error_notification"] =
+    "Please select a medical record.";
 
                 await LoadMedicalRecords(doctor.DoctorId, MedicalRecordId);
 
@@ -531,8 +531,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
             if (medicalRecord == null)
             {
-                TempData["Error"] =
-                    "Invalid medical record or you don't have permission.";
+                TempData["error_notification"] =
+    "Invalid medical record or you don't have permission.";
 
                 await LoadMedicalRecords(doctor.DoctorId, existingFile.MedicalRecordId);
                 return View(existingFile);
@@ -577,8 +577,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
                 // Check extension 
                 if (!allowedExtensions.Contains(extension))
                 {
-                    TempData["Error"] =
-                        "Only PDF, JPG, JPEG and PNG files are allowed.";
+                    TempData["error_notification"] =
+    "Only PDF, JPG, JPEG and PNG files are allowed.";
 
                     await LoadMedicalRecords(doctor.DoctorId, MedicalRecordId);
 
@@ -591,8 +591,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
                 if (uploadedFile.Length > maxFileSize)
                 {
-                    TempData["Error"] =
-                        "File size must not exceed 10 MB.";
+                    TempData["error_notification"] =
+    "File size must not exceed 10 MB.";
 
                     await LoadMedicalRecords(doctor.DoctorId, MedicalRecordId);
 
@@ -693,8 +693,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
 
             await _medicalFileRepository.CommitAsync();
 
-            TempData["Success"] =
-                "Medical file updated successfully.";
+            TempData["success_notification"] =
+    "Medical file updated successfully.";
 
             return RedirectToAction(nameof(Index));
         }
@@ -779,8 +779,8 @@ namespace clinicManagementSystem.Areas.Doctor.Controllers
             _medicalFileRepository.Delete(medicalFile);
             await _medicalFileRepository.CommitAsync();
 
-            TempData["Success"] = "Medical file deleted successfully.";
-
+            TempData["success_notification"] =
+                "Medical file deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
 

@@ -51,8 +51,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             await _departmentRepository.CreateAsync(department);
             await _departmentRepository.CommitAsync();
 
-            TempData["Success"] = "Department created successfully.";
-
+            TempData["success_notification"] = "Department created successfully.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -89,8 +88,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             _departmentRepository.Update(department);
             await _departmentRepository.CommitAsync();
 
-            TempData["Success"] = "Department updated successfully.";
-
+            TempData["success_notification"] = "Department updated successfully.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -130,15 +128,13 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             // Department cannot be deleted if it has doctors
             if (department.Doctors.Any())
             {
-                TempData["Error"] = "This department cannot be deleted because it has doctors assigned to it.";
-                return RedirectToAction(nameof(Index));
+                TempData["error_notification"] = "This department cannot be deleted because it has doctors assigned to it."; return RedirectToAction(nameof(Index));
             }
 
             _departmentRepository.Delete(department);
             await _departmentRepository.CommitAsync();
 
-            TempData["Success"] = "Department deleted successfully.";
-
+            TempData["success_notification"] = "Department deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
     }
