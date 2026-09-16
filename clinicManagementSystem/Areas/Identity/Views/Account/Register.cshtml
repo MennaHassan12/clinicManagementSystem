@@ -5,8 +5,8 @@
     Layout = "_MainLayout";
 }
 
-<h2>Create Account</h2>
-<p class="subtitle">Fill in your details to access the diagnostic platform</p>
+<h2>@SharedLocalizer["Create Account"]</h2>
+<p class="subtitle">@SharedLocalizer["Fill in your details to access the diagnostic platform"]</p>
 
 
 <form asp-action="Register" asp-controller="Account" method="post">
@@ -71,7 +71,7 @@
 </form>
 
 <div class="switch-link">
-    Already have an account? <a asp-action="Login" asp-controller="Account">Sign In</a>
+    @SharedLocalizer["Already have an account?"] <a asp-action="Login" asp-controller="Account">@SharedLocalizer["Log In"]</a>
 </div>
 @section Scripts {
     @{
