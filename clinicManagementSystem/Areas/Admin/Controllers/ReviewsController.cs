@@ -73,8 +73,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             _reviewRepository.Delete(review);
             await _reviewRepository.CommitAsync();
 
-            TempData["Success"] = "Review deleted successfully.";
-
+            TempData["success_notification"] = "Review deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
     }

@@ -230,15 +230,15 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                 await _medicalFileRepository.CreateAsync(medicalFile);
                 await _medicalFileRepository.CommitAsync();
 
-                TempData["Success"] =
-                    "Medical file uploaded successfully.";
+                TempData["success_notification"] =
+    "Medical file uploaded successfully.";
 
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                TempData["Error"] =
-                    $"Failed to upload file: {ex.Message}";
+                TempData["error_notification"] =
+    $"Failed to upload file: {ex.Message}";
 
                 await LoadMedicalRecords(model.MedicalRecordId);
 
@@ -288,8 +288,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
 
             if (MedicalRecordId <= 0)
             {
-                TempData["Error"] = "Please select a medical record.";
-                await LoadMedicalRecords(MedicalRecordId);
+                TempData["error_notification"] = "Please select a medical record."; await LoadMedicalRecords(MedicalRecordId);
                 return View(existingFile);
             }
 
@@ -303,16 +302,14 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
 
                 if (!allowedExtensions.Contains(extension))
                 {
-                    TempData["Error"] = "Only PDF, JPG, JPEG and PNG files are allowed.";
-                    await LoadMedicalRecords(MedicalRecordId);
+                    TempData["error_notification"] = "Only PDF, JPG, JPEG and PNG files are allowed."; await LoadMedicalRecords(MedicalRecordId);
                     return View(existingFile);
                 }
 
                 const long maxFileSize = 10 * 1024 * 1024;
                 if (uploadedFile.Length > maxFileSize)
                 {
-                    TempData["Error"] = "File size must not exceed 10 MB.";
-                    await LoadMedicalRecords(MedicalRecordId);
+                    TempData["error_notification"] = "File size must not exceed 10 MB."; await LoadMedicalRecords(MedicalRecordId);
                     return View(existingFile);
                 }
 
@@ -348,8 +345,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             _medicalFileRepository.Update(existingFile);
             await _medicalFileRepository.CommitAsync();
 
-            TempData["Success"] = "Medical file updated successfully.";
-
+            TempData["success_notification"] = "Medical file updated successfully.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -404,8 +400,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
             _medicalFileRepository.Delete(medicalFile);
             await _medicalFileRepository.CommitAsync();
 
-            TempData["Success"] = "Medical file deleted successfully.";
-
+            TempData["success_notification"] = "Medical file deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
 

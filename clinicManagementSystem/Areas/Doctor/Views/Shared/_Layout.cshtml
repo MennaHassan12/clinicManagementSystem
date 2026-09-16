@@ -343,22 +343,7 @@
 
             </ul>
 
-            <!-- Account -->
-            <div class="doctor-menu-title mt-4">
-                @SharedLocalizer["My Profile"]
-            </div>
-
-            <form asp-area="Identity"
-                  asp-controller="Account"
-                  asp-action="Logout"
-                  method="post">
-                @Html.AntiForgeryToken()
-                <button type="submit"
-                        class="nav-link doctor-logout border-0 bg-transparent w-100 text-start">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>@SharedLocalizer["Logout"]</span>
-                </button>
-            </form>
+           
         </nav>
     </aside>
 
