@@ -6,7 +6,7 @@
 
 <div class="card shadow-sm border-0">
     <div class="card-header bg-primary text-white py-3">
-        <h3 class="card-title font-weight-bold m-0" style="font-size: 1.5rem;">Add New Article</h3>
+        <h3 class="card-title font-weight-bold m-0" style="font-size: 1.5rem;">@SharedLocalizer["Add New Article"]</h3>
     </div>
 
     <form asp-area="Admin" asp-controller="Blog" asp-action="Create" method="post" enctype="multipart/form-data">
@@ -15,47 +15,50 @@
         <div class="card-body p-4">
 
             <div class="form-group mb-4">
-                <label asp-for="Title" class="font-weight-bold text-dark mb-2">Article Title</label>
-                <input asp-for="Title" class="form-control" placeholder="Enter article title" />
+                <label asp-for="Title" class="font-weight-bold text-dark mb-2">@SharedLocalizer["Article Title"]</label>
+                <input asp-for="Title" class="form-control" placeholder="@SharedLocalizer["Enter article title"]" />
                 <span asp-validation-for="Title" class="text-danger small d-block mt-1"></span>
             </div>
 
             <div class="row mb-4">
                 <div class="col-md-6 mb-3 mb-md-0">
-                    <label asp-for="Category" class="font-weight-bold text-dark mb-2">Category</label>
-                    <input asp-for="Category" class="form-control" placeholder="e.g. Cardiology" />
+                    <label asp-for="Category" class="font-weight-bold text-dark mb-2">@SharedLocalizer["Category"]</label>
+                    <input asp-for="Category" class="form-control" placeholder="@SharedLocalizer["e.g. Cardiology"]" />
                     <span asp-validation-for="Category" class="text-danger small d-block mt-1"></span>
                 </div>
                 <div class="col-md-6">
-                    <label asp-for="Author" class="font-weight-bold text-dark mb-2">Select Doctor (Author)</label>
+                    <label asp-for="Author" class="font-weight-bold text-dark mb-2">@SharedLocalizer["Select Doctor (Author)"]</label>
                     <select asp-for="Author" asp-items="Model.DoctorsList" class="form-control custom-select">
-                        <option value="">-- Select Doctor --</option>
+                        <option value="">-- @SharedLocalizer["Select Doctor"] --</option>
                     </select>
                     <span asp-validation-for="Author" class="text-danger small d-block mt-1"></span>
                 </div>
             </div>
 
             <div class="form-group mb-4">
-                <label asp-for="Content" class="font-weight-bold text-dark mb-2">Content</label>
-                <textarea asp-for="Content" class="form-control" rows="5" placeholder="Write content here..."></textarea>
+                <label asp-for="Content" class="font-weight-bold text-dark mb-2">@SharedLocalizer["Content"]</label>
+                <textarea asp-for="Content" class="form-control" rows="5" placeholder="@SharedLocalizer["Write content here..."]"></textarea>
                 <span asp-validation-for="Content" class="text-danger small d-block mt-1"></span>
             </div>
 
             <div class="form-group mb-4">
-                <label asp-for="ImageFile" class="font-weight-bold text-dark mb-2">Article Banner Image</label>
-                <div class="custom-file">
-                    <input type="file" asp-for="ImageFile" class="custom-file-input" id="customFile" accept="image/*">
-                    <label class="custom-file-label" for="customFile">Choose file...</label>
-                </div>
-                <span asp-validation-for="ImageFile" class="text-danger small d-block mt-1"></span>
-            </div>
+    <label asp-for="ImageFile" class="font-weight-bold text-dark mb-2">@SharedLocalizer["Article Banner Image"]</label>
+    <div class="input-group">
+        <input type="file" asp-for="ImageFile" class="form-control d-none" id="customFile" accept="image/*" onchange="document.getElementById('fileNameSpan').innerText = this.files[0] ? this.files[0].name : '@SharedLocalizer["No file chosen"]';">
+        <label for="customFile" class="form-control d-flex align-items-center justify-content-between cursor-pointer bg-white" style="cursor: pointer;">
+            <span id="fileNameSpan" class="text-muted">@SharedLocalizer["No file chosen"]</span>
+            <span class="btn btn-sm btn-outline-primary rounded-pill px-3">@SharedLocalizer["Choose file..."]</span>
+        </label>
+    </div>
+    <span asp-validation-for="ImageFile" class="text-danger small d-block mt-1"></span>
+</div>
 
             <div class="pt-3 d-flex gap-2" >
                 <button type="submit" class="btn btn-primary px-4 py-2 font-weight-bold rounded-pill mr-2">
-                    Publish Article
+                    @SharedLocalizer["Publish Article"]
                 </button>
                 <a asp-area="Admin" asp-controller="Blog" asp-action="Index" class="btn btn-outline-secondary px-4 py-2 font-weight-bold rounded-pill">
-                    Cancel
+                    @SharedLocalizer["Cancel"]
                 </a>
             </div>
         </div>

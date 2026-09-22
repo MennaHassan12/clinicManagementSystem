@@ -71,9 +71,16 @@ namespace clinicManagementSystem
             builder.Services.AddScoped<IAppointmentService, AppointmentService>();
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
+            //builder.Services.AddControllersWithViews()
+            //    .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
+            //    .AddDataAnnotationsLocalization();
             builder.Services.AddControllersWithViews()
-                .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
-                .AddDataAnnotationsLocalization();
+    .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization(options =>
+    {
+        options.DataAnnotationLocalizerProvider = (type, factory) =>
+            factory.Create(typeof(SharedResource));
+    });
             builder.Services.AddRazorPages();
 
             var supportedCultures = new[]
