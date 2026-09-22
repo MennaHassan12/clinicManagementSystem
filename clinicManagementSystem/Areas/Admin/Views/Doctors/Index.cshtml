@@ -20,7 +20,7 @@
     }
 
     .doctor-row:hover {
-        background-color: rgba(13, 110, 253, 0.04) ;
+        background-color: rgba(13, 110, 253, 0.04);
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
@@ -48,15 +48,6 @@
         border-radius: 50%;
         border: 2px solid #fff;
     }
-
-    .btn-action-hover {
-        transition: all 0.2s ease-in-out;
-    }
-
-    .btn-action-hover:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
 </style>
 
 <div class="container py-4 animate-directory">
@@ -65,8 +56,8 @@
             <h2 class="fw-bold text-primary mb-1">@SharedLocalizer["Doctors Directory"]</h2>
             <p class="text-muted mb-0">@SharedLocalizer["Manage doctor profiles and department assignments"]</p>
         </div>
-        <a asp-area="Admin" asp-controller="Doctors" asp-action="Create" class="btn btn-primary px-4 py-2  fw-semibold shadow-sm rounded-pill">
-             @SharedLocalizer["Add New Doctor"]
+        <a asp-area="Admin" asp-controller="Doctors" asp-action="Create" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm rounded-pill">
+            <i class="bi bi-plus-lg me-1"></i> @SharedLocalizer["Add New Doctor"]
         </a>
     </div>
 
@@ -105,7 +96,6 @@
                                         <div class="d-flex align-items-center gap-3">
                                             @if (!string.IsNullOrEmpty(doctor.Image))
                                             {
-                                               
                                                 <div class="doctor-img-frame">
                                                     <img src="~/images/doctors/@doctor.Image" alt="Doctor Photo" class="doctor-img" />
                                                 </div>
@@ -146,55 +136,14 @@
                                         <div class="d-inline-flex gap-2">
                                             <a asp-area="Admin" asp-controller="Doctors" asp-action="Details" asp-route-id="@doctor.DoctorId" class="btn btn-sm btn-outline-info rounded-pill">@SharedLocalizer["Details"]</a>
                                             <a asp-area="Admin" asp-controller="Doctors" asp-action="Edit" asp-route-id="@doctor.DoctorId" class="btn btn-sm btn-outline-warning rounded-pill">@SharedLocalizer["Edit"]</a>
-                                            <button type="button" class="btn btn-sm btn-danger ms-1 rounded-pill" data-bs-toggle="modal" data-bs-target="#deleteModal-@doctor.DoctorId">
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-danger ms-1 rounded-pill delete-doctor-btn" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#globalDeleteModal"
+                                                    data-doctor-id="@doctor.DoctorId"
+                                                    data-doctor-name="@(doctor.ApplicationUser?.FullName ?? SharedLocalizer["Dr. Unnamed"])">
                                                 @SharedLocalizer["Delete"]
                                             </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="7" class="text-center text-muted py-5">
-                                    No doctors found.
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-                                        <div class="modal fade text-start" id="deleteModal-@doctor.DoctorId" tabindex="-1" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content border-0 shadow rounded-3">
-                                                    <div class="modal-header bg-danger text-white">
-                                                        <h5 class="modal-title fw-bold">@SharedLocalizer["Confirm Delete"]</h5>
-                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body p-4 text-center">
-                                                        <div class="text-danger mb-3">
-                                                            <i class="bi bi-exclamation-triangle-fill display-4"></i>
-                                                        </div>
-                                                        <h5 class="fw-bold">@SharedLocalizer["Are you sure?"]</h5>
-                                                        <p class="text-muted mb-0">
-                                                            @SharedLocalizer["You are about to delete"] <strong>@(doctor.ApplicationUser?.FullName ?? SharedLocalizer["Dr. Unnamed"])</strong>. @SharedLocalizer["This action cannot be undone."]
-                                                        </p>
-                                                    </div>
-                                                    <div class="modal-footer bg-light border-0 d-flex justify-content-center gap-2 pb-3">
-                                                        <button type="button" class="btn btn-secondary px-4 rounded-pill" data-bs-dismiss="modal">@SharedLocalizer["Cancel"]</button>
-                                                        <form asp-area="Admin" asp-controller="Doctors" asp-action="Delete" asp-route-id="@doctor.DoctorId" method="post" class="d-inline">
-                                                            @Html.AntiForgeryToken()
-                                                            <button type="submit" class="btn btn-danger px-4 rounded-pill fw-semibold">@SharedLocalizer["Yes, Delete"]</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -214,3 +163,51 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="globalDeleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-3">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold">@SharedLocalizer["Confirm Delete"]</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 text-center">
+                <div class="text-danger mb-3">
+                    <i class="bi bi-exclamation-triangle-fill display-4"></i>
+                </div>
+                <h5 class="fw-bold">@SharedLocalizer["Are you sure?"]</h5>
+                <p class="text-muted mb-0">
+                    @SharedLocalizer["You are about to delete"] <strong id="modalDoctorName"></strong>. @SharedLocalizer["This action cannot be undone."]
+                </p>
+            </div>
+            <div class="modal-footer bg-light border-0 d-flex justify-content-center gap-2 pb-3">
+                <button type="button" class="btn btn-secondary px-4 rounded-pill" data-bs-dismiss="modal">@SharedLocalizer["Cancel"]</button>
+                <form id="deleteDoctorForm" asp-area="Admin" asp-controller="Doctors" asp-action="Delete" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="modalDoctorId" value="" />
+                    <button type="submit" class="btn btn-danger px-4 rounded-pill fw-semibold">@SharedLocalizer["Yes, Delete"]</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.delete-doctor-btn');
+            const doctorNameElem = document.getElementById('modalDoctorName');
+            const doctorIdInput = document.getElementById('modalDoctorId');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const id = this.getAttribute('data-doctor-id');
+                    const name = this.getAttribute('data-doctor-name');
+
+                    if (doctorNameElem) doctorNameElem.textContent = name;
+                    if (doctorIdInput) doctorIdInput.value = id;
+                });
+            });
+        });
+    </script>
+}
