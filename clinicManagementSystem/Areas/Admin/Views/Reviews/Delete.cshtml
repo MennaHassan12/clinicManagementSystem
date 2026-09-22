@@ -1,16 +1,16 @@
 ﻿@model clinicManagementSystem.Models.Review
 
 @{
-    ViewData["Title"] = "Delete Review";
+    ViewData["Title"] = SharedLocalizer["Delete Review"];
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container-fluid py-4">
 
     <div class="mb-4">
-        <h2 class="fw-bold">Delete Review</h2>
+        <h2 class="fw-bold">@SharedLocalizer["Delete Review"]</h2>
         <p class="text-muted">
-            Are you sure you want to delete this review?
+            @SharedLocalizer["Are you sure you want to delete this review?"]
         </p>
     </div>
 
@@ -19,23 +19,23 @@
 
             <dl class="row">
 
-                <dt class="col-sm-3">Doctor</dt>
+                <dt class="col-sm-3">@SharedLocalizer["Doctor"]</dt>
                 <dd class="col-sm-9 fw-bold text-dark">
-                    @(Model.Appointment?.Doctor?.ApplicationUser?.FullName ?? $"Doctor #{Model.Appointment?.DoctorId}")
-                    <span class="badge bg-light text-muted border ms-2">@(Model.Appointment?.Doctor?.Department?.Name ?? "Department")</span>
+                    @(Model.Appointment?.Doctor?.ApplicationUser?.FullName ?? $"{SharedLocalizer["Doctor"]} #{Model.Appointment?.DoctorId}")
+                    <span class="badge bg-light text-muted border ms-2">@(Model.Appointment?.Doctor?.Department?.Name ?? SharedLocalizer["Department"].Value)</span>
                 </dd>
 
-                <dt class="col-sm-3">Patient</dt>
+                <dt class="col-sm-3">@SharedLocalizer["Patient"]</dt>
                 <dd class="col-sm-9 fw-semibold">
-                    @(Model.Appointment?.Patient?.ApplicationUser?.FullName ?? $"Patient #{Model.Appointment?.PatientId}")
+                    @(Model.Appointment?.Patient?.ApplicationUser?.FullName ?? $"{SharedLocalizer["Patient"]} #{Model.Appointment?.PatientId}")
                 </dd>
 
-                <dt class="col-sm-3">Appointment Date</dt>
+                <dt class="col-sm-3">@SharedLocalizer["Appointment Date"]</dt>
                 <dd class="col-sm-9">
-                    @(Model.Appointment?.AppointmentDate.ToString("dd/MM/yyyy") ?? $"Appointment #{Model.AppointmentId}")
+                    @(Model.Appointment?.AppointmentDate.ToString("dd/MM/yyyy") ?? $"{SharedLocalizer["Appointment"]} #{Model.AppointmentId}")
                 </dd>
 
-                <dt class="col-sm-3">Rating</dt>
+                <dt class="col-sm-3">@SharedLocalizer["Rating"]</dt>
                 <dd class="col-sm-9">
 
                     <span class="fw-semibold me-2">
@@ -56,14 +56,14 @@
 
                 </dd>
 
-                <dt class="col-sm-3">Comment</dt>
+                <dt class="col-sm-3">@SharedLocalizer["Comment"]</dt>
                 <dd class="col-sm-9">
                     @(string.IsNullOrWhiteSpace(Model.Comment)
-                        ? "No comment"
+                        ? SharedLocalizer["No comment"].Value
                         : Model.Comment)
                 </dd>
 
-                <dt class="col-sm-3">Review Date</dt>
+                <dt class="col-sm-3">@SharedLocalizer["Review Date"]</dt>
                 <dd class="col-sm-9">
                     @Model.ReviewDate.ToString("dd/MM/yyyy")
                 </dd>
@@ -80,14 +80,14 @@
 
                 <button type="submit"
                         class="btn btn-danger rounded-pill">
-                    Yes, Delete
+                    @SharedLocalizer["Yes, Delete"]
                 </button>
 
                 <a asp-area="Admin"
                    asp-controller="Reviews"
                    asp-action="Index"
                    class="btn btn-outline-secondary rounded-pill">
-                    Cancel
+                    @SharedLocalizer["Cancel"]
                 </a>
 
             </form>

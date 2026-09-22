@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<clinicManagementSystem.Models.Appointment>
 
 @{
-    ViewData["Title"] = "Doctor Appointments";
+    ViewData["Title"] = SharedLocalizer["Doctor Appointments"];
     int currentDoctorId = ViewBag.DoctorId ?? 1;
     string searchString = ViewBag.SearchString as string ?? "";
 }
@@ -9,8 +9,8 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-primary mb-1">My Patient Appointments</h2>
-            <p class="text-muted mb-0">Manage and update your patient bookings</p>
+            <h2 class="fw-bold text-primary mb-1">@SharedLocalizer["My Patient Appointments"]</h2>
+            <p class="text-muted mb-0">@SharedLocalizer["Manage and update your patient bookings"]</p>
         </div>
         
     </div>
@@ -21,18 +21,18 @@
                 <input type="hidden" name="doctorId" value="@currentDoctorId" />
 
                 <div class="col-8 col-md-9">
-                    <input type="text" name="searchString" class="form-control rounded-pill px-3" placeholder="Search by patient name or notes..." value="@searchString" />
+                    <input type="text" name="searchString" class="form-control rounded-pill px-3" placeholder="@SharedLocalizer["Search by patient name or notes..."]" value="@searchString" />
                 </div>
 
                 <div class="col-4 col-md-3 d-flex gap-2">
                     <button type="submit" class="btn btn-primary rounded-pill flex-grow-1 fw-semibold">
-                         Search
+                         @SharedLocalizer["Search"]
                     </button>
 
                     <a href="/Doctor/Appointments/Index?doctorId=@currentDoctorId"
                        class="btn btn-outline-secondary rounded-pill d-flex align-items-center justify-content-center fw-bold"
                        style="min-width: 45px; height: 38px;"
-                       title="Reset Search">
+                       title="@SharedLocalizer["Reset Search"]">
                         ↺
                     </a>
                 </div>
@@ -43,13 +43,13 @@
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light">
+                <thead class="bg-light text-uppercase">
                     <tr>
-                        <th class="py-3 px-4">PATIENT</th>
-                        <th class="py-3 px-4">DATE & TIME</th>
-                        <th class="py-3 px-4">NOTES</th>
-                        <th class="py-3 px-4">STATUS</th>
-                        <th class="py-3 px-4 text-end">ACTIONS</th>
+                        <th class="py-3 px-4">@SharedLocalizer["Patient"]</th>
+                        <th class="py-3 px-4">@SharedLocalizer["DATE & TIME"]</th>
+                        <th class="py-3 px-4">@SharedLocalizer["NOTES"]</th>
+                        <th class="py-3 px-4">@SharedLocalizer["STATUS"]</th>
+                        <th class="py-3 px-4 text-end">@SharedLocalizer["ACTIONS"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,7 +57,7 @@
                     {
                         @foreach (var item in Model.OrderByDescending(a => a.AppointmentDate).ThenByDescending(a => a.AppointmentTime))
                         {
-                            string patientDisplayName = item.Patient?.ApplicationUser?.FullName ?? $"Patient #{item.PatientId}";
+                            string patientDisplayName = item.Patient?.ApplicationUser?.FullName ?? $"{SharedLocalizer["Patient"]} #{item.PatientId}";
                             string actualNotes = "-";
 
                             if (!string.IsNullOrWhiteSpace(item.Notes))
@@ -101,19 +101,19 @@
                                 <td class="px-4">
                                     @if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Pending)
                                     {
-                                        <span class="badge bg-warning-subtle text-warning border border-warning px-3 py-2 rounded-pill">Pending</span>
+                                        <span class="badge bg-warning-subtle text-warning border border-warning px-3 py-2 rounded-pill">@SharedLocalizer["Pending"]</span>
                                     }
                                     else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Confirmed)
                                     {
-                                        <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill">Confirmed</span>
+                                        <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill">@SharedLocalizer["Confirmed"]</span>
                                     }
                                     else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Completed)
                                     {
-                                        <span class="badge bg-primary-subtle text-primary border border-primary px-3 py-2 rounded-pill">Completed</span>
+                                        <span class="badge bg-primary-subtle text-primary border border-primary px-3 py-2 rounded-pill">@SharedLocalizer["Completed"]</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary-subtle text-secondary border px-3 py-2 rounded-pill">Cancelled</span>
+                                        <span class="badge bg-secondary-subtle text-secondary border px-3 py-2 rounded-pill">@SharedLocalizer["Cancelled"]</span>
                                     }
                                 </td>
                                 <td class="px-4 text-end">
@@ -124,20 +124,20 @@
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="id" value="@item.AppointmentId" />
                                                 <input type="hidden" name="status" value="@((int)clinicManagementSystem.Models.AppointmentStatus.Confirmed)" />
-                                                <button type="submit" class="btn btn-sm btn-success rounded-pill px-3">Confirm</button>
+                                                <button type="submit" class="btn btn-sm btn-success rounded-pill px-3">@SharedLocalizer["Confirm"]</button>
                                             </form>
                                         }
 
                                         @if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Confirmed)
                                         {
                                             <a href="/Doctor/MedicalRecords/Create?appointmentId=@item.AppointmentId&doctorId=@currentDoctorId" class="btn btn-sm btn-primary rounded-pill px-3">
-                                                Add Medical Record
+                                                @SharedLocalizer["Add Medical Record"]
                                             </a>
                                         }
                                         @if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Completed)
                                         {
                                             <a href="/Doctor/MedicalRecords/Details?appointmentId=@item.AppointmentId" class="btn btn-sm btn-outline-info rounded-pill px-3">
-                                                 View Record
+                                                 @SharedLocalizer["View Record"]
                                             </a>
                                         }
 
@@ -147,7 +147,7 @@
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="id" value="@item.AppointmentId" />
                                                 <input type="hidden" name="status" value="@((int)clinicManagementSystem.Models.AppointmentStatus.Cancelled)" />
-                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2">Cancel</button>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-2">@SharedLocalizer["Cancel"]</button>
                                             </form>
                                         }
 
@@ -156,8 +156,8 @@
                                             <form action="/Doctor/Appointments/Delete" method="post" class="d-inline">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="id" value="@item.AppointmentId" />
-                                                <button type="submit" class="btn btn-sm btn-danger rounded-pill px-3" onclick="return confirm('Are you sure you want to delete this appointment?');">
-                                                    Delete
+                                                <button type="submit" class="btn btn-sm btn-danger rounded-pill px-3" onclick="return confirm('@SharedLocalizer["Are you sure you want to delete this appointment?"]');">
+                                                    @SharedLocalizer["Delete"]
                                                 </button>
                                             </form>
                                         }
@@ -169,7 +169,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="5" class="text-center py-4 text-muted">No appointments found matching your search.</td>
+                            <td colspan="5" class="text-center py-4 text-muted">@SharedLocalizer["No appointments found matching your search."]</td>
                         </tr>
                     }
                 </tbody>

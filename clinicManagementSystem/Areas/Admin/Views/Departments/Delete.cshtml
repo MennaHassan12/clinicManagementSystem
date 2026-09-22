@@ -1,7 +1,7 @@
 ﻿@model clinicManagementSystem.Models.Department
 
 @{
-    ViewData["Title"] = "Delete Department";
+    ViewData["Title"] = SharedLocalizer["Delete Department"];
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,11 +12,11 @@
 
         <div>
             <h2 class="fw-bold text-danger mb-1">
-                Delete Department
+                @SharedLocalizer["Delete Department"]
             </h2>
 
             <p class="text-muted mb-0">
-                Review the department information before deleting it.
+                @SharedLocalizer["Review the department information before deleting it."]
             </p>
         </div>
 
@@ -36,8 +36,8 @@
                 <i class="fas fa-exclamation-triangle me-2"></i>
 
                 <div>
-                    <strong>Are you sure?</strong>
-                    This department will be permanently deleted.
+                    <strong>@SharedLocalizer["Are you sure?"]</strong>
+                    @SharedLocalizer["This department will be permanently deleted."]
                 </div>
 
             </div>
@@ -48,7 +48,7 @@
             <div class="mb-4">
 
                 <h5 class="fw-bold text-primary mb-3">
-                    Department Information
+                    @SharedLocalizer["Department Information"]
                 </h5>
 
                 <div class="row">
@@ -56,7 +56,7 @@
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label fw-semibold">
-                            Department Name
+                            @SharedLocalizer["Department Name"]
                         </label>
 
                         <div class="form-control bg-light">
@@ -69,7 +69,7 @@
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label fw-semibold">
-                            Department ID
+                            @SharedLocalizer["Department ID"]
                         </label>
 
                         <div class="form-control bg-light">
@@ -82,7 +82,7 @@
                     <div class="col-12 mb-3">
 
                         <label class="form-label fw-semibold">
-                            Description
+                            @SharedLocalizer["Department Description"]
                         </label>
 
                         <div class="form-control bg-light"
@@ -115,13 +115,13 @@
                     <button type="submit"
                             class="btn btn-danger rounded-pill px-4">
 
-                        Delete Department
+                        @SharedLocalizer["Delete Department"]
 
                     </button>
                     <a asp-action="Index"
                        class="btn btn-outline-secondary rounded-pill px-4">
 
-                        Cancel
+                        @SharedLocalizer["Cancel"]
 
                     </a>
 
