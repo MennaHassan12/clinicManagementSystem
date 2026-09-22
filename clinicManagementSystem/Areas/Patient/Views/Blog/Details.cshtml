@@ -4,7 +4,37 @@
     ViewData["Title"] = Model.Title;
 }
 
-<div class="container py-5">
+<style>
+  @@keyframes detailsFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-details {
+        animation: detailsFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .blog-details-img {
+        transition: transform 0.6s ease;
+    }
+
+    .blog-details-img:hover {
+        transform: scale(1.02);
+    }
+
+    .blog-content {
+        line-height: 1.8;
+    }
+</style>
+
+
+<div class="container py-5 animate-details">
     <div class="row justify-content-center">
         <div class="col-lg-8">
 
@@ -30,7 +60,7 @@
             @if (!string.IsNullOrEmpty(Model.Image))
             {
                 <div class="mb-4 rounded-4 overflow-hidden shadow-sm" style="max-height: 400px;">
-                    <img src="@Model.Image" class="w-100 h-100" style="object-fit: cover;" alt="@Model.Title" />
+                    <img src="@Model.Image" class="w-100 h-100 blog-details-img" style="object-fit: cover;" alt="@Model.Title" />
                 </div>
             }
 

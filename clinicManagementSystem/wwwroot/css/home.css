@@ -1,4 +1,19 @@
-﻿.side-toggle-btn {
+﻿html {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+main, .container {
+    flex: 1;
+}
+
+.side-toggle-btn {
     position: fixed;
     right: -10px;
     top: 50%;
@@ -15,7 +30,7 @@
         opacity: 1;
         box-shadow: -4px 0 15px rgba(0, 123, 255, 0.2) !important;
     }
-
+    
 #patientFloatingMenu {
     position: fixed;
     right: 70px;
@@ -66,6 +81,14 @@
     color: #38bdf8 !important; 
     font-size: 1.1rem; 
 }
+
+
+footer.footer-with-bg {
+   margin-top: auto !important;
+    margin-bottom: 0 !important;
+    width: 100%;
+}
+
 #departments {
     background-color: #f8fafc !important; 
 }
@@ -175,3 +198,11 @@
 .btn-animate-arrow:hover .btn-arrow {
     transform: translateX(6px);
 }
+
+
+
+
+
+
+
+
