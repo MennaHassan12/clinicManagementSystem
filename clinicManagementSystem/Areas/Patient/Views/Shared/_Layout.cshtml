@@ -169,17 +169,17 @@
 
             <div class="col-lg-3 col-md-6">
                 <h5 class="fw-bold text-primary mb-3"><i class="bi bi-heart-pulse-fill me-2"></i>@SharedLocalizer["HealthCare"]</h5>
-                <p class="text-light opacity-75 fs-7">Providing trusted healthcare services, easy online appointment bookings, and comprehensive medical record management.</p>
+                <p class="text-light opacity-75 fs-7">@SharedLocalizer["Providing trusted healthcare services, easy online appointment bookings, and comprehensive medical record management."]</p>
             </div>
 
             <!-- Opening Hours -->
             <div class="col-lg-3 col-md-6">
                 <h5 class="fw-bold text-white mb-3"><i class="bi bi-clock me-2 text-primary"></i>@SharedLocalizer["Opening Hours"]</h5>
                 <ul class="list-unstyled d-flex flex-column gap-2 text-light opacity-75 fs-7">
-                    <li class="d-flex justify-content-between"><span>Mon - Wed:</span> <span>8.00 - 18.00</span></li>
-                    <li class="d-flex justify-content-between"><span>Thu - Fri:</span> <span>8.00 - 17.00</span></li>
-                    <li class="d-flex justify-content-between"><span>Sat - Sun:</span> <span>9.00 - 15.00</span></li>
-                    <li class="d-flex justify-content-between text-warning"><span>Holidays:</span> <span>Closed</span></li>
+                    <li class="d-flex justify-content-between"><span>@SharedLocalizer["Mon - Wed"]:</span> <span>8.00 - 18.00</span></li>
+                    <li class="d-flex justify-content-between"><span>@SharedLocalizer["Thu - Fri"]:</span> <span>8.00 - 17.00</span></li>
+                    <li class="d-flex justify-content-between"><span>@SharedLocalizer["Sat - Sun"]:</span> <span>9.00 - 15.00</span></li>
+                    <li class="d-flex justify-content-between text-warning"><span>@SharedLocalizer["Holidays"]:</span> <span>@SharedLocalizer["Closed"]</span></li>
                 </ul>
             </div>
 
@@ -196,14 +196,14 @@
 
             <div class="col-lg-3 col-md-6">
                 <h5 class="fw-bold text-white mb-3">@SharedLocalizer["Contact Info"]</h5>
-                <p class="text-light opacity-75 mb-2 fs-7"><i class="bi bi-geo-alt me-2 text-primary"></i>123 Health Street, Cairo, Egypt</p>
+                <p class="text-light opacity-75 mb-2 fs-7"><i class="bi bi-geo-alt me-2 text-primary"></i>@SharedLocalizer["123 Health Street, Cairo, Egypt"]</p>
                 <p class="text-light opacity-75 mb-2 fs-7"><i class="bi bi-telephone me-2 text-primary"></i>+20 123 456 7890</p>
                 <p class="text-light opacity-75 fs-7"><i class="bi bi-envelope me-2 text-primary"></i>support@healthcareportal.com</p>
             </div>
         </div>
         <hr class="border-secondary opacity-25">
         <div class="text-center pt-2">
-            <small class="text-light opacity-50">&copy; @DateTime.Now.Year HealthCare Portal. All Rights Reserved.</small>
+            <small class="text-light opacity-50">&copy; @DateTime.Now.Year @SharedLocalizer["HealthCare Portal"]. @SharedLocalizer["All Rights Reserved."]</small>
         </div>
     </div>
 </footer>

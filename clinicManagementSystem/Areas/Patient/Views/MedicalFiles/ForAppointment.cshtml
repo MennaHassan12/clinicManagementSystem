@@ -1,4 +1,4 @@
-﻿@model IEnumerable<clinicManagementSystem.Models.MedicalFile>
+@model IEnumerable<clinicManagementSystem.Models.MedicalFile>
 
 @{
     ViewData["Title"] = "Medical Files";
@@ -17,11 +17,11 @@
         <div>
 
             <h2 class="fw-bold text-primary mb-1">
-                Medical Files
+                @SharedLocalizer["Medical Files"]
             </h2>
 
             <p class="text-muted mb-0">
-                Medical files for your appointment
+                @SharedLocalizer["Medical files for your appointment"]
             </p>
 
         </div>
@@ -32,7 +32,7 @@
            class="btn btn-primary shadow-sm rounded-pill px-4">
 
             <i class="fas fa-arrow-left me-1"></i>
-            Back to Medical Files
+            @SharedLocalizer["My Medical Files"]
 
         </a>
 
@@ -53,16 +53,16 @@
                 <div>
 
                     <h4 class="fw-bold mb-1">
-                        @(doctor?.ApplicationUser?.FullName ?? "Doctor")
+                        @(doctor?.ApplicationUser?.FullName ?? SharedLocalizer["Doctor"].Value)
                     </h4>
 
                     <div class="text-muted">
-                        @(doctor?.Department?.Name ?? "Department")
+                        @(doctor?.Department?.Name ?? SharedLocalizer["General"].Value)
                     </div>
 
                     <div class="text-muted small mt-1">
                         <i class="fas fa-calendar-alt me-1"></i>
-                        Appointment:
+                        @SharedLocalizer["Appointments"]:
                         @appointment!.AppointmentDate.ToString("dd/MM/yyyy")
                     </div>
 
@@ -82,7 +82,7 @@
 
             <h5 class="fw-bold mb-4">
                 <i class="fas fa-folder-open text-primary me-2"></i>
-                Medical Files
+                @SharedLocalizer["Medical Files"]
             </h5>
 
             <div class="table-responsive">
@@ -93,11 +93,11 @@
 
                         <tr>
 
-                            <th>File</th>
-                            <th>Medical Record</th>
-                            <th>File Type</th>
-                            <th>Upload Date</th>
-                            <th class="text-center">Action</th>
+                            <th>@SharedLocalizer["File"]</th>
+                            <th>@SharedLocalizer["Medical Record"]</th>
+                            <th>@SharedLocalizer["File Type"]</th>
+                            <th>@SharedLocalizer["Upload Date"]</th>
+                            <th class="text-center">@SharedLocalizer["ACTIONS"]</th>
 
                         </tr>
 
@@ -125,7 +125,7 @@
                                 <td>
 
                                     <span class="badge bg-info">
-                                        Record #@file.MedicalRecordId
+                                        @SharedLocalizer["Record"] #@file.MedicalRecordId
                                     </span>
 
                                 </td>
@@ -176,7 +176,7 @@
                                        class="btn  btn-outline-primary rounded-pill px-3 me-1">
 
                                         <i class="fas fa-eye me-1"></i>
-                                        View
+                                        @SharedLocalizer["View"]
 
                                     </a>
 
@@ -187,7 +187,7 @@
                                        class="btn  btn-outline-success rounded-pill px-3">
 
                                         <i class="fas fa-download me-1"></i>
-                                        Download
+                                        @SharedLocalizer["Download"]
 
                                     </a>
 

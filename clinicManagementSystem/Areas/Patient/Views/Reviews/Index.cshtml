@@ -11,7 +11,7 @@
     {
         <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm mb-4" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>
-            @TempData["success_notification"]
+            @SharedLocalizer[TempData["success_notification"]?.ToString() ?? ""]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
@@ -20,7 +20,7 @@
     {
         <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm mb-4" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            @TempData["error_notification"]
+            @SharedLocalizer[TempData["error_notification"]?.ToString() ?? ""]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }

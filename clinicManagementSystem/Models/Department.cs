@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace clinicManagementSystem.Models
 {
@@ -6,7 +6,7 @@ namespace clinicManagementSystem.Models
         {
             public int DepartmentId { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Department Name is required.")]
             [MaxLength(100)]
             public string Name { get; set; } = null!;
 

@@ -1,6 +1,6 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    ViewData["Title"] = "Access Denied";
+    ViewData["Title"] = SharedLocalizer["Access Denied"];
     Layout = "_MainLayout";
 }
 
@@ -11,24 +11,23 @@
     </div>
 </div>
 
-<h2>Access Denied</h2>
-<p class="subtitle">You don't have permission to view this page</p>
+<h2>@SharedLocalizer["Access Denied"]</h2>
+<p class="subtitle">@SharedLocalizer["You don't have permission to view this page"]</p>
 
 <p class="access-message">
-    This area is restricted to authorized personnel only.
-    If you believe this is a mistake, please contact the administrator.
+    @SharedLocalizer["This area is restricted to authorized personnel only. If you believe this is a mistake, please contact the administrator."]
 </p>
 
 <button type="button" id="backToPreviousBtn"
         class="btn-primary text-decoration-none d-block w-100 text-center border-0">
-    Back to Previous Page
+    @SharedLocalizer["Back to Previous Page"]
 </button>
 
 <div class="switch-link">
-    Want to use another account?
+    @SharedLocalizer["Want to use another account?"]
     <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
         @Html.AntiForgeryToken()
-        <button type="submit" class="logout-link-button">Logout</button>
+        <button type="submit" class="logout-link-button">@SharedLocalizer["Logout"]</button>
     </form>
 </div>
 

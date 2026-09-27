@@ -1659,7 +1659,712 @@
   <data name="Are you sure you want to delete this article?" xml:space="preserve">
     <value>Are you sure you want to delete this article?</value>
   </data>
-  <data name="Are you sure you want to delete this appointment?" xml:space="preserve">
-    <value>Are you sure you want to delete the appointment?</value>
+  <data name="Full Name is required." xml:space="preserve">
+    <value>Full Name is required.</value>
+  </data>
+  <data name="Name must be at least 3 characters." xml:space="preserve">
+    <value>Name must be at least 3 characters.</value>
+  </data>
+  <data name="Email address is required." xml:space="preserve">
+    <value>Email address is required.</value>
+  </data>
+  <data name="Invalid email address format." xml:space="preserve">
+    <value>Invalid email address format.</value>
+  </data>
+  <data name="Phone number is required." xml:space="preserve">
+    <value>Phone number is required.</value>
+  </data>
+  <data name="Invalid phone number." xml:space="preserve">
+    <value>Invalid phone number.</value>
+  </data>
+  <data name="License number is required." xml:space="preserve">
+    <value>License number is required.</value>
+  </data>
+  <data name="License number must be a positive number." xml:space="preserve">
+    <value>License number must be a positive number.</value>
+  </data>
+  <data name="Consultation fee is required." xml:space="preserve">
+    <value>Consultation fee is required.</value>
+  </data>
+  <data name="Consultation fee cannot be negative." xml:space="preserve">
+    <value>Consultation fee cannot be negative.</value>
+  </data>
+  <data name="Years of experience is required." xml:space="preserve">
+    <value>Years of experience is required.</value>
+  </data>
+  <data name="Years of experience cannot be negative." xml:space="preserve">
+    <value>Years of experience cannot be negative.</value>
+  </data>
+  <data name="Bio cannot exceed 1000 characters." xml:space="preserve">
+    <value>Bio cannot exceed 1000 characters.</value>
+  </data>
+  <data name="Please select a doctor." xml:space="preserve">
+    <value>Please select a doctor.</value>
+  </data>
+  <data name="Please select a day of the week." xml:space="preserve">
+    <value>Please select a day of the week.</value>
+  </data>
+  <data name="Please specify the start time." xml:space="preserve">
+    <value>Please specify the start time.</value>
+  </data>
+  <data name="Please specify the end time." xml:space="preserve">
+    <value>Please specify the end time.</value>
+  </data>
+  <data name="Please specify max patients capacity." xml:space="preserve">
+    <value>Please specify max patients capacity.</value>
+  </data>
+  <data name="Max patients must be a positive number between 1 and 100." xml:space="preserve">
+    <value>Max patients must be a positive number between 1 and 100.</value>
+  </data>
+  <data name="End time must be greater than start time." xml:space="preserve">
+    <value>End time must be greater than start time.</value>
+  </data>
+  <data name="This doctor already has a schedule assigned for this day." xml:space="preserve">
+    <value>This doctor already has a schedule assigned for this day.</value>
+  </data>
+  <data name="Password must be at least 8 characters" xml:space="preserve">
+    <value>Password must be at least 8 characters.</value>
+  </data>
+  <data name="Password must be at least 8 characters." xml:space="preserve">
+    <value>Password must be at least 8 characters.</value>
+  </data>
+  <data name="Passwords do not match." xml:space="preserve">
+    <value>Passwords do not match.</value>
+  </data>
+  <data name="Email is required" xml:space="preserve">
+    <value>Email is required.</value>
+  </data>
+  <data name="Email is required." xml:space="preserve">
+    <value>Email is required.</value>
+  </data>
+  <data name="Invalid email format" xml:space="preserve">
+    <value>Invalid email format.</value>
+  </data>
+  <data name="Invalid email format." xml:space="preserve">
+    <value>Invalid email format.</value>
+  </data>
+  <data name="Please enter the OTP code" xml:space="preserve">
+    <value>Please enter the OTP code.</value>
+  </data>
+  <data name="OTP code must be 6 digits" xml:space="preserve">
+    <value>OTP code must be 6 digits.</value>
+  </data>
+  <data name="Current Password is required." xml:space="preserve">
+    <value>Current Password is required.</value>
+  </data>
+  <data name="Password is required." xml:space="preserve">
+    <value>Password is required.</value>
+  </data>
+  <data name="Confirm Password is required." xml:space="preserve">
+    <value>Confirm Password is required.</value>
+  </data>
+  <data name="Invalid Email" xml:space="preserve">
+    <value>Invalid Email.</value>
+  </data>
+  <data name="Invalid Password" xml:space="preserve">
+    <value>Invalid Password.</value>
+  </data>
+  <data name="Confirm Your Email First" xml:space="preserve">
+    <value>Confirm Your Email First.</value>
+  </data>
+  <data name="Invalid or expired OTP" xml:space="preserve">
+    <value>Invalid or expired OTP.</value>
+  </data>
+  <data name="Patient Name is required." xml:space="preserve">
+    <value>Patient Name is required.</value>
+  </data>
+  <data name="Date of Birth is required" xml:space="preserve">
+    <value>Date of Birth is required.</value>
+  </data>
+  <data name="Date of Birth is required." xml:space="preserve">
+    <value>Date of Birth is required.</value>
+  </data>
+  <data name="Email Address is required." xml:space="preserve">
+    <value>Email Address is required.</value>
+  </data>
+  <data name="Please select an appointment." xml:space="preserve">
+    <value>Please select an appointment.</value>
+  </data>
+  <data name="Please select an appointment to review." xml:space="preserve">
+    <value>Please select an appointment to review.</value>
+  </data>
+  <data name="Rating must be between 1 and 5." xml:space="preserve">
+    <value>Rating must be between 1 and 5.</value>
+  </data>
+  <data name="Rating must be between 1 and 5 stars." xml:space="preserve">
+    <value>Rating must be between 1 and 5 stars.</value>
+  </data>
+  <data name="Rating is required." xml:space="preserve">
+    <value>Rating is required.</value>
+  </data>
+  <data name="Title is required." xml:space="preserve">
+    <value>Title is required.</value>
+  </data>
+  <data name="Title is required" xml:space="preserve">
+    <value>Title is required.</value>
+  </data>
+  <data name="Category is required." xml:space="preserve">
+    <value>Category is required.</value>
+  </data>
+  <data name="Category is required" xml:space="preserve">
+    <value>Category is required.</value>
+  </data>
+  <data name="Please select an author." xml:space="preserve">
+    <value>Please select an author.</value>
+  </data>
+  <data name="Author name is required" xml:space="preserve">
+    <value>Author name is required.</value>
+  </data>
+  <data name="Content is required." xml:space="preserve">
+    <value>Content is required.</value>
+  </data>
+  <data name="Content is required" xml:space="preserve">
+    <value>Content is required.</value>
+  </data>
+  <data name="Please upload an article banner image." xml:space="preserve">
+    <value>Please upload an article banner image.</value>
+  </data>
+  <data name="Department Name is required." xml:space="preserve">
+    <value>Department Name is required.</value>
+  </data>
+  <data name="Add Account Successfully, check you email" xml:space="preserve">
+    <value>Add Account Successfully, check your email</value>
+  </data>
+  <data name="Email confirmed successfully, You can now log in." xml:space="preserve">
+    <value>Email confirmed successfully, You can now log in.</value>
+  </data>
+  <data name="Resend Email Confirmation successfully, please check your email" xml:space="preserve">
+    <value>Resend Email Confirmation successfully, please check your email</value>
+  </data>
+  <data name="If this email exists, an OTP has been sent, please check your email" xml:space="preserve">
+    <value>If this email exists, an OTP has been sent, please check your email</value>
+  </data>
+  <data name="You have exceeded the maximum number of OTP attempts. Please try again later." xml:space="preserve">
+    <value>You have exceeded the maximum number of OTP attempts. Please try again later.</value>
+  </data>
+  <data name="OTP number sent successfully. Please check your email." xml:space="preserve">
+    <value>OTP number sent successfully. Please check your email.</value>
+  </data>
+  <data name="Password changed successfully, you can now log in" xml:space="preserve">
+    <value>Password changed successfully, you can now log in</value>
+  </data>
+  <data name="Password changed successfully" xml:space="preserve">
+    <value>Password changed successfully</value>
+  </data>
+  <data name="Profile updated successfully" xml:space="preserve">
+    <value>Profile updated successfully</value>
+  </data>
+  <data name="Profile updated successfully!" xml:space="preserve">
+    <value>Profile updated successfully!</value>
+  </data>
+  <data name="Appointment booked successfully!" xml:space="preserve">
+    <value>Appointment booked successfully!</value>
+  </data>
+  <data name="Failed to book appointment. Please check selected doctor and schedule." xml:space="preserve">
+    <value>Failed to book appointment. Please check selected doctor and schedule.</value>
+  </data>
+  <data name="Appointment cancelled successfully!" xml:space="preserve">
+    <value>Appointment cancelled successfully!</value>
+  </data>
+  <data name="Failed to cancel the appointment." xml:space="preserve">
+    <value>Failed to cancel the appointment.</value>
+  </data>
+  <data name="Appointment deleted successfully!" xml:space="preserve">
+    <value>Appointment deleted successfully!</value>
+  </data>
+  <data name="Appointment not found!" xml:space="preserve">
+    <value>Appointment not found!</value>
+  </data>
+  <data name="Cannot delete appointment due to related records." xml:space="preserve">
+    <value>Cannot delete appointment due to related records.</value>
+  </data>
+  <data name="Please select a valid date and time slot." xml:space="preserve">
+    <value>Please select a valid date and time slot.</value>
+  </data>
+  <data name="Capacity for this date is full." xml:space="preserve">
+    <value>Capacity for this date is full.</value>
+  </data>
+  <data name="This time slot is already booked for this specific date." xml:space="preserve">
+    <value>This time slot is already booked for this specific date.</value>
+  </data>
+  <data name="Doctor profile not found." xml:space="preserve">
+    <value>Doctor profile not found.</value>
+  </data>
+  <data name="Schedule added successfully!" xml:space="preserve">
+    <value>Schedule added successfully!</value>
+  </data>
+  <data name="Failed to add schedule. Please try again." xml:space="preserve">
+    <value>Failed to add schedule. Please try again.</value>
+  </data>
+  <data name="Schedule updated successfully!" xml:space="preserve">
+    <value>Schedule updated successfully!</value>
+  </data>
+  <data name="Failed to update schedule!" xml:space="preserve">
+    <value>Failed to update schedule!</value>
+  </data>
+  <data name="Schedule deleted successfully!" xml:space="preserve">
+    <value>Schedule deleted successfully!</value>
+  </data>
+  <data name="Schedule not found!" xml:space="preserve">
+    <value>Schedule not found!</value>
+  </data>
+  <data name="Cannot delete schedule as it might be referenced elsewhere." xml:space="preserve">
+    <value>Cannot delete schedule as it might be referenced elsewhere.</value>
+  </data>
+  <data name="Please fix validation errors and try again." xml:space="preserve">
+    <value>Please fix validation errors and try again.</value>
+  </data>
+  <data name="Validation failed. Please check inputs." xml:space="preserve">
+    <value>Validation failed. Please check inputs.</value>
+  </data>
+  <data name="Department created successfully!" xml:space="preserve">
+    <value>Department created successfully!</value>
+  </data>
+  <data name="Department updated successfully!" xml:space="preserve">
+    <value>Department updated successfully!</value>
+  </data>
+  <data name="Department deleted successfully!" xml:space="preserve">
+    <value>Department deleted successfully!</value>
+  </data>
+  <data name="Doctor created successfully!" xml:space="preserve">
+    <value>Doctor created successfully!</value>
+  </data>
+  <data name="Doctor updated successfully!" xml:space="preserve">
+    <value>Doctor updated successfully!</value>
+  </data>
+  <data name="Doctor deleted successfully!" xml:space="preserve">
+    <value>Doctor deleted successfully!</value>
+  </data>
+  <data name="Medical record created successfully!" xml:space="preserve">
+    <value>Medical record created successfully!</value>
+  </data>
+  <data name="Medical file uploaded successfully." xml:space="preserve">
+    <value>Medical file uploaded successfully.</value>
+  </data>
+  <data name="Medical file updated successfully." xml:space="preserve">
+    <value>Medical file updated successfully.</value>
+  </data>
+  <data name="Medical file deleted successfully." xml:space="preserve">
+    <value>Medical file deleted successfully.</value>
+  </data>
+  <data name="No medical files found for this appointment." xml:space="preserve">
+    <value>No medical files found for this appointment.</value>
+  </data>
+  <data name="File could not be found on server." xml:space="preserve">
+    <value>File could not be found on server.</value>
+  </data>
+  <data name="Please select a medical record." xml:space="preserve">
+    <value>Please select a medical record.</value>
+  </data>
+  <data name="Only PDF, JPG, JPEG and PNG files are allowed." xml:space="preserve">
+    <value>Only PDF, JPG, JPEG and PNG files are allowed.</value>
+  </data>
+  <data name="File size must not exceed 10 MB." xml:space="preserve">
+    <value>File size must not exceed 10 MB.</value>
+  </data>
+  <data name="Thank you! Your review has been submitted successfully." xml:space="preserve">
+    <value>Thank you! Your review has been submitted successfully.</value>
+  </data>
+  <data name="Your review has been updated successfully." xml:space="preserve">
+    <value>Your review has been updated successfully.</value>
+  </data>
+  <data name="Review deleted successfully." xml:space="preserve">
+    <value>Review deleted successfully.</value>
+  </data>
+  <data name="Patient profile not found." xml:space="preserve">
+    <value>Patient profile not found.</value>
+  </data>
+  <data name="Selected appointment was not found in your records." xml:space="preserve">
+    <value>Selected appointment was not found in your records.</value>
+  </data>
+  <data name="You can only rate doctors for completed appointments." xml:space="preserve">
+    <value>You can only rate doctors for completed appointments.</value>
+  </data>
+  <data name="This appointment already has a review. You can edit your existing review." xml:space="preserve">
+    <value>This appointment already has a review. You can edit your existing review.</value>
+  </data>
+  <data name="Article created successfully!" xml:space="preserve">
+    <value>Article created successfully!</value>
+  </data>
+  <data name="Article updated successfully!" xml:space="preserve">
+    <value>Article updated successfully!</value>
+  </data>
+  <data name="Article deleted successfully!" xml:space="preserve">
+    <value>Article deleted successfully!</value>
+  </data>
+  <data name="Thank you! Your message has been sent successfully." xml:space="preserve">
+    <value>Thank you! Your message has been sent successfully.</value>
+  </data>
+  <data name="Failed to send email. Please try again." xml:space="preserve">
+    <value>Failed to send email. Please try again.</value>
+  </data>
+  <data name="Please fill in all required fields." xml:space="preserve">
+    <value>Please fill in all required fields.</value>
+  </data>
+  <data name="Admin email configuration is missing." xml:space="preserve">
+    <value>Admin email configuration is missing.</value>
+  </data>
+  <data name="Patient created successfully!" xml:space="preserve">
+    <value>Patient created successfully!</value>
+  </data>
+  <data name="Patient updated successfully!" xml:space="preserve">
+    <value>Patient updated successfully!</value>
+  </data>
+  <data name="Patient deleted successfully!" xml:space="preserve">
+    <value>Patient deleted successfully!</value>
+  </data>
+  <data name="Change Password" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="Update your password to keep your account secure" xml:space="preserve">
+    <value>Update your password to keep your account secure</value>
+  </data>
+  <data name="Current Password" xml:space="preserve">
+    <value>Current Password</value>
+  </data>
+  <data name="Enter your current password" xml:space="preserve">
+    <value>Enter your current password</value>
+  </data>
+  <data name="New Password" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="Enter your new password" xml:space="preserve">
+    <value>Enter your new password</value>
+  </data>
+  <data name="Re-enter your new password" xml:space="preserve">
+    <value>Re-enter your new password</value>
+  </data>
+  <data name="CHANGE PASSWORD" xml:space="preserve">
+    <value>CHANGE PASSWORD</value>
+  </data>
+  <data name="Back to" xml:space="preserve">
+    <value>Back to</value>
+  </data>
+  <data name="Forgot Password" xml:space="preserve">
+    <value>Forgot Password</value>
+  </data>
+  <data name="Enter your email and we'll send you a verification code" xml:space="preserve">
+    <value>Enter your email and we'll send you a verification code</value>
+  </data>
+  <data name="SEND CODE" xml:space="preserve">
+    <value>SEND CODE</value>
+  </data>
+  <data name="Remembered your password?" xml:space="preserve">
+    <value>Remembered your password?</value>
+  </data>
+  <data name="Reset Password" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="Create a new password for your account" xml:space="preserve">
+    <value>Create a new password for your account</value>
+  </data>
+  <data name="RESET PASSWORD" xml:space="preserve">
+    <value>RESET PASSWORD</value>
+  </data>
+  <data name="Verify Code" xml:space="preserve">
+    <value>Verify Code</value>
+  </data>
+  <data name="Enter the 6-digit code sent to Your Email" xml:space="preserve">
+    <value>Enter the 6-digit code sent to Your Email</value>
+  </data>
+  <data name="VERIFY CODE" xml:space="preserve">
+    <value>VERIFY CODE</value>
+  </data>
+  <data name="Didn't get the code?" xml:space="preserve">
+    <value>Didn't get the code?</value>
+  </data>
+  <data name="Resend code" xml:space="preserve">
+    <value>Resend code</value>
+  </data>
+  <data name="RESEND CODE" xml:space="preserve">
+    <value>RESEND CODE</value>
+  </data>
+  <data name="Resend Confirmation" xml:space="preserve">
+    <value>Resend Confirmation</value>
+  </data>
+  <data name="Enter your email and we'll resend the confirmation link" xml:space="preserve">
+    <value>Enter your email and we'll resend the confirmation link</value>
+  </data>
+  <data name="RESEND CONFIRMATION EMAIL" xml:space="preserve">
+    <value>RESEND CONFIRMATION EMAIL</value>
+  </data>
+  <data name="Registration Confirmation" xml:space="preserve">
+    <value>Registration Confirmation</value>
+  </data>
+  <data name="Check Your Email" xml:space="preserve">
+    <value>Check Your Email</value>
+  </data>
+  <data name="We've sent a confirmation link to your email address" xml:space="preserve">
+    <value>We've sent a confirmation link to your email address</value>
+  </data>
+  <data name="Please check your inbox and click the confirmation link to activate your account. If you didn't receive it, check your spam folder." xml:space="preserve">
+    <value>Please check your inbox and click the confirmation link to activate your account. If you didn't receive it, check your spam folder.</value>
+  </data>
+  <data name="Already confirmed?" xml:space="preserve">
+    <value>Already confirmed?</value>
+  </data>
+  <data name="Access Denied" xml:space="preserve">
+    <value>Access Denied</value>
+  </data>
+  <data name="You don't have permission to view this page" xml:space="preserve">
+    <value>You don't have permission to view this page</value>
+  </data>
+  <data name="This area is restricted to authorized personnel only. If you believe this is a mistake, please contact the administrator." xml:space="preserve">
+    <value>This area is restricted to authorized personnel only. If you believe this is a mistake, please contact the administrator.</value>
+  </data>
+  <data name="Back to Previous Page" xml:space="preserve">
+    <value>Back to Previous Page</value>
+  </data>
+  <data name="Want to use another account?" xml:space="preserve">
+    <value>Want to use another account?</value>
+  </data>
+  <data name="View and update your account information" xml:space="preserve">
+    <value>View and update your account information</value>
+  </data>
+  <data name="My Shifts" xml:space="preserve">
+    <value>My Shifts</value>
+  </data>
+  <data name="Weekly schedule" xml:space="preserve">
+    <value>Weekly schedule</value>
+  </data>
+  <data name="Your email" xml:space="preserve">
+    <value>Your email</value>
+  </data>
+  <data name="EDIT PROFILE" xml:space="preserve">
+    <value>EDIT PROFILE</value>
+  </data>
+  <data name="LOG OUT" xml:space="preserve">
+    <value>LOG OUT</value>
+  </data>
+  <data name="SAVE PROFILE" xml:space="preserve">
+    <value>SAVE PROFILE</value>
+  </data>
+  <data name="CANCEL" xml:space="preserve">
+    <value>CANCEL</value>
+  </data>
+  <data name="SuperAdmin" xml:space="preserve">
+    <value>SuperAdmin</value>
+  </data>
+  <data name="Super Admin" xml:space="preserve">
+    <value>Super Admin</value>
+  </data>
+  <data name="Manage your comments" xml:space="preserve">
+    <value>Manage your comments</value>
+  </data>
+  <data name="Providing trusted healthcare services, easy online appointment bookings, and comprehensive medical record management." xml:space="preserve">
+    <value>Providing trusted healthcare services, easy online appointment bookings, and comprehensive medical record management.</value>
+  </data>
+  <data name="Mon - Wed" xml:space="preserve">
+    <value>Mon - Wed</value>
+  </data>
+  <data name="Thu - Fri" xml:space="preserve">
+    <value>Thu - Fri</value>
+  </data>
+  <data name="Sat - Sun" xml:space="preserve">
+    <value>Sat - Sun</value>
+  </data>
+  <data name="Holidays" xml:space="preserve">
+    <value>Holidays</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="123 Health Street, Cairo, Egypt" xml:space="preserve">
+    <value>123 Health Street, Cairo, Egypt</value>
+  </data>
+  <data name="HealthCare Portal" xml:space="preserve">
+    <value>HealthCare Portal</value>
+  </data>
+  <data name="All Rights Reserved." xml:space="preserve">
+    <value>All Rights Reserved.</value>
+  </data>
+  <data name="Patient Feedback" xml:space="preserve">
+    <value>Patient Feedback</value>
+  </data>
+  <data name="What Our Patients Say" xml:space="preserve">
+    <value>What Our Patients Say</value>
+  </data>
+  <data name="Patient Comment" xml:space="preserve">
+    <value>Patient Comment</value>
+  </data>
+  <data name="The patient left a rating without a written comment." xml:space="preserve">
+    <value>The patient left a rating without a written comment.</value>
+  </data>
+  <data name="There are no patient reviews available yet." xml:space="preserve">
+    <value>There are no patient reviews available yet.</value>
+  </data>
+  <data name="Medical files for your appointment" xml:space="preserve">
+    <value>Medical files for your appointment</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Delete Review" xml:space="preserve">
+    <value>Delete Review</value>
+  </data>
+  <data name="Are you sure you want to delete this review?" xml:space="preserve">
+    <value>Are you sure you want to delete this review?</value>
+  </data>
+  <data name="Yes, Delete" xml:space="preserve">
+    <value>Yes, Delete</value>
+  </data>
+  <data name="View and manage patient reviews" xml:space="preserve">
+    <value>View and manage patient reviews</value>
+  </data>
+  <data name="There are no patient reviews yet." xml:space="preserve">
+    <value>There are no patient reviews yet.</value>
+  </data>
+  <data name="Patient Reviews &amp; Feedback" xml:space="preserve">
+    <value>Patient Reviews &amp; Feedback</value>
+  </data>
+  <data name="Track your ratings and feedback submitted by patients after completed appointments" xml:space="preserve">
+    <value>Track your ratings and feedback submitted by patients after completed appointments</value>
+  </data>
+  <data name="Patient consultations rated" xml:space="preserve">
+    <value>Patient consultations rated</value>
+  </data>
+  <data name="Rating Breakdown" xml:space="preserve">
+    <value>Rating Breakdown</value>
+  </data>
+  <data name="5 Stars" xml:space="preserve">
+    <value>5 Stars</value>
+  </data>
+  <data name="4 Stars" xml:space="preserve">
+    <value>4 Stars</value>
+  </data>
+  <data name="3 Stars" xml:space="preserve">
+    <value>3 Stars</value>
+  </data>
+  <data name="1-2 Stars" xml:space="preserve">
+    <value>1-2 Stars</value>
+  </data>
+  <data name="Patient reviews will appear here once your patients rate their completed visits." xml:space="preserve">
+    <value>Patient reviews will appear here once your patients rate their completed visits.</value>
+  </data>
+  <data name="Recent Feedback" xml:space="preserve">
+    <value>Recent Feedback</value>
+  </data>
+  <data name="Appointment Date" xml:space="preserve">
+    <value>Appointment Date</value>
+  </data>
+  <data name="Review Date" xml:space="preserve">
+    <value>Review Date</value>
+  </data>
+  <data name="No comment provided" xml:space="preserve">
+    <value>No comment provided</value>
+  </data>
+  <data name="No comment" xml:space="preserve">
+    <value>No comment</value>
+  </data>
+  <data name="Patient Reviews &amp; Ratings" xml:space="preserve">
+    <value>Patient Reviews &amp; Ratings</value>
+  </data>
+  <data name="Read experiences and feedback from our patients" xml:space="preserve">
+    <value>Read experiences and feedback from our patients</value>
+  </data>
+  <data name="Patient Reviews" xml:space="preserve">
+    <value>Patient Reviews</value>
+  </data>
+  <data name="Full Name is required." xml:space="preserve">
+    <value>Full Name is required.</value>
+  </data>
+  <data name="Name must be at least 3 characters." xml:space="preserve">
+    <value>Name must be at least 3 characters.</value>
+  </data>
+  <data name="Email address is required." xml:space="preserve">
+    <value>Email address is required.</value>
+  </data>
+  <data name="Invalid email address format." xml:space="preserve">
+    <value>Invalid email address format.</value>
+  </data>
+  <data name="Phone number is required." xml:space="preserve">
+    <value>Phone number is required.</value>
+  </data>
+  <data name="Invalid phone number." xml:space="preserve">
+    <value>Invalid phone number.</value>
+  </data>
+  <data name="License number is required." xml:space="preserve">
+    <value>License number is required.</value>
+  </data>
+  <data name="License number must be a positive number." xml:space="preserve">
+    <value>License number must be a positive number.</value>
+  </data>
+  <data name="Consultation fee is required." xml:space="preserve">
+    <value>Consultation fee is required.</value>
+  </data>
+  <data name="Consultation fee cannot be negative." xml:space="preserve">
+    <value>Consultation fee cannot be negative.</value>
+  </data>
+  <data name="Years of experience is required." xml:space="preserve">
+    <value>Years of experience is required.</value>
+  </data>
+  <data name="Years of experience cannot be negative." xml:space="preserve">
+    <value>Years of experience cannot be negative.</value>
+  </data>
+  <data name="Bio cannot exceed 1000 characters." xml:space="preserve">
+    <value>Bio cannot exceed 1000 characters.</value>
+  </data>
+  <data name="Please select a doctor." xml:space="preserve">
+    <value>Please select a doctor.</value>
+  </data>
+  <data name="Please select a day of the week." xml:space="preserve">
+    <value>Please select a day of the week.</value>
+  </data>
+  <data name="Please specify the start time." xml:space="preserve">
+    <value>Please specify the start time.</value>
+  </data>
+  <data name="Please specify the end time." xml:space="preserve">
+    <value>Please specify the end time.</value>
+  </data>
+  <data name="Please specify max patients capacity." xml:space="preserve">
+    <value>Please specify max patients capacity.</value>
+  </data>
+  <data name="Max patients must be a positive number between 1 and 100." xml:space="preserve">
+    <value>Max patients must be a positive number between 1 and 100.</value>
+  </data>
+  <data name="Title is required." xml:space="preserve">
+    <value>Title is required.</value>
+  </data>
+  <data name="Category is required." xml:space="preserve">
+    <value>Category is required.</value>
+  </data>
+  <data name="Please select an author." xml:space="preserve">
+    <value>Please select an author.</value>
+  </data>
+  <data name="Content is required." xml:space="preserve">
+    <value>Content is required.</value>
+  </data>
+  <data name="Patient Name is required." xml:space="preserve">
+    <value>Patient Name is required.</value>
+  </data>
+  <data name="Date of Birth is required" xml:space="preserve">
+    <value>Date of Birth is required</value>
+  </data>
+  <data name="Email Address is required." xml:space="preserve">
+    <value>Email Address is required.</value>
+  </data>
+  <data name="Invalid email format." xml:space="preserve">
+    <value>Invalid email format.</value>
+  </data>
+  <data name="Department Name is required." xml:space="preserve">
+    <value>Department Name is required.</value>
+  </data>
+  <data name="Please select an appointment." xml:space="preserve">
+    <value>Please select an appointment.</value>
+  </data>
+  <data name="Rating must be between 1 and 5." xml:space="preserve">
+    <value>Rating must be between 1 and 5.</value>
+  </data>
+  <data name="Title is required" xml:space="preserve">
+    <value>Title is required</value>
+  </data>
+  <data name="Category is required" xml:space="preserve">
+    <value>Category is required</value>
+  </data>
+  <data name="Author name is required" xml:space="preserve">
+    <value>Author name is required</value>
+  </data>
+  <data name="Content is required" xml:space="preserve">
+    <value>Content is required</value>
   </data>
 </root>
