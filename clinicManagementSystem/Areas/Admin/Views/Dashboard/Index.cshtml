@@ -1,6 +1,6 @@
-﻿@model clinicManagementSystem.Areas.Admin.ViewModels.AdminDashboardVM
+@model clinicManagementSystem.Areas.Admin.ViewModels.AdminDashboardVM
 @{
-    ViewData["Title"] = "Departments";
+    ViewData["Title"] = SharedLocalizer["Admin Dashboard"];
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,9 +9,9 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1">Admin Dashboard</h2>
+            <h2 class="fw-bold mb-1">@SharedLocalizer["Admin Dashboard"]</h2>
             <p class="text-muted mb-0">
-                Overview of your clinic management system
+                @SharedLocalizer["Overview of your clinic management system"]
             </p>
         </div>
 
@@ -29,7 +29,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <p class="text-muted mb-2">Patients</p>
+                            <p class="text-muted mb-2">@SharedLocalizer["Patients"]</p>
                             <h3 class="fw-bold mb-0">@Model.TotalPatients</h3>
                         </div>
                         <div class="fs-2 text-primary">
@@ -45,7 +45,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <p class="text-muted mb-2">Doctors</p>
+                            <p class="text-muted mb-2">@SharedLocalizer["Doctors"]</p>
                             <h3 class="fw-bold mb-0">@Model.TotalDoctors</h3>
                         </div>
                         <div class="fs-2 text-success">
@@ -61,7 +61,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <p class="text-muted mb-2">Departments</p>
+                            <p class="text-muted mb-2">@SharedLocalizer["Departments"]</p>
                             <h3 class="fw-bold mb-0">@Model.TotalDepartments</h3>
                         </div>
                         <div class="fs-2 text-info">
@@ -77,7 +77,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <p class="text-muted mb-2">Appointments</p>
+                            <p class="text-muted mb-2">@SharedLocalizer["Appointments"]</p>
                             <h3 class="fw-bold mb-0">@Model.TotalAppointments</h3>
                         </div>
                         <div class="fs-2 text-warning">
@@ -93,7 +93,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <p class="text-muted mb-2">Medical Files</p>
+                            <p class="text-muted mb-2">@SharedLocalizer["Medical Files"]</p>
                             <h3 class="fw-bold mb-0">@Model.TotalMedicalFiles</h3>
                         </div>
                         <div class="fs-2 text-danger">
@@ -109,7 +109,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <p class="text-muted mb-2">Reviews</p>
+                            <p class="text-muted mb-2">@SharedLocalizer["Reviews"]</p>
                             <h3 class="fw-bold mb-0">@Model.TotalReviews</h3>
                             <small class="text-muted">
                                 ★ @Model.AverageRating.ToString("0.0") / 5
@@ -133,9 +133,9 @@
                 <div class="card-header bg-white border-0 pt-4 px-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h5 class="fw-bold mb-1">Today's Appointments</h5>
+                            <h5 class="fw-bold mb-1">@SharedLocalizer["Today's Appointments"]</h5>
                             <p class="text-muted mb-0">
-                                @Model.TodayAppointments appointment(s) today
+                                @Model.TodayAppointments @SharedLocalizer["appointment(s) today"]
                             </p>
                         </div>
                         <i class="bi bi-calendar2-week fs-3 text-primary"></i>
@@ -149,10 +149,10 @@
                             <table class="table align-middle">
                                 <thead>
                                     <tr>
-                                        <th>Patient</th>
-                                        <th>Doctor</th>
-                                        <th>Time</th>
-                                        <th>Status</th>
+                                        <th>@SharedLocalizer["Patient"]</th>
+                                        <th>@SharedLocalizer["Doctor"]</th>
+                                        <th>@SharedLocalizer["Time"]</th>
+                                        <th>@SharedLocalizer["STATUS"]</th>
                                     </tr>
                                 </thead>
 
@@ -162,12 +162,12 @@
                                         <tr>
                                             <td>
                                                 <strong>
-                                                    @(appointment.Patient?.ApplicationUser?.FullName ?? "Unknown")
+                                                    @(appointment.Patient?.ApplicationUser?.FullName ?? SharedLocalizer["Unknown"].Value)
                                                 </strong>
                                             </td>
 
                                             <td>
-                                                @(appointment.Doctor?.ApplicationUser?.FullName ?? "Unknown")
+                                                @(appointment.Doctor?.ApplicationUser?.FullName ?? SharedLocalizer["Unknown"].Value)
                                             </td>
 
                                             <td>
@@ -179,25 +179,25 @@
                                                 {
                                                     case AppointmentStatus.Confirmed:
                                                         <span class="badge rounded-pill bg-success-subtle text-success">
-                                                            Confirmed
+                                                            @SharedLocalizer["Confirmed"]
                                                         </span>
                                                         break;
 
                                                     case AppointmentStatus.Pending:
                                                         <span class="badge rounded-pill bg-warning-subtle text-warning">
-                                                            Pending
+                                                            @SharedLocalizer["Pending"]
                                                         </span>
                                                         break;
 
                                                     case AppointmentStatus.Completed:
                                                         <span class="badge rounded-pill bg-info-subtle text-info">
-                                                            Completed
+                                                            @SharedLocalizer["Completed"]
                                                         </span>
                                                         break;
 
                                                     case AppointmentStatus.Cancelled:
                                                         <span class="badge rounded-pill bg-danger-subtle text-danger">
-                                                            Cancelled
+                                                            @SharedLocalizer["Cancelled"]
                                                         </span>
                                                         break;
                                                 }
@@ -213,7 +213,7 @@
                         <div class="text-center py-5">
                             <i class="bi bi-calendar-x fs-1 text-muted"></i>
                             <p class="text-muted mt-3 mb-0">
-                                No appointments scheduled for today.
+                                @SharedLocalizer["No appointments scheduled for today."]
                             </p>
                         </div>
                     }
@@ -225,7 +225,7 @@
         <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-4 h-100">
                 <div class="card-header bg-white border-0 pt-4 px-4">
-                    <h5 class="fw-bold mb-0">Today's Overview</h5>
+                    <h5 class="fw-bold mb-0">@SharedLocalizer["Today's Overview"]</h5>
                 </div>
 
                 <div class="card-body px-4">
@@ -233,7 +233,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <span class="text-muted">
                             <i class="bi bi-check-circle me-2"></i>
-                            Confirmed
+                            @SharedLocalizer["Confirmed"]
                         </span>
                         <strong>@Model.TodayConfirmed</strong>
                     </div>
@@ -241,7 +241,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <span class="text-muted">
                             <i class="bi bi-clock me-2"></i>
-                            Pending
+                            @SharedLocalizer["Pending"]
                         </span>
                         <strong>@Model.TodayPending</strong>
                     </div>
@@ -249,7 +249,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <span class="text-muted">
                             <i class="bi bi-check2-all me-2"></i>
-                            Completed
+                            @SharedLocalizer["Completed"]
                         </span>
                         <strong>@Model.TodayCompleted</strong>
                     </div>
@@ -257,7 +257,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="text-muted">
                             <i class="bi bi-x-circle me-2"></i>
-                            Cancelled
+                            @SharedLocalizer["Cancelled"]
                         </span>
                         <strong>@Model.TodayCancelled</strong>
                     </div>
@@ -275,9 +275,9 @@
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-header bg-white border-0 pt-4 px-4">
-                    <h5 class="fw-bold mb-1">Departments</h5>
+                    <h5 class="fw-bold mb-1">@SharedLocalizer["Departments"]</h5>
                     <p class="text-muted mb-0">
-                        Doctors by department
+                        @SharedLocalizer["Doctors by department"]
                     </p>
                 </div>
 
@@ -292,7 +292,7 @@
                             </span>
 
                             <span class="badge rounded-pill bg-primary-subtle text-primary">
-                                @department.DoctorCount doctors
+                                @department.DoctorCount @SharedLocalizer["Doctors"]
                             </span>
                         </div>
                     }
@@ -300,7 +300,7 @@
                     @if (!Model.DepartmentStats.Any())
                     {
                         <p class="text-muted text-center py-3">
-                            No departments available.
+                            @SharedLocalizer["No departments available."]
                         </p>
                     }
 
@@ -312,9 +312,9 @@
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-header bg-white border-0 pt-4 px-4">
-                    <h5 class="fw-bold mb-1">Recent Reviews</h5>
+                    <h5 class="fw-bold mb-1">@SharedLocalizer["Recent Reviews"]</h5>
                     <p class="text-muted mb-0">
-                        Latest patient feedback
+                        @SharedLocalizer["Latest patient feedback"]
                     </p>
                 </div>
 
@@ -326,7 +326,7 @@
 
                             <div class="d-flex justify-content-between">
                                 <strong>
-                                    @(review.Appointment?.Patient?.ApplicationUser?.FullName ?? "Patient")
+                                    @(review.Appointment?.Patient?.ApplicationUser?.FullName ?? SharedLocalizer["Patient"].Value)
                                 </strong>
 
                                 <span class="text-warning">
@@ -351,7 +351,7 @@
                     @if (!Model.RecentReviews.Any())
                     {
                         <p class="text-muted text-center py-3">
-                            No reviews available.
+                            @SharedLocalizer["No reviews available."]
                         </p>
                     }
 

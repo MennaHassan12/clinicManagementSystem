@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<clinicManagementSystem.Models.Review>
 
 @{
-    ViewData["Title"] = "Reviews";
+    ViewData["Title"] = SharedLocalizer["Reviews"];
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,9 +10,9 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
-            <h2 class="fw-bold mb-1">Reviews</h2>
+            <h2 class="fw-bold mb-1">@SharedLocalizer["Reviews"]</h2>
             <p class="text-muted mb-0">
-                View and manage patient reviews
+                @SharedLocalizer["View and manage patient reviews"]
             </p>
         </div>
 
@@ -30,10 +30,10 @@
         <div class="card shadow-sm border-0">
             <div class="card-body text-center py-5">
 
-                <h5>No Reviews Found</h5>
+                <h5>@SharedLocalizer["No Reviews Found"]</h5>
 
                 <p class="text-muted mb-0">
-                    There are no patient reviews yet.
+                    @SharedLocalizer["There are no patient reviews yet."]
                 </p>
 
             </div>
@@ -51,12 +51,12 @@
 
                         <thead class="table-light">
                             <tr class="text-secondary small text-uppercase fw-bold">
-                                <th>Doctor</th>
-                                <th>Patient</th>
-                                <th>Rating</th>
-                                <th>Comment</th>
-                                <th>Review Date</th>
-                                <th class="text-center">Actions</th>
+                                <th>@SharedLocalizer["Doctor"]</th>
+                                <th>@SharedLocalizer["Patient"]</th>
+                                <th>@SharedLocalizer["Rating"]</th>
+                                <th>@SharedLocalizer["Comment"]</th>
+                                <th>@SharedLocalizer["Review Date"]</th>
+                                <th class="text-center">@SharedLocalizer["ACTIONS"]</th>
                             </tr>
                         </thead>
 
@@ -66,16 +66,16 @@
                                 <tr>
                                     <td>
                                         <div class="fw-bold text-dark">
-                                            @(review.Appointment?.Doctor?.ApplicationUser?.FullName ?? $"Doctor #{review.Appointment?.DoctorId}")
+                                            @(review.Appointment?.Doctor?.ApplicationUser?.FullName ?? $"{SharedLocalizer["Doctor"]} #{review.Appointment?.DoctorId}")
                                         </div>
                                         <small class="text-muted">
-                                            @(review.Appointment?.Doctor?.Department?.Name ?? "Department")
+                                            @(review.Appointment?.Doctor?.Department?.Name ?? SharedLocalizer["Department"].Value)
                                         </small>
                                     </td>
 
                                     <td>
                                         <span class="fw-semibold">
-                                            @(review.Appointment?.Patient?.ApplicationUser?.FullName ?? $"Patient #{review.Appointment?.PatientId}")
+                                            @(review.Appointment?.Patient?.ApplicationUser?.FullName ?? $"{SharedLocalizer["Patient"]} #{review.Appointment?.PatientId}")
                                         </span>
                                     </td>
 
@@ -100,7 +100,7 @@
 
                                     <td>
                                         @(string.IsNullOrWhiteSpace(review.Comment)
-                                            ? "No comment"
+                                            ? SharedLocalizer["No comment"].Value
                                             : review.Comment)
                                     </td>
 
@@ -114,10 +114,9 @@
                                            asp-controller="Reviews"
                                            asp-action="Delete"
                                            asp-route-id="@review.ReviewId"
-                                           class="btn btn-danger btn-sm rounded-3">
+                                           class="btn btn-danger btn-sm rounded-pill">
 
-                                            <i class="bi bi-trash"></i>
-                                            Delete
+                                            @SharedLocalizer["Delete"]
 
                                         </a>
 

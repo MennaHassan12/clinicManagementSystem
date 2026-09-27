@@ -94,8 +94,7 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
 
             if (medicalFiles == null || !medicalFiles.Any())
             {
-                TempData["Error"] = "No medical files found for this appointment.";
-
+                TempData["error_notification"] = "No medical files found for this appointment.";
                 return RedirectToAction(nameof(Index));
             }
 

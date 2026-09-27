@@ -1,11 +1,10 @@
-
 @model clinicManagementSystem.ViewModels.ApplicationUserVM
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = SharedLocalizer["My Profile"];
     Layout = "_MainLayout";
 
-    var roleClass = Model.Role.ToLower().Replace(" ", "-");
+    var roleClass = Model.Role.ToLower().Replace(" ", "-"); // super-admin / admin / doctor / patient / member
 }
 
 <div class="profile-avatar-wrap">
@@ -25,22 +24,22 @@
 <h2>@(string.IsNullOrWhiteSpace(Model.FullName) ? SharedLocalizer["My Profile"].Value : Model.FullName)</h2>
 
 <div class="profile-meta">
-    <span class="role-badge role-@roleClass">@SharedLocalizer[Model.Role]</span>
+    <span class="role-badge role-@roleClass">@(SharedLocalizer[Model.Role].Value)</span>
     <span class="member-since-badge">
         <span class="icon icon-calendar"></span>
         @SharedLocalizer["Member since"] @Model.CreatedAt.ToString("MMMM yyyy")
     </span>
 </div>
 
-<p class="subtitle">@SharedLocalizer["Profile Settings"]</p>
+<p class="subtitle">@SharedLocalizer["View and update your account information"]</p>
 
 @if (Model.Role == "Doctor")
 {
     <div class="doctor-links-grid">
         <a asp-area="Doctor" asp-controller="Schedule" asp-action="Index" class="doctor-stat-card doctor-stat-shifts">
             <span class="icon icon-calendar"></span>
-            <span class="doctor-stat-title">@SharedLocalizer["Opening Hours"]</span>
-            <span class="doctor-stat-subtitle">@SharedLocalizer["Opening Hours"]</span>
+            <span class="doctor-stat-title">@SharedLocalizer["My Shifts"]</span>
+            <span class="doctor-stat-subtitle">@SharedLocalizer["Weekly schedule"]</span>
         </a>
         <a asp-area="Doctor" asp-controller="Appointments" asp-action="Index" class="doctor-stat-card doctor-stat-appts">
             <span class="icon icon-appointments"></span>
@@ -69,10 +68,10 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="Email">@SharedLocalizer["Email Address"]</label>
+        <label asp-for="Email">@SharedLocalizer["Email"]</label>
         <div class="input-field readonly-field">
             <span class="icon icon-email"></span>
-            <input asp-for="Email" type="email" readonly placeholder="@SharedLocalizer["Enter your Email"]" />
+            <input asp-for="Email" type="email" readonly placeholder="@SharedLocalizer["Your email"]" />
         </div>
         <span asp-validation-for="Email" class="field-error"></span>
     </div>
@@ -88,15 +87,15 @@
 
     <div class="profile-actions" id="viewActions">
         <button type="button" id="editProfileBtn" class="btn-primary">
-            <span class="icon icon-edit"></span> @SharedLocalizer["My Profile"]
+            <span class="icon icon-edit"></span> @SharedLocalizer["EDIT PROFILE"]
         </button>
-        <a asp-action="ChangePassword" asp-controller="Account" class="btn-secondary" style="text-align:center; text-decoration:none; display:block;">@SharedLocalizer["Forgot password?"]</a>
-        <button type="submit" form="logoutForm" class="btn-danger">@SharedLocalizer["Logout"]</button>
+        <a asp-action="ChangePassword" asp-controller="Account" class="changePass" style="text-align:center; text-decoration:none; display:block;">@SharedLocalizer["CHANGE PASSWORD"]</a>
+        <button type="submit" form="logoutForm" class="btn-danger">@SharedLocalizer["LOG OUT"]</button>
     </div>
 
     <div class="profile-actions" id="editActions" style="display:none;">
-        <button type="submit" class="btn-primary">@SharedLocalizer["Confirm & Book"]</button>
-        <button type="button" id="cancelEditBtn" class="btn-secondary">@SharedLocalizer["Cancel"]</button>
+        <button type="submit" class="btn-primary">@SharedLocalizer["SAVE PROFILE"]</button>
+        <button type="button" id="cancelEditBtn" class="btn-secondary">@SharedLocalizer["CANCEL"]</button>
     </div>
 </form>
 

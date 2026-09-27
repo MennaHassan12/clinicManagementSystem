@@ -12,7 +12,7 @@
             <p class="text-muted">@SharedLocalizer["Track and manage your medical appointments"]</p>
         </div>
         <a href="/Patient/Home/AllDoctors" class="btn btn-primary shadow-sm rounded-pill px-4">
-            👨‍⚕️ @SharedLocalizer["Browse Doctors"]
+             @SharedLocalizer["Browse Doctors"]
         </a>
     </div>
 
@@ -80,7 +80,7 @@
                                     else if (item.Status == clinicManagementSystem.Models.AppointmentStatus.Completed)
                                     {
                                         <a href="/Doctor/MedicalRecords/Details?appointmentId=@item.AppointmentId" class="btn btn-outline-primary btn-sm px-3 rounded-pill">
-                                            📄 @SharedLocalizer["View Prescription"]
+                                             @SharedLocalizer["View Prescription"]
                                         </a>
 
                                         <a asp-area="Patient"
@@ -88,7 +88,7 @@
                                            asp-action="Create"
                                            asp-route-appointmentId="@item.AppointmentId"
                                            class="btn btn-outline-warning btn-sm px-3 rounded-pill ms-2">
-                                            ⭐ @SharedLocalizer["Add Review"]
+                                            @SharedLocalizer["Add Review"]
                                         </a>
                                     }
                                     else

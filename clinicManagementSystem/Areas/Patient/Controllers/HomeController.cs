@@ -6,6 +6,7 @@ using clinicManagementSystem.Repositories.IRepositories;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using DoctorModel = clinicManagementSystem.Models.Doctor;
 using Microsoft.AspNetCore.Authorization;
+using System.Linq.Expressions;
 
 namespace clinicManagementSystem.Areas.Patient.Controllers
 {
@@ -19,7 +20,6 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         private readonly IRepository<Review> _reviewRepo;
         private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
-
         public HomeController(
             IRepository<Department> departmentRepo,
             IRepository<BlogPost> blogRepo,
@@ -53,10 +53,47 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
                 .ThenByDescending(d => d.YearsOfExperience)
                 .Take(4)
                 .ToList();
+            var homeReviews = await _reviewRepo.GetAsync(
+       includes: new Expression<Func<Review, object>>[]
+       {
+        r => r.Appointment!,
+        r => r.Appointment!.Doctor,
+        r => r.Appointment!.Doctor.ApplicationUser,
+        r => r.Appointment!.Doctor.Department
+       },
+       orderBy: q => q.OrderByDescending(r => r.ReviewDate),
+       tracked: false
+   );
+
+            ViewBag.HomeReviews = homeReviews
+                .Take(5)
+                .ToList();
 
             return View(topDoctors);
         }
+        public async Task<IActionResult> AllReviews(int? departmentId)
+        {
+            ViewBag.Departments = await _departmentRepo.GetAsync();
+            ViewBag.CurrentDepartment = departmentId;
 
+            var reviews = await _reviewRepo.GetAsync(
+                expression: departmentId.HasValue
+                    ? r => r.Appointment != null &&
+                           r.Appointment.Doctor.DepartmentId == departmentId.Value
+                    : null,
+                includes: new Expression<Func<Review, object>>[]
+                {
+            r => r.Appointment!,
+            r => r.Appointment!.Doctor,
+            r => r.Appointment!.Doctor.ApplicationUser,
+            r => r.Appointment!.Doctor.Department
+                },
+                orderBy: q => q.OrderByDescending(r => r.ReviewDate),
+                tracked: false
+            );
+
+            return View(reviews);
+        }
         public async Task<IActionResult> AllDoctors(string? searchTerm, int? departmentId)
         {
             ViewBag.Departments = await _departmentRepo.GetAsync();
@@ -74,7 +111,7 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
 
             return View(doctors);
         }
-
+        
         [HttpGet]
         public async Task<IActionResult> SearchDoctors(string? searchTerm, int? departmentId)
         {

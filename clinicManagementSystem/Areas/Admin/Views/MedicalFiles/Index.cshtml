@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<clinicManagementSystem.Models.MedicalFile>
 
 @{
-    ViewData["Title"] = "Medical Files";
+    ViewData["Title"] = SharedLocalizer["Medical Files"];
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,20 +10,19 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold text-primary mb-1">
-                Medical Files
+                @SharedLocalizer["Medical Files"]
             </h2>
 
             <p class="text-muted mb-0">
-                Manage patient medical files
+                @SharedLocalizer["Manage patient medical files"]
             </p>
         </div>
 
         <a asp-area="Admin"
            asp-controller="MedicalFiles"
            asp-action="Create"
-           class="btn btn-primary">
-            <i class="fas fa-plus me-1"></i>
-            Add Medical File
+           class="btn btn-primary rounded-pill">
+            @SharedLocalizer["Add Medical File"]
         </a>
     </div>
 
@@ -50,7 +49,7 @@
                     <i class="fas fa-file-medical fa-3x text-muted mb-3"></i>
 
                     <h5 class="text-muted">
-                        No medical files found.
+                        @SharedLocalizer["No medical files found."]
                     </h5>
                 </div>
             }
@@ -63,12 +62,12 @@
                         <thead class="table-light">
 
                             <tr>
-                                <th>ID</th>
-                                <th>Medical Record</th>
-                                <th>File Name</th>
-                                <th>File Type</th>
-                                <th>Upload Date</th>
-                                <th class="text-center">Actions</th>
+                                <th>@SharedLocalizer["ID"]</th>
+                                <th>@SharedLocalizer["Medical Record"]</th>
+                                <th>@SharedLocalizer["File Name"]</th>
+                                <th>@SharedLocalizer["File Type"]</th>
+                                <th>@SharedLocalizer["Upload Date"]</th>
+                                <th class="text-center">@SharedLocalizer["ACTIONS"]</th>
                             </tr>
 
                         </thead>
@@ -85,7 +84,7 @@
 
                                     <td>
                                         <span class="badge bg-info">
-                                            Record #@file.MedicalRecordId
+                                            @SharedLocalizer["Record"] #@file.MedicalRecordId
                                         </span>
                                     </td>
 
@@ -110,40 +109,36 @@
                                                asp-action="ViewFile"
                                                asp-route-id="@file.MedicalFileId"
                                                target="_blank"
-                                               class="btn btn-sm btn-outline-primary rounded-3 px-3"
-                                               title="View Medical File">
-                                                <i class="fas fa-eye me-1"></i>
-                                                View
+                                               class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                                               title="@SharedLocalizer["View Medical File"]">
+                                                @SharedLocalizer["View"]
                                             </a>
 
                                             <a asp-area="Admin"
                                                asp-controller="MedicalFiles"
                                                asp-action="Download"
                                                asp-route-id="@file.MedicalFileId"
-                                               class="btn btn-sm btn-outline-success rounded-3 px-3"
-                                               title="Download Medical File">
-                                                <i class="fas fa-download me-1"></i>
-                                                Download
+                                               class="btn btn-sm btn-outline-success rounded-pill px-3"
+                                               title="@SharedLocalizer["Download Medical File"]">
+                                                @SharedLocalizer["Download"]
                                             </a>
 
                                             <a asp-area="Admin"
                                                asp-controller="MedicalFiles"
                                                asp-action="Edit"
                                                asp-route-id="@file.MedicalFileId"
-                                               class="btn btn-sm btn-outline-warning rounded-3 px-3"
-                                               title="Edit Medical File">
-                                                <i class="fas fa-pen me-1"></i>
-                                                Edit
+                                               class="btn btn-sm btn-outline-warning rounded-pill px-3"
+                                               title="@SharedLocalizer["Edit Medical File"]">
+                                                @SharedLocalizer["Edit"]
                                             </a>
 
                                             <a asp-area="Admin"
                                                asp-controller="MedicalFiles"
                                                asp-action="Delete"
                                                asp-route-id="@file.MedicalFileId"
-                                               class="btn btn-sm btn-outline-danger rounded-3 px-3"
-                                               title="Delete Medical File">
-                                                <i class="fas fa-trash me-1"></i>
-                                                Delete
+                                               class="btn btn-sm btn-danger rounded-pill px-3"
+                                               title="@SharedLocalizer["Delete Medical File"]">
+                                                @SharedLocalizer["Delete"]
                                             </a>
 
                                         </div>

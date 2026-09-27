@@ -1,7 +1,7 @@
 ﻿@model clinicManagementSystem.Models.MedicalFile
 
 @{
-    ViewData["Title"] = "Edit Medical File";
+    ViewData["Title"] = SharedLocalizer["Edit Medical File"];
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 
     var medicalRecords =
@@ -14,23 +14,15 @@
 
         <div>
             <h2 class="fw-bold text-primary mb-1">
-                Edit Medical File
+                @SharedLocalizer["Edit Medical File"]
             </h2>
 
             <p class="text-muted mb-0">
-                Update medical record link, date, or replace the file
+                @SharedLocalizer["Update medical record link, date, or replace the file"]
             </p>
         </div>
 
-        <a asp-area="Admin"
-           asp-controller="MedicalFiles"
-           asp-action="Index"
-           class="btn btn-outline-secondary rounded-3">
-
-            <i class="fas fa-arrow-left me-1"></i>
-            Back to Medical Files
-
-        </a>
+       
 
     </div>
 
@@ -62,14 +54,14 @@
                 <div class="mb-4">
 
                     <label class="form-label fw-semibold">
-                        Medical Record
+                        @SharedLocalizer["Medical Record"]
                     </label>
 
                     <select name="MedicalRecordId"
                             class="form-select">
 
                         <option value="">
-                            -- Select Medical Record --
+                            -- @SharedLocalizer["Select Medical Record"] --
                         </option>
 
                         @if (medicalRecords != null)
@@ -92,7 +84,7 @@
                 <div class="mb-4">
 
                     <label class="form-label fw-semibold">
-                        Current File
+                        @SharedLocalizer["Current File"]
                     </label>
 
                     <div class="p-3 bg-light rounded-3">
@@ -116,7 +108,7 @@
                 <div class="mb-4">
 
                     <label class="form-label fw-semibold">
-                        Replace File <small class="text-muted fw-normal">(optional)</small>
+                        @SharedLocalizer["Replace File"] <small class="text-muted fw-normal">(@SharedLocalizer["optional"])</small>
                     </label>
 
                     <input type="file"
@@ -126,9 +118,7 @@
 
                     <div class="form-text mt-2">
                         <i class="fas fa-info-circle me-1"></i>
-                        Leave empty to keep the current file.
-                        Allowed files: PDF, JPG, JPEG and PNG.
-                        Maximum size: 10 MB.
+                        @SharedLocalizer["Leave empty to keep the current file. Allowed files: PDF, JPG, JPEG and PNG. Maximum size: 10 MB."]
                     </div>
 
                 </div>
@@ -138,7 +128,7 @@
                 <div class="mb-4">
 
                     <label class="form-label fw-semibold">
-                        Upload Date
+                        @SharedLocalizer["Upload Date"]
                     </label>
 
                     <input type="date"
@@ -150,22 +140,23 @@
 
 
                 <!-- Buttons -->
-                <div class="d-flex justify-content-end gap-2">
+                <div class="d-flex justify-content-start gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary px-4 rounded-pill">
+
+                        @SharedLocalizer["Save Changes"]
+
+                    </button>
 
                     <a asp-area="Admin"
                        asp-controller="MedicalFiles"
                        asp-action="Index"
-                       class="btn btn-secondary px-4">
-                        Cancel
+                       class="btn btn-outline-secondary rounded-pill px-4">
+                        @SharedLocalizer["Cancel"]
                     </a>
 
-                    <button type="submit"
-                            class="btn btn-primary px-4">
-
-                        <i class="fas fa-save me-1"></i>
-                        Save Changes
-
-                    </button>
+                   
 
                 </div>
 

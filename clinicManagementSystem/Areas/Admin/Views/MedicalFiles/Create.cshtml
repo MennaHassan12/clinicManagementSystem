@@ -1,7 +1,7 @@
 ﻿@model clinicManagementSystem.ViewModels.MedicalFileVM
 
 @{
-    ViewData["Title"] = "Create Medical File";
+    ViewData["Title"] = SharedLocalizer["Create Medical File"];
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 
     var medicalRecords =
@@ -15,23 +15,15 @@
 
         <div>
             <h2 class="fw-bold text-primary mb-1">
-                Add Medical File
+                @SharedLocalizer["Add Medical File"]
             </h2>
 
             <p class="text-muted mb-0">
-                Upload a PDF or image to a medical record
+                @SharedLocalizer["Upload a PDF or image to a medical record"]
             </p>
         </div>
 
-        <a asp-area="Admin"
-           asp-controller="MedicalFiles"
-           asp-action="Index"
-           class="btn btn-outline-secondary rounded-3">
-
-            <i class="fas fa-arrow-left me-1"></i>
-            Back to Medical Files
-
-        </a>
+       
 
     </div>
 
@@ -64,14 +56,14 @@
 
                         <label asp-for="MedicalRecordId"
                                class="form-label fw-semibold">
-                            Medical Record
+                            @SharedLocalizer["Medical Record"]
                         </label>
 
                         <select asp-for="MedicalRecordId"
                                 class="form-select">
 
                             <option value="0">
-                                -- Select Medical Record --
+                                -- @SharedLocalizer["Select Medical Record"] --
                             </option>
 
                             @if (medicalRecords != null)
@@ -98,7 +90,7 @@
 
                         <label asp-for="UploadDate"
                                class="form-label fw-semibold">
-                            Upload Date
+                            @SharedLocalizer["Upload Date"]
                         </label>
 
                         <input asp-for="UploadDate"
@@ -117,7 +109,7 @@
 
                         <label asp-for="File"
                                class="form-label fw-semibold">
-                            Medical File
+                            @SharedLocalizer["Medical File"]
                         </label>
 
                         <input asp-for="File"
@@ -127,8 +119,7 @@
 
                         <div class="form-text mt-2">
                             <i class="fas fa-info-circle me-1"></i>
-                            Allowed files: PDF, JPG, JPEG and PNG.
-                            Maximum size: 10 MB.
+                            @SharedLocalizer["Allowed files: PDF, JPG, JPEG and PNG. Maximum size: 10 MB."]
                         </div>
 
                         <span asp-validation-for="File"
@@ -141,25 +132,25 @@
 
 
                 <!-- Buttons -->
-                <div class="d-flex justify-content-end gap-2 mt-4">
+                <div class="d-flex justify-content-start gap-2 mt-4">
+
+                    <button type="submit"
+                            class="btn btn-primary rounded-pill px-4">
+
+                        @SharedLocalizer["Upload File"]
+
+                    </button>
 
                     <a asp-area="Admin"
                        asp-controller="MedicalFiles"
                        asp-action="Index"
-                       class="btn btn-secondary px-4">
+                       class="btn btn-outline-secondary rounded-pill px-4">
 
-                        <i class="fas fa-times me-1"></i>
-                        Cancel
+                        @SharedLocalizer["Cancel"]
 
                     </a>
 
-                    <button type="submit"
-                            class="btn btn-primary px-4">
-
-                        <i class="fas fa-upload me-1"></i>
-                        Upload File
-
-                    </button>
+                    
 
                 </div>
 

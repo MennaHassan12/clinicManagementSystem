@@ -329,27 +329,18 @@
                         <span>@SharedLocalizer["Reviews"]</span>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a asp-area="Admin"
+                       asp-controller="Blog"
+                       asp-action="Index"
+                       class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Blog" ? "active" : "")">
+                        <i class="bi bi-journal-text"></i>
+                        <span>@SharedLocalizer["Blogs"]</span>
+                    </a>
+                </li>
             </ul>
 
-            <div class="admin-menu-title mt-4">
-                @SharedLocalizer["My Profile"]
-            </div>
-
-            <form asp-area="Identity"
-                  asp-controller="Account"
-                  asp-action="Logout"
-                  method="post">
-
-                @Html.AntiForgeryToken()
-
-                <button type="submit"
-                        class="nav-link admin-logout border-0 bg-transparent w-100 text-start">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>@SharedLocalizer["Logout"]</span>
-                </button>
-
-            </form>
+            
 
         </nav>
 
@@ -382,21 +373,77 @@
             </div>
 
             <div class="d-flex align-items-center gap-3">
+
                 <partial name="_SelectLanguagePartial" />
-                <div class="admin-user-menu">
-                    <i class="bi bi-person-circle"></i>
-                    <span class="d-none d-sm-inline">
-                        @(User.Identity?.Name ?? SharedLocalizer["Administrator"].Value)
-                    </span>
+
+                <!-- Admin Profile Dropdown -->
+                <div class="dropdown">
+
+                    <button class="btn admin-user-menu dropdown-toggle border-0 bg-transparent p-0"
+                            type="button"
+                            id="adminProfileDropdown"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+
+                        <i class="bi bi-person-circle"></i>
+
+                        <span class="d-none d-sm-inline">
+                            @(User.Identity?.Name ?? SharedLocalizer["Administrator"].Value)
+                        </span>
+
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2"
+                        aria-labelledby="adminProfileDropdown"
+                        style="min-width: 190px;">
+
+                        <!-- Profile -->
+                        <li>
+                            <a class="dropdown-item py-2"
+                               asp-area="Identity"
+                               asp-controller="Profile"
+                               asp-action="Index">
+
+                                <i class="bi bi-person me-2 text-primary"></i>
+                                @SharedLocalizer["Profile"]
+
+                            </a>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <!-- Logout -->
+                        <li>
+                            <form asp-area="Identity"
+                                  asp-controller="Account"
+                                  asp-action="Logout"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="dropdown-item py-2 text-danger">
+
+                                    <i class="bi bi-box-arrow-right me-2"></i>
+                                    @SharedLocalizer["Logout"]
+
+                                </button>
+
+                            </form>
+                        </li>
+
+                    </ul>
+
                 </div>
+
             </div>
 
         </header>
 
         <!-- Page -->
         <main class="admin-page-content">
-
-            <partial name="_NotificationPartial" />
 
             @RenderBody()
 
@@ -409,6 +456,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
+    <partial name="_NotificationPartial" />
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

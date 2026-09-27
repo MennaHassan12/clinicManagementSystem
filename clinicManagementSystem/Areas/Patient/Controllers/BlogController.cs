@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace clinicManagementSystem.Areas.Patient.Controllers
 {
     [Area("Patient")]
+    [AllowAnonymous]
     public class BlogController : Controller
     {
         private readonly IRepository<BlogPost> _blogRepo;

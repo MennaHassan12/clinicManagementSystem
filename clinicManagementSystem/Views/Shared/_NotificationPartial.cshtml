@@ -1,31 +1,56 @@
-﻿@if (TempData["success_notification"] is not null)
+@inject Microsoft.Extensions.Localization.IStringLocalizer<clinicManagementSystem.SharedResource> SharedLocalizer
+@{
+    var rawSuccess = (TempData["success_notification"] ?? TempData["Success"])?.ToString();
+    var rawError = (TempData["error_notification"] ?? TempData["Error"])?.ToString();
+    var rawWarning = (TempData["warning_notification"] ?? TempData["Warning"])?.ToString();
+    var rawInfo = (TempData["info_notification"] ?? TempData["Info"])?.ToString();
+
+    var successMsg = !string.IsNullOrEmpty(rawSuccess) ? SharedLocalizer[rawSuccess].Value : string.Empty;
+    var errorMsg = !string.IsNullOrEmpty(rawError) ? SharedLocalizer[rawError].Value : string.Empty;
+    var warningMsg = !string.IsNullOrEmpty(rawWarning) ? SharedLocalizer[rawWarning].Value : string.Empty;
+    var infoMsg = !string.IsNullOrEmpty(rawInfo) ? SharedLocalizer[rawInfo].Value : string.Empty;
+
+    var successJs = !string.IsNullOrEmpty(successMsg)
+        ? System.Text.Json.JsonSerializer.Serialize(successMsg).Trim('"')
+        : string.Empty;
+    var errorJs = !string.IsNullOrEmpty(errorMsg)
+        ? System.Text.Json.JsonSerializer.Serialize(errorMsg).Trim('"')
+        : string.Empty;
+    var warningJs = !string.IsNullOrEmpty(warningMsg)
+        ? System.Text.Json.JsonSerializer.Serialize(warningMsg).Trim('"')
+        : string.Empty;
+    var infoJs = !string.IsNullOrEmpty(infoMsg)
+        ? System.Text.Json.JsonSerializer.Serialize(infoMsg).Trim('"')
+        : string.Empty;
+}
+@if (!string.IsNullOrEmpty(successJs))
 {
     <script>
-        toastr.success('@TempData["success_notification"]');
+        toastr.success('@Html.Raw(successJs)');
     </script>
 }
-else if (TempData["error_notification"] is not null)
+else if (!string.IsNullOrEmpty(errorJs))
 {
     <script>
-        toastr.error('@TempData["error_notification"]');
+        toastr.error('@Html.Raw(errorJs)');
     </script>
 }
-else if (TempData["warning_notification"] is not null)
+else if (!string.IsNullOrEmpty(warningJs))
 {
     <script>
-        toastr.warning('@TempData["warning_notification"]');
+        toastr.warning('@Html.Raw(warningJs)');
     </script>
 }
-else if (TempData["info_notification"] is not null)
+else if (!string.IsNullOrEmpty(infoJs))
 {
     <script>
-        toastr.info('@TempData["info_notification"]');
+        toastr.info('@Html.Raw(infoJs)');
     </script>
 }
 
 <script>
     window.addEventListener("pageshow", function (event) {
-        var historyTraversal = event.persisted || 
+        var historyTraversal = event.persisted ||
             (typeof window.performance != "undefined" && window.performance.navigation.type === 2);
         if (historyTraversal) {
             window.location.reload();

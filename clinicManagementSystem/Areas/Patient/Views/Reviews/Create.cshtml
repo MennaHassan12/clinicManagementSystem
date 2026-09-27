@@ -18,7 +18,7 @@
     {
         <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm mb-4" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            @TempData["error_notification"]
+            @SharedLocalizer[TempData["error_notification"]?.ToString() ?? ""]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
@@ -93,7 +93,7 @@
 
                     <div class="d-flex gap-2 pt-2">
                         <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm">
-                            <i class="bi bi-send-fill me-1"></i> @SharedLocalizer["Send Message"]
+                             @SharedLocalizer["Send Message"]
                         </button>
                         <a asp-area="Patient" asp-controller="Reviews" asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4">
                             @SharedLocalizer["Cancel"]

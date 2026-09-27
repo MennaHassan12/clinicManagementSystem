@@ -1,26 +1,34 @@
 ﻿@model clinicManagementSystem.Models.MedicalRecord
-
 @{
-    ViewData["Title"] = "Medical Record Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = SharedLocalizer["Medical Record Details"];
+
+    if (User.IsInRole("Doctor"))
+    {
+        Layout = "~/Areas/Doctor/Views/Shared/_Layout.cshtml";
+    }
+
+    else
+    {
+        Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
+    }
 }
 
 <div class="container py-4">
     <div class="card border-0 shadow-sm rounded-4 p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h3 class="fw-bold text-primary mb-1">Medical Record & Prescription Details</h3>
-                <p class="text-muted mb-0">Visit Date: @Model.VisitDate.ToString("yyyy-MM-dd hh:mm tt")</p>
+                <h3 class="fw-bold text-primary mb-1">@SharedLocalizer["Medical Record & Prescription Details"]</h3>
+                <p class="text-muted mb-0">@SharedLocalizer["Visit Date"]: @Model.VisitDate.ToString("yyyy-MM-dd hh:mm tt")</p>
             </div>
             <button onclick="window.print()" class="btn btn-outline-secondary rounded-pill px-3">
-                🖨️ Print
+                🖨️ @SharedLocalizer["Print"]
             </button>
         </div>
 
         <div class="row g-3 mb-4">
             <div class="col-md-12">
                 <div class="p-3 bg-light rounded-3">
-                    <h5 class="fw-bold text-dark mb-2">Diagnosis</h5>
+                    <h5 class="fw-bold text-dark mb-2">@SharedLocalizer["Diagnosis"]</h5>
                     <p class="mb-0 text-secondary fs-5">@Model.Diagnosis</p>
                 </div>
             </div>
@@ -29,24 +37,24 @@
             {
                 <div class="col-md-12">
                     <div class="p-3 bg-light rounded-3">
-                        <h6 class="fw-bold text-dark mb-1">Doctor Notes</h6>
+                        <h6 class="fw-bold text-dark mb-1">@SharedLocalizer["Doctor Notes"]</h6>
                         <p class="mb-0 text-muted">@Model.Notes</p>
                     </div>
                 </div>
             }
         </div>
 
-        <h5 class="fw-bold text-dark mb-3">Prescribed Medications</h5>
+        <h5 class="fw-bold text-dark mb-3">@SharedLocalizer["Prescribed Medications"]</h5>
         
         <div class="table-responsive">
             <table class="table table-bordered align-middle">
                 <thead class="table-primary">
                     <tr>
-                        <th>Medicine Name</th>
-                        <th>Dosage</th>
-                        <th>Frequency</th>
-                        <th>Duration</th>
-                        <th>Instructions</th>
+                        <th>@SharedLocalizer["Medicine Name"]</th>
+                        <th>@SharedLocalizer["Dosage"]</th>
+                        <th>@SharedLocalizer["Frequency"]</th>
+                        <th>@SharedLocalizer["Duration"]</th>
+                        <th>@SharedLocalizer["Instructions"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,7 +74,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="5" class="text-center text-muted">No medications prescribed in this record.</td>
+                            <td colspan="5" class="text-center text-muted">@SharedLocalizer["No medications prescribed in this record."]</td>
                         </tr>
                     }
                 </tbody>
@@ -74,7 +82,7 @@
         </div>
 
         <div class="mt-4">
-            <a href="javascript:history.back()" class="btn btn-primary rounded-pill px-4">Back</a>
+            <a href="javascript:history.back()" class="btn btn-primary rounded-pill px-4">@SharedLocalizer["Back"]</a>
         </div>
     </div>
 </div>
