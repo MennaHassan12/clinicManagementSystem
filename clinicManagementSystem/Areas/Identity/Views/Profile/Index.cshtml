@@ -1,7 +1,7 @@
 @model clinicManagementSystem.ViewModels.ApplicationUserVM
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    ViewData["Title"] = SharedLocalizer["My Profile"];
+    ViewData["Title"] = "My Profile";
     Layout = "_MainLayout";
 
     var roleClass = Model.Role.ToLower().Replace(" ", "-"); // super-admin / admin / doctor / patient / member
@@ -21,13 +21,13 @@
     </div>
 </div>
 
-<h2>@(string.IsNullOrWhiteSpace(Model.FullName) ? SharedLocalizer["My Profile"].Value : Model.FullName)</h2>
+<h2>@(string.IsNullOrWhiteSpace(Model.FullName) ? "My Profile" : Model.FullName)</h2>
 
 <div class="profile-meta">
     <span class="role-badge role-@roleClass">@(SharedLocalizer[Model.Role].Value)</span>
     <span class="member-since-badge">
         <span class="icon icon-calendar"></span>
-        @SharedLocalizer["Member since"] @Model.CreatedAt.ToString("MMMM yyyy")
+        Member since @Model.CreatedAt.ToString("MMMM yyyy")
     </span>
 </div>
 
@@ -43,8 +43,8 @@
         </a>
         <a asp-area="Doctor" asp-controller="Appointments" asp-action="Index" class="doctor-stat-card doctor-stat-appts">
             <span class="icon icon-appointments"></span>
-            <span class="doctor-stat-title">@SharedLocalizer["Appointments"]</span>
-            <span class="doctor-stat-subtitle">@SharedLocalizer["Manage bookings"]</span>
+            <span class="doctor-stat-title">Appointments</span>
+            <span class="doctor-stat-subtitle">Manage bookings</span>
         </a>
     </div>
 }
@@ -59,10 +59,10 @@
     <input asp-for="CreatedAt" type="hidden" />
 
     <div class="form-group">
-        <label asp-for="FullName">@SharedLocalizer["Full Name"]</label>
+        <label asp-for="FullName">Full Name</label>
         <div class="input-field">
             <span class="icon icon-user"></span>
-            <input asp-for="FullName" placeholder="@SharedLocalizer["Enter your full name"]" autocomplete="name" readonly class="profile-editable" />
+            <input asp-for="FullName" placeholder="Enter your full name" autocomplete="name" readonly class="profile-editable" />
         </div>
         <span asp-validation-for="FullName" class="field-error"></span>
     </div>
@@ -77,10 +77,10 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="PhoneNumber">@SharedLocalizer["Phone Number"]</label>
+        <label asp-for="PhoneNumber">Phone Number</label>
         <div class="input-field">
             <span class="icon icon-phone"></span>
-            <input asp-for="PhoneNumber" type="tel" placeholder="@SharedLocalizer["Enter your phone number"]" autocomplete="tel" readonly class="profile-editable" />
+            <input asp-for="PhoneNumber" type="tel" placeholder="Enter your phone number" autocomplete="tel" readonly class="profile-editable" />
         </div>
         <span asp-validation-for="PhoneNumber" class="field-error"></span>
     </div>
