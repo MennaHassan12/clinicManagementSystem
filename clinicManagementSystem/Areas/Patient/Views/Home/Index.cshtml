@@ -3,7 +3,6 @@
 @inject IStringLocalizer<clinicManagementSystem.SharedResource> SharedLocalizer
 @{
     Layout = "~/Areas/Patient/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Home - Healthcare Portal";
 }
 
 
@@ -46,9 +45,9 @@
             <div class="container h-100 d-flex align-items-center" style="min-height: 85vh;">
                 <div class="row w-100">
                     <div class="col-lg-8 text-white hero-animate">
-                        <span class="badge bg-info rounded-pill px-3 py-2 text-uppercase fw-semibold mb-3 tracking-wide">
-                            @SharedLocalizer["Modern Facilities"]
-                        </span>
+                        <span class="badge bg-primary rounded-pill px-3 py-2 text-uppercase fw-semibold mb-3 tracking-wide">
+                   @SharedLocalizer["Modern Facilities"]
+                  </span>
                         <h1 class="display-3 fw-bold mb-3">@SharedLocalizer["Health Care For Whole Family"]</h1>
                         <p class="lead fs-4 text-light opacity-90 mb-4">
                             @SharedLocalizer["Providing exceptional healthcare service excellence through qualified physicians and state-of-the-art technology."]
@@ -72,7 +71,7 @@
     <div class="container py-4">
 
         <!-- Section Header -->
-        <div class="text-center mx-auto mb-5" style="max-width: 650px;">
+        <div class="text-center mx-auto mb-5" style="max-width: 650px;" data-aos="fade-up">
             <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-semibold text-uppercase mb-2">
                 @SharedLocalizer["About Us"]
             </span>
@@ -83,8 +82,8 @@
         <!-- Content Row -->
         <div class="row align-items-center g-4 g-lg-5">
 
-            
-            <div class="col-lg-6 position-relative">
+            <!-- Left Side: Images & Experience Badge -->
+            <div class="col-lg-6 position-relative" data-aos="fade-right">
                 <div class="row g-3 align-items-center">
 
                     <!-- First Image -->
@@ -103,24 +102,24 @@
 
                 </div>
 
-<div class="position-absolute bottom-0 start-0 m-3 bg-white p-3 px-3.5 rounded-4 shadow-sm border d-flex align-items-center gap-3" style="z-index: 10;">
-    
-    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-award-fill" viewBox="0 0 16 16">
-            <path d="m8 0 1.669.864 1.858.282.842 1.68 1.337 1.32L13.4 6l.306 1.854-1.337 1.32-.842 1.68-1.858.282L8 12l-1.669-.864-1.858-.282-.842-1.68-1.337-1.32L2.6 6l-.306-1.854 1.337-1.32.842-1.68 1.337-.282z"/>
-            <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126l-1.982-.982z"/>
-        </svg>
-    </div>
+                <!-- Experience Badge with Zoom Animation -->
+                <div class="position-absolute bottom-0 start-0 m-3 bg-white p-3 px-3.5 rounded-4 shadow-sm border d-flex align-items-center gap-3" style="z-index: 10;" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-award-fill" viewBox="0 0 16 16">
+                            <path d="m8 0 1.669.864 1.858.282.842 1.68 1.337 1.32L13.4 6l.306 1.854-1.337 1.32-.842 1.68-1.858.282L8 12l-1.669-.864-1.858-.282-.842-1.68-1.337-1.32L2.6 6l-.306-1.854 1.337-1.32.842-1.68 1.337-.282z"/>
+                            <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126l-1.982-.982z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="fw-bold text-dark mb-0 lh-1 fs-4"><span id="yearsCounter" data-target="15">0</span>+</h3>
+                        <small class="text-muted fw-semibold text-uppercase fs-8" style="letter-spacing: 0.5px;">@SharedLocalizer["Years Experience"]</small>
+                    </div>
+                </div>
 
-    <div>
-        <h3 class="fw-bold text-dark mb-0 lh-1 fs-4"><span id="yearsCounter" data-target="15">0</span>+</h3>
-        <small class="text-muted fw-semibold text-uppercase fs-8" style="letter-spacing: 0.5px;">@SharedLocalizer["Years Experience"]</small>
-    </div>
-
-</div>
             </div>
 
-            <div class="col-lg-6">
+            <!-- Right Side: Text & Feature Cards -->
+            <div class="col-lg-6" data-aos="fade-left">
 
                 <h3 class="fw-bold text-dark mb-3">
                     @SharedLocalizer["Best Care For Your"] <span class="text-primary">@SharedLocalizer["Good Health"]</span>
@@ -132,7 +131,8 @@
 
                 <div class="d-flex flex-column gap-3 mb-4" style="max-width: 480px;">
 
-                    <div class="p-3 bg-white rounded-4 border d-flex align-items-center gap-3 shadow-sm">
+                    <!-- Card 1 -->
+                    <div class="p-3 bg-white rounded-4 border d-flex align-items-center gap-3 shadow-sm feature-card">
                         <div class="bg-primary text-white rounded-3 p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 46px; height: 46px;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-person-check" viewBox="0 0 16 16">
                                 <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.75.75 0 0 1 1.06-1.06l.367.367 1.002-1.67a.75.75 0 1 1 1.254.816" />
@@ -146,7 +146,8 @@
                         </div>
                     </div>
 
-                    <div class="p-3 bg-white rounded-4 border d-flex align-items-center gap-3 shadow-sm">
+                    <!-- Card 2 -->
+                    <div class="p-3 bg-white rounded-4 border d-flex align-items-center gap-3 shadow-sm feature-card">
                         <div class="bg-primary text-white rounded-3 p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 46px; height: 46px;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-building-check" viewBox="0 0 16 16">
                                 <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.75.75 0 0 1 1.06-1.06l.367.367 1.002-1.67a.75.75 0 1 1 1.254.816" />
@@ -172,11 +173,53 @@
     </div>
 </section>
 
-@{
 
+<style>
+    .feature-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08) ;
+    }
+
+    .doctor-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .doctor-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .star-rating {
+        display: inline-flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        gap: 4px;
+        width: 100%;
+    }
+    .star-rating input {
+        display: none;
+    }
+    .star-rating label {
+        font-size: 2rem;
+        color: #e2e2e2;
+        cursor: pointer;
+        transition: color 0.15s ease;
+    }
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #ffc107;
+    }
+
+</style>
+
+@{
     var doctorRatings = ViewBag.DoctorRatings as Dictionary<int, double>
                         ?? new Dictionary<int, double>();
 }
+
 
 <!-- Top Rated Doctors Section -->
 <section class="py-5 bg-light">
@@ -191,125 +234,106 @@
             </a>
         </div>
 
+        <div class="row g-4 row-cols-1 row-cols-md-2 row-cols-lg-3">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var doctor in Model)
+                {
 
-        <div class="position-relative px-md-5">
-            <div class="swiper topDoctorsSwiper py-3">
-                <div class="swiper-wrapper">
-                    @if (Model != null && Model.Any())
+                    var rawName = doctor.ApplicationUser != null && !string.IsNullOrEmpty(doctor.ApplicationUser.FullName)
+                        ? doctor.ApplicationUser.FullName.Trim()
+                        : SharedLocalizer["Medical Specialist"].Value;
+
+                    if (rawName.StartsWith("Dr. ", StringComparison.OrdinalIgnoreCase))
                     {
-                        foreach (var doctor in Model)
+                        rawName = rawName.Substring(4).Trim();
+                    }
+                    else if (rawName.StartsWith("Dr.", StringComparison.OrdinalIgnoreCase))
+                    {
+                        rawName = rawName.Substring(3).Trim();
+                    }
+                    else if (rawName.StartsWith("Dr ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        rawName = rawName.Substring(3).Trim();
+                    }
+
+                    var displayName = $"Dr. {rawName}";
+
+
+                    var rating = doctorRatings.TryGetValue(doctor.DoctorId, out var doctorRating)
+                        ? doctorRating
+                        : 0;
+
+
+                    string imageSrc = "";
+                    if (!string.IsNullOrEmpty(doctor.Image))
+                    {
+                        if (doctor.Image.StartsWith("http") || doctor.Image.StartsWith("/"))
                         {
+                            imageSrc = doctor.Image;
+                        }
+                        else
+                        {
+                            imageSrc = $"/images/doctors/{doctor.Image}";
+                        }
+                    }
 
-                            var rawName = doctor.ApplicationUser != null && !string.IsNullOrEmpty(doctor.ApplicationUser.FullName)
-                                ? doctor.ApplicationUser.FullName.Trim()
-                                : SharedLocalizer["Medical Specialist"].Value;
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden bg-white doctor-card">
 
-                            if (rawName.StartsWith("Dr. ", StringComparison.OrdinalIgnoreCase))
-                            {
-                                rawName = rawName.Substring(4).Trim();
-                            }
-                            else if (rawName.StartsWith("Dr.", StringComparison.OrdinalIgnoreCase))
-                            {
-                                rawName = rawName.Substring(3).Trim();
-                            }
-                            else if (rawName.StartsWith("Dr ", StringComparison.OrdinalIgnoreCase))
-                            {
-                                rawName = rawName.Substring(3).Trim();
-                            }
+                            <div class="bg-primary bg-opacity-10 text-center py-4 px-3 d-flex align-items-center justify-content-center position-relative" style="min-height: 200px;">
 
-                            var displayName = $"Dr. {rawName}";
+                                <div class="position-absolute top-0 end-0 m-3 bg-warning bg-opacity-10 text-warning px-3 py-1 rounded-pill fw-bold">
+                                    ★ @rating.ToString("0.0")
+                                </div>
 
-
-                            var rating = doctorRatings.TryGetValue(doctor.DoctorId, out var doctorRating)
-                                ? doctorRating
-                                : 0;
-
-
-                            string imageSrc = "";
-                            if (!string.IsNullOrEmpty(doctor.Image))
-                            {
-                                if (doctor.Image.StartsWith("http") || doctor.Image.StartsWith("/"))
+                                @if (!string.IsNullOrEmpty(imageSrc))
                                 {
-                                    imageSrc = doctor.Image;
+                                    <img src="@imageSrc"
+                                         class="rounded-circle border border-4 border-white shadow-sm"
+                                         style="width: 130px; height: 130px; object-fit: cover;"
+                                         alt="@displayName"
+                                         onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+
+                                    <div class="rounded-circle bg-white border align-items-center justify-content-center shadow-sm"
+                                         style="width: 130px; height: 130px; flex-shrink: 0; display: none;">
+                                        <i class="bi bi-person-fill text-secondary fs-1"></i>
+                                    </div>
                                 }
                                 else
                                 {
-                                    imageSrc = $"/images/doctors/{doctor.Image}";
-                                }
-                            }
-
-                            <div class="swiper-slide">
-
-                                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white mx-auto my-2" style="max-width: 850px;">
-                                    <div class="row g-0 align-items-center">
-
-
-                                        <div class="col-md-4 bg-primary bg-opacity-10 text-center py-4 px-3 d-flex align-items-center justify-content-center" style="min-height: 220px;">
-                                            @if (!string.IsNullOrEmpty(imageSrc))
-                                            {
-                                                <img src="@imageSrc"
-                                                     class="rounded-circle border border-4 border-white shadow-sm"
-                                                     style="width: 130px; height: 130px; object-fit: cover;"
-                                                     alt="@displayName"
-                                                     onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-
-                                                <div class="rounded-circle bg-white border align-items-center justify-content-center shadow-sm"
-                                                     style="width: 130px; height: 130px; flex-shrink: 0; display: none;">
-                                                    <i class="bi bi-person-fill text-secondary fs-1"></i>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="rounded-circle bg-white d-flex align-items-center justify-content-center border shadow-sm"
-                                                     style="width: 130px; height: 130px; flex-shrink: 0;">
-                                                    <i class="bi bi-person-fill text-secondary fs-1"></i>
-                                                </div>
-                                            }
-                                        </div>
-
-
-                                        <div class="col-md-8">
-                                            <div class="card-body p-4 text-start">
-                                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                                    <div>
-                                                        <h3 class="fw-bold text-dark mb-1">@displayName</h3>
-                                                        <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-1 rounded-pill">
-                                                            @(doctor.Department?.Name ?? SharedLocalizer["General"].Value)
-                                                        </span>
-                                                    </div>
-                                                    <div class="bg-warning bg-opacity-10 text-warning px-3 py-1 rounded-pill fw-bold">
-                                                        ★ @rating.ToString("0.0")
-                                                    </div>
-                                                </div>
-
-                                                <div class="text-muted small mb-3">
-                                                    <p class="mb-1"><i class="bi bi-award me-1 text-primary"></i> @doctor.YearsOfExperience @SharedLocalizer["Years Experience"]</p>
-                                                    <p class="mb-0"><i class="bi bi-cash me-1 text-success"></i> @SharedLocalizer["Fee"]: @doctor.ConsultationFee @SharedLocalizer["EGP"]</p>
-                                                </div>
-
-                                                <div class="d-flex gap-2 pt-2">
-                                                    <a href="/Patient/Appointments/DoctorDetails/@doctor.DoctorId" class="btn btn-outline-secondary rounded-pill px-3 py-2 fw-bold">
-                                                        @SharedLocalizer["View Details"]
-                                                    </a>
-                                                    <a href="/Patient/Appointments/Book?doctorId=@doctor.DoctorId" class="btn btn-primary rounded-pill px-4 py-2 fw-bold">
-                                                        @SharedLocalizer["Book Now"]
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-
+                                    <div class="rounded-circle bg-white d-flex align-items-center justify-content-center border shadow-sm"
+                                         style="width: 130px; height: 130px; flex-shrink: 0;">
+                                        <i class="bi bi-person-fill text-secondary fs-1"></i>
                                     </div>
-                                </div>
+                                }
                             </div>
-                        }
-                    }
-                </div>
-            </div>
 
+                            <div class="card-body p-4 text-start">
+                                <h3 class="fw-bold text-dark mb-1 fs-5">@displayName</h3>
+                                <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-1 rounded-pill mb-3">
+                                    @(doctor.Department?.Name ?? SharedLocalizer["General"].Value)
+                                </span>
 
-            <div class="swiper-button-next text-primary"></div>
-            <div class="swiper-button-prev text-primary"></div>
-            <div class="swiper-pagination mt-2 position-relative"></div>
+                                <div class="text-muted small mb-3">
+                                    <p class="mb-1"><i class="bi bi-award me-1 text-primary"></i> @doctor.YearsOfExperience @SharedLocalizer["Years Experience"]</p>
+                                    <p class="mb-0"><i class="bi bi-cash me-1 text-success"></i> @SharedLocalizer["Fee"]: @doctor.ConsultationFee @SharedLocalizer["$"]</p>
+                                </div>
+
+                                <div class="d-flex gap-2 pt-2">
+                                    <a href="/Patient/Appointments/DoctorDetails/@doctor.DoctorId" class="btn btn-outline-secondary rounded-pill px-3 py-2 fw-bold flex-fill">
+                                        @SharedLocalizer["View Details"]
+                                    </a>
+                                    <a href="/Patient/Appointments/Book?doctorId=@doctor.DoctorId" class="btn btn-primary rounded-pill px-3 py-2 fw-bold flex-fill">
+                                        @SharedLocalizer["Book Now"]
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
         </div>
     </div>
 </section>
@@ -633,24 +657,24 @@
 </section>
 
 <!-- Patient Reviews Section -->
-<section class="py-5 bg-light">
+<section id="reviews-section" class="py-5 bg-light">
     <div class="container py-4">
 
         <!-- Section Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <span class="text-primary fw-bold small text-uppercase tracking-wider">
-                    Patient Feedback
+                    @SharedLocalizer["Patient Feedback"]
                 </span>
 
                 <h2 class="display-6 fw-bold text-dark mb-0">
-                    What Our Patients Say
+                    @SharedLocalizer["What Our Patients Say"]
                 </h2>
             </div>
 
             <a href="/Patient/Home/AllReviews"
                class="btn btn-outline-primary rounded-pill px-4 fw-semibold">
-                Show All Reviews
+                @SharedLocalizer["Show All Reviews"]
                 <i class="bi bi-arrow-right ms-1"></i>
             </a>
         </div>
@@ -771,7 +795,7 @@
                                                                 </h3>
 
                                                                 <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-1 rounded-pill">
-                                                            @(doctor?.Department?.Name ?? "General")
+                                                            @(doctor?.Department?.Name ?? SharedLocalizer["General"].Value)
                                                                 </span>
 
                                                             </div>
@@ -787,12 +811,12 @@
 
             <div class="text-primary fw-semibold small mb-2">
                 <i class="bi bi-chat-left-text me-1"></i>
-                Patient Comment
+                @SharedLocalizer["Patient Comment"]
             </div>
 
             <p class="text-muted fs-6 mb-0" style="line-height:1.7;">
                                                         @(string.IsNullOrWhiteSpace(review.Comment)
-                                                                ? "The patient left a rating without a written comment."
+                                                                ? SharedLocalizer["The patient left a rating without a written comment."].Value
                                                                 : review.Comment)
             </p>
 
@@ -859,11 +883,11 @@
                     <i class="bi bi-chat-square-text fs-1 text-muted d-block mb-2"></i>
 
                     <h5 class="text-muted fw-bold">
-                        No Reviews Found
+                        @SharedLocalizer["No Reviews Found"]
                     </h5>
 
                     <p class="text-muted small">
-                        There are no patient reviews available yet.
+                        @SharedLocalizer["There are no patient reviews available yet."]
                     </p>
 
                 </div>
@@ -940,12 +964,97 @@
     </div>
 </section>
 
+<!-- Rate Doctor Modal -->
+<div class="modal fade" id="rateDoctorModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow">
+      <form asp-action="AddReview" asp-controller="Reviews" asp-area="Patient" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="DoctorId" id="ratingDoctorId" value="" />
+
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold">
+            @SharedLocalizer["Rate"] <span id="ratingDoctorName" class="text-primary"></span>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="text-center mb-2">
+            <span class="fw-bold fs-2 text-warning" id="ratingNumberDisplay">0</span>
+            <span class="text-muted fs-5">/ 5</span>
+          </div>
+
+          <div class="star-rating mb-4">
+            <input type="radio" id="star5" name="Rating" value="5" required />
+            <label for="star5"><i class="bi bi-star-fill"></i></label>
+            <input type="radio" id="star4" name="Rating" value="4" />
+            <label for="star4"><i class="bi bi-star-fill"></i></label>
+            <input type="radio" id="star3" name="Rating" value="3" />
+            <label for="star3"><i class="bi bi-star-fill"></i></label>
+            <input type="radio" id="star2" name="Rating" value="2" />
+            <label for="star2"><i class="bi bi-star-fill"></i></label>
+            <input type="radio" id="star1" name="Rating" value="1" />
+            <label for="star1"><i class="bi bi-star-fill"></i></label>
+          </div>
+
+          <label class="form-label fw-semibold">@SharedLocalizer["Your Comment"]</label>
+          <textarea name="Comment" rows="3" class="form-control rounded-3"
+                    placeholder="@SharedLocalizer["Share your experience..."]"></textarea>
+        </div>
+
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
+            @SharedLocalizer["Cancel"]
+          </button>
+          <button type="submit" class="btn btn-primary rounded-pill px-4 fw-semibold">
+            @SharedLocalizer["Submit Review"]
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 @section Scripts {
     <!-- Swiper JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <script>
+        function setRatingDoctor(btn) {
+            var doctorId = btn.getAttribute('data-doctor-id');
+            var doctorName = btn.getAttribute('data-doctor-name');
+            document.getElementById('ratingDoctorId').value = doctorId;
+            document.getElementById('ratingDoctorName').textContent = doctorName;
+
+            // Reset the modal's previous selection each time it's opened for a new doctor
+            var display = document.getElementById('ratingNumberDisplay');
+            if (display) { display.textContent = '0'; }
+            document.querySelectorAll('.star-rating input[name="Rating"]').forEach(function (input) {
+                input.checked = false;
+            });
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
+
+            // Update the number above the stars whenever a star is picked
+            var ratingInputs = document.querySelectorAll('.star-rating input[name="Rating"]');
+            var ratingDisplay = document.getElementById('ratingNumberDisplay');
+            ratingInputs.forEach(function (input) {
+                input.addEventListener('change', function () {
+                    if (ratingDisplay) { ratingDisplay.textContent = this.value; }
+                });
+            });
+
+            // If we've just been redirected back with #reviews-section, scroll to it
+            if (window.location.hash === '#reviews-section') {
+                var target = document.getElementById('reviews-section');
+                if (target) {
+                    setTimeout(function () {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 300);
+                }
+            }
             // Initialize Hero Carousel
             var heroElem = document.getElementById('heroCarousel');
             if (heroElem) {
@@ -956,23 +1065,6 @@
                 });
             }
 
-        var doctorsSwiper = new Swiper('.topDoctorsSwiper', {
-        slidesPerView: 1, 
-        spaceBetween: 30,
-        loop: true,
-        autoplay: {
-        delay: 4000,
-        disableOnInteraction: false,
-        },
-        navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-        },
-        pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-        }
-        });
                         // Initialize Patient Reviews Swiper
                 var homeReviewsCount = document.querySelectorAll(
                     '.patientReviewsSwiper .swiper-slide'

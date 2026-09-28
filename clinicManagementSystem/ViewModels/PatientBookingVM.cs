@@ -17,7 +17,7 @@ namespace clinicManagementSystem.ViewModels
         public string BirthDate { get; set; }
 
 
-        [Required(ErrorMessage = "Email Address is required.")]
+        [Required(ErrorMessage = "Email address is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string PatientEmail { get; set; }
 

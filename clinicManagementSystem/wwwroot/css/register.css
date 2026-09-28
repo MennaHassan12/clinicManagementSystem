@@ -2,7 +2,8 @@
 
 html, body {
     height: 100%;
-    overflow: hidden;
+    margin: 0;
+    padding: 0;
 }
 
 * {
@@ -17,10 +18,15 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at 30% 20%, #2c50b8 0%, #1c3a8f 40%, #0e1f52 75%, #081230 100%);
+    background: radial-gradient(circle at 30% 20%, #e0ecff 10%, #c2d8ff 20%, #0d6efd 50%, #7aa8ff 60%) ;
     padding: 2vh 16px;
+    min-height: 100vh;
 }
 
+
+.access-message{
+    color: #1c54d2;
+}
 .register-wrapper {
     width: 100%;
     max-width: 400px;
@@ -74,7 +80,7 @@ body {
 
 .register-card {
     width: 100%;
-    background: rgba(20, 34, 76, 0.55);
+   background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -84,14 +90,14 @@ body {
 }
 
     .register-card h2 {
-        color: #ffffff;
+        color: #31407c;
         font-size: clamp(16px, 2.2vh, 19px);
         font-weight: 700;
         text-align: center;
     }
 
     .register-card p.subtitle {
-        color: #a9b6de;
+        color: #4a5578;
         font-size: 12px;
         text-align: center;
         margin-top: 4px;
@@ -104,7 +110,7 @@ body {
 
     .form-group label {
         display: block;
-        color: #cdd7f5;
+        color: #31407c;
         font-size: 10.5px;
         font-weight: 700;
         letter-spacing: 1px;
@@ -197,7 +203,7 @@ body {
     font-weight: 800;
     letter-spacing: 1px;
     color: #ffffff;
-    background: linear-gradient(135deg, #4d7dff, #2140b4);
+    background: linear-gradient(135deg, #284bae, #1a56db);
     cursor: pointer;
 }
 
@@ -229,11 +235,11 @@ body {
     text-align: center;
     margin-top: clamp(10px, 1.8vh, 16px);
     font-size: 12px;
-    color: #a9b6de;
+    color: #284bae;
 }
 
     .switch-link a {
-        color: #6f9bff;
+        color: #284bae;
         font-weight: 700;
         text-decoration: none;
     }
@@ -262,7 +268,7 @@ body {
     }
 
 .forgot-link {
-    color: #6f9bff;
+    color: #31407c;
     font-size: 12px;
     font-weight: 700;
     text-decoration: none;
@@ -278,7 +284,7 @@ body {
     text-align: center;
     margin-top: 8px;
     font-size: 11px;
-    color: #8fa0cf;
+    color: #31407c;
     line-height: 1.6;
 }
 
@@ -304,7 +310,7 @@ body {
     align-items: center;
     gap: 7px;
     cursor: pointer;
-    color: #cdd7f5;
+    color: #31407c;
     font-size: 12px;
     font-weight: 600;
     user-select: none;
@@ -370,7 +376,7 @@ body {
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.3px;
-    color: #1c2340;
+    color: #31407c;
     background: #ffffff;
     cursor: pointer;
     transition: background 0.15s ease, transform 0.15s ease;
@@ -384,7 +390,7 @@ body {
 .icon-google {
     width: 18px;
     height: 18px;
-    background-color: #1c2340;
+    background-color: #31407c;
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M21.35 11.1h-9.17v2.73h5.52c-.25 1.61-1.72 4.7-5.52 4.7-3.32 0-6.03-2.75-6.03-6.13S8.86 6.27 12.18 6.27c1.89 0 3.16.8 3.88 1.5l2.65-2.55C17.13 3.6 14.87 2.6 12.18 2.6 6.98 2.6 2.75 6.86 2.75 12s4.23 9.4 9.43 9.4c5.44 0 9.05-3.83 9.05-9.22 0-.62-.07-1.09-.15-1.63z'/%3E%3C/svg%3E");
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M21.35 11.1h-9.17v2.73h5.52c-.25 1.61-1.72 4.7-5.52 4.7-3.32 0-6.03-2.75-6.03-6.13S8.86 6.27 12.18 6.27c1.89 0 3.16.8 3.88 1.5l2.65-2.55C17.13 3.6 14.87 2.6 12.18 2.6 6.98 2.6 2.75 6.86 2.75 12s4.23 9.4 9.43 9.4c5.44 0 9.05-3.83 9.05-9.22 0-.62-.07-1.09-.15-1.63z'/%3E%3C/svg%3E");
 }
@@ -399,7 +405,7 @@ body {
     width: 84px;
     height: 84px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #4d7dff, #2140b4);
+    background: linear-gradient(135deg, rgb(13, 110, 253), #2140b4);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -408,18 +414,18 @@ body {
     font-weight: 800;
     letter-spacing: 1px;
     box-shadow: 0 10px 25px rgba(45, 90, 220, 0.45);
-    border: 3px solid rgba(255, 255, 255, 0.12);
+    border: 3px solid rgba(255, 255, 255, 0.09);
 }
 
 .btn-danger {
     width: 100%;
-    border: 1px solid rgba(255, 90, 90, 0.35);
+    border: 1px solid #e05b5b;
     border-radius: 11px;
     padding: clamp(9px, 1.6vh, 13px);
     font-size: 13.5px;
     font-weight: 800;
     letter-spacing: 1px;
-    color: #ffb3b3;
+    color: #e05b5b;
     background: rgba(255, 90, 90, 0.1);
     cursor: pointer;
     transition: background 0.15s ease, transform 0.15s ease;
@@ -450,6 +456,7 @@ body {
     flex-wrap: wrap;
     margin-top: 6px;
     margin-bottom: 4px;
+    color:#5b6b96;
 }
 
 .role-badge {
@@ -468,12 +475,12 @@ body {
     }
 
     .role-badge.role-doctor {
-        background: linear-gradient(135deg, #24c48a, #0e8f63);
+        background: linear-gradient(135deg, #83bba6, #86e2ee);
     }
 
     .role-badge.role-admin,
     .role-badge.role-super-admin {
-        background: linear-gradient(135deg, #b06dff, #6a2fc7);
+        background: linear-gradient(135deg,  #5472b8 20%, #1D53D1 70%);
     }
 
     .role-badge.role-member {
@@ -513,7 +520,10 @@ body {
 }
 
 .avatar-role-doctor .avatar-ring {
-    border-color: rgba(36, 196, 138, 0.55);
+   .avatar-role-doctor .avatar-ring {
+    background: linear-gradient(135deg, #81c7ad 50%, #86e2ee 50%);
+    border: none; 
+}
 }
 
 .avatar-role-patient .avatar-ring {
@@ -522,17 +532,33 @@ body {
 
 .avatar-role-admin .avatar-ring,
 .avatar-role-super-admin .avatar-ring {
-    border-color: rgba(176, 109, 255, 0.55);
+    border-color: rgba rgba(109, 221, 255,0.55);
 }
 
 .avatar-role-doctor {
-    background: linear-gradient(135deg, #24c48a, #0e8f63);
+    border-color: rgba(109, 221, 255, 0.55);
+    background: linear-gradient(135deg, #83bba6, #86e2ee);
 }
 
 .avatar-role-admin, .avatar-role-super-admin {
-    background: linear-gradient(135deg, #b06dff, #6a2fc7);
+    border-color:rgba(29, 83, 209,0.55);
+    background: linear-gradient(135deg,  #5472b8 20%, rgb(29, 83, 209) 70%);
 }
 
+
+.changePass{
+    width: 100%;
+    border: 1px solid  #1D53D1;
+    border-radius: 11px;
+    padding: clamp(9px, 1.6vh, 13px);
+    font-size: 13.5px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #1D53D1;
+    background: #cdd7f5;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
 /* ===== Doctor stat-style link cards ===== */
 .doctor-links-grid {
     display: grid;
@@ -548,7 +574,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(63, 101, 206, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
     padding: 18px 10px;
@@ -567,7 +593,7 @@ body {
     }
 
 .doctor-stat-shifts .icon {
-    background-color: #24c48a;
+    background-color: #4d7dff;
 }
 
 .doctor-stat-appts .icon {
@@ -575,14 +601,14 @@ body {
 }
 
 .doctor-stat-title {
-    color: #ffffff;
+    color: #4776e4;
     font-size: 13px;
     font-weight: 800;
     text-align: center;
 }
 
 .doctor-stat-subtitle {
-    color: #8fa0cf;
+    color: #8197d3;
     font-size: 10.5px;
     text-align: center;
     line-height: 1.3;
@@ -616,7 +642,7 @@ body {
 .icon-appointments {
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-6h2zm0-8h-2V7h2z'/%3E%3C/svg%3E");
     mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 15h-2v-6h2zm0-8h-2V7h2z'/%3E%3C/svg%3E");
-}}
+}
  
     
 

@@ -15,7 +15,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HealthCare Portal</title>
+    <title>@ViewData["Title"] HealthCare Portal</title>
+
     @if (isRtl)
     {
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" />
@@ -46,10 +47,10 @@
     </div>
 
     <!-- Main Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-2">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-3 text-primary" href="/Patient/Home/Index">
-                <i class="bi bi-heart-pulse-fill fs-2"></i>
+                <i class="bi bi-heart-pulse-fill fs-3"></i>
                 <span class="tracking-wide">@SharedLocalizer["HealthCare"]</span>
             </a>
 
@@ -58,39 +59,31 @@
             </button>
 
             <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-semibold text-uppercase fs-7 gap-lg-3">
+               <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-semibold fs-6 gap-lg-3">
                     <li class="nav-item">
-                        <a class="nav-link text-dark active" href="/Patient/Home/Index">@SharedLocalizer["Home"]</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-dark" href="#" id="pagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            @SharedLocalizer["Pages"]
-                        </a>
-                        <ul class="dropdown-menu border-0 shadow-lg rounded-3 py-2" aria-labelledby="pagesDropdown">
-                            <li><a class="dropdown-item py-2" href="/Patient/Home/AllDoctors"><i class="bi bi-person-badge me-2 text-primary"></i>@SharedLocalizer["Doctors"]</a></li>
-                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#departments"><i class="bi bi-hospital me-2 text-primary"></i>@SharedLocalizer["Departments"]</a></li>
-                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#services"><i class="bi bi-gear-wide-connected me-2 text-primary"></i>@SharedLocalizer["Services"]</a></li>
-                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#about"><i class="bi bi-info-circle me-2 text-primary"></i>@SharedLocalizer["About Us"]</a></li>
-                            <li><a class="dropdown-item py-2" href="/Patient/Blog/Index"><i class="bi bi-newspaper me-2 text-primary"></i>@SharedLocalizer["Blog"]</a></li>
-                            <li><a class="dropdown-item py-2" href="/Patient/Home/Index#contact"><i class="bi bi-envelope me-2 text-primary"></i>@SharedLocalizer["Contact Us"]</a></li>
-                        </ul>
+                        <a class="nav-link text-dark active nav-hover" href="/Patient/Home/Index">@SharedLocalizer["Home"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Patient/Home/Index#about">@SharedLocalizer["About"]</a>
+                       <a class="nav-link text-dark nav-hover" href="/Patient/Home/AllDoctors">@SharedLocalizer["Doctors"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Patient/Home/Index#services">@SharedLocalizer["Services"]</a>
+                       <a class="nav-link text-dark nav-hover" href="/Patient/Home/Index#departments">@SharedLocalizer["Departments"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Patient/Blog/Index">@SharedLocalizer["Blog"]</a>
+                        <a class="nav-link text-dark nav-hover" href="/Patient/Home/Index#about">@SharedLocalizer["About"]</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/Patient/Home/Index#contact">@SharedLocalizer["Contact"]</a>
+                        <a class="nav-link text-dark nav-hover" href="/Patient/Home/Index#services">@SharedLocalizer["Services"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark nav-hover" href="/Patient/Blog/Index">@SharedLocalizer["Blog"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark nav-hover" href="/Patient/Home/Index#contact">@SharedLocalizer["Contact"]</a>
                     </li>
                 </ul>
 
                 <div class="d-flex align-items-center gap-2">
-                    <partial name="_SelectLanguagePartial" />
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <div class="dropdown">
@@ -167,54 +160,53 @@
         </div>
     }
 
-    <!-- Footer -->
-    <footer class="footer-with-bg text-white py-5 mt-auto">
-        <div class="footer-overlay"></div>
+ <!-- Footer -->
+<footer class="footer-with-bg text-white py-5 mt-auto w-100 position-relative">
+    <div class="footer-overlay"></div>
 
-        <div class="container text-center text-md-start position-relative" style="z-index: 2;">
-            <div class="row g-4 mb-4">
+    <div class="container text-center text-md-start position-relative" style="z-index: 2;">
+        <div class="row g-4 mb-4">
 
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="fw-bold text-primary mb-3"><i class="bi bi-heart-pulse-fill me-2"></i>@SharedLocalizer["HealthCare"]</h5>
-                    <p class="text-light opacity-75 fs-7">Providing trusted healthcare services, easy online appointment bookings, and comprehensive medical record management.</p>
-                </div>
-
-                <!-- Opening Hours -->
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="fw-bold text-white mb-3"><i class="bi bi-clock me-2 text-primary"></i>@SharedLocalizer["Opening Hours"]</h5>
-                    <ul class="list-unstyled d-flex flex-column gap-2 text-light opacity-75 fs-7">
-                        <li class="d-flex justify-content-between"><span>Mon - Wed:</span> <span>8.00 - 18.00</span></li>
-                        <li class="d-flex justify-content-between"><span>Thu - Fri:</span> <span>8.00 - 17.00</span></li>
-                        <li class="d-flex justify-content-between"><span>Sat - Sun:</span> <span>9.00 - 15.00</span></li>
-                        <li class="d-flex justify-content-between text-warning"><span>Holidays:</span> <span>Closed</span></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="fw-bold text-white mb-3">@SharedLocalizer["Quick Links"]</h5>
-                    <ul class="list-unstyled d-flex flex-column gap-2 fs-7">
-                        <li><a href="/Patient/Home/Index#about" class="text-light opacity-75 text-decoration-none">@SharedLocalizer["About Us"]</a></li>
-                        <li><a href="/Patient/Home/Index#services" class="text-light opacity-75 text-decoration-none">@SharedLocalizer["Services"]</a></li>
-                        <li><a href="/Patient/Blog/Index" class="text-light opacity-75 text-decoration-none">@SharedLocalizer["Blog"]</a></li>
-                        <li><a href="/Patient/Home/Index#contact" class="text-light opacity-75 text-decoration-none">@SharedLocalizer["Contact Us"]</a></li>
-                        <li><a href="/Patient/Home/AllDoctors" class="text-light opacity-75 text-decoration-none">@SharedLocalizer["Our Doctors"]</a></li>
-                    </ul>
-                </div>
-
-
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="fw-bold text-white mb-3">@SharedLocalizer["Contact Info"]</h5>
-                    <p class="text-light opacity-75 mb-2 fs-7"><i class="bi bi-geo-alt me-2 text-primary"></i>123 Health Street, Cairo, Egypt</p>
-                    <p class="text-light opacity-75 mb-2 fs-7"><i class="bi bi-telephone me-2 text-primary"></i>+20 123 456 7890</p>
-                    <p class="text-light opacity-75 fs-7"><i class="bi bi-envelope me-2 text-primary"></i>support@healthcareportal.com</p>
-                </div>
+            <div class="col-lg-3 col-md-6">
+                <h5 class="fw-bold text-primary mb-3"><i class="bi bi-heart-pulse-fill me-2"></i>@SharedLocalizer["HealthCare"]</h5>
+                <p class="text-light opacity-75 fs-7">@SharedLocalizer["Providing trusted healthcare services, easy online appointment bookings, and comprehensive medical record management."]</p>
             </div>
-            <hr class="border-secondary opacity-25">
-            <div class="text-center pt-2">
-                <small class="text-light opacity-50">&copy; @DateTime.Now.Year HealthCare Portal. All Rights Reserved.</small>
+
+            <!-- Opening Hours -->
+            <div class="col-lg-3 col-md-6">
+                <h5 class="fw-bold text-white mb-3"><i class="bi bi-clock me-2 text-primary"></i>@SharedLocalizer["Opening Hours"]</h5>
+                <ul class="list-unstyled d-flex flex-column gap-2 text-light opacity-75 fs-7">
+                    <li class="d-flex justify-content-between"><span>@SharedLocalizer["Mon - Wed"]:</span> <span>8.00 - 18.00</span></li>
+                    <li class="d-flex justify-content-between"><span>@SharedLocalizer["Thu - Fri"]:</span> <span>8.00 - 17.00</span></li>
+                    <li class="d-flex justify-content-between"><span>@SharedLocalizer["Sat - Sun"]:</span> <span>9.00 - 15.00</span></li>
+                    <li class="d-flex justify-content-between text-warning"><span>@SharedLocalizer["Holidays"]:</span> <span>@SharedLocalizer["Closed"]</span></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+    <h5 class="fw-bold text-white mb-3">@SharedLocalizer["Quick Links"]</h5>
+    <ul class="list-unstyled d-flex flex-column gap-2 fs-7">
+        <li><a href="/Patient/Home/Index#about" class="text-light opacity-75 text-decoration-none transition-all hover-white">@SharedLocalizer["About Us"]</a></li>
+        <li><a href="/Patient/Home/Index#services" class="text-light opacity-75 text-decoration-none transition-all hover-white">@SharedLocalizer["Services"]</a></li>
+        <li><a href="/Patient/Blog/Index" class="text-light opacity-75 text-decoration-none transition-all hover-white">@SharedLocalizer["Blog"]</a></li>
+        <li><a href="/Patient/Home/Index#contact" class="text-light opacity-75 text-decoration-none transition-all hover-white">@SharedLocalizer["Contact Us"]</a></li>
+        <li><a href="/Patient/Home/AllDoctors" class="text-light opacity-75 text-decoration-none transition-all hover-white">@SharedLocalizer["Our Doctors"]</a></li>
+    </ul>
+</div>
+
+            <div class="col-lg-3 col-md-6">
+                <h5 class="fw-bold text-white mb-3">@SharedLocalizer["Contact Info"]</h5>
+                <p class="text-light opacity-75 mb-2 fs-7"><i class="bi bi-geo-alt me-2 text-primary"></i>@SharedLocalizer["123 Health Street, Cairo, Egypt"]</p>
+                <p class="text-light opacity-75 mb-2 fs-7"><i class="bi bi-telephone me-2 text-primary"></i>+20 123 456 7890</p>
+                <p class="text-light opacity-75 fs-7"><i class="bi bi-envelope me-2 text-primary"></i>support@healthcareportal.com</p>
             </div>
         </div>
-    </footer>
+        <hr class="border-secondary opacity-25">
+        <div class="text-center pt-2">
+            <small class="text-light opacity-50">&copy; @DateTime.Now.Year @SharedLocalizer["HealthCare Portal"]. @SharedLocalizer["All Rights Reserved."]</small>
+        </div>
+    </div>
+</footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

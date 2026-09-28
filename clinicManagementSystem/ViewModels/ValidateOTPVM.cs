@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace clinicManagementSystem.ViewModels
 {
@@ -6,7 +6,7 @@ namespace clinicManagementSystem.ViewModels
     {
         public int Id { get; set; }
          
-        [Required]
+        [Required(ErrorMessage = "Email address is required.")]
         public string Email { get; set; } = string.Empty;
  
         [Required(ErrorMessage = "Please enter the OTP code")]

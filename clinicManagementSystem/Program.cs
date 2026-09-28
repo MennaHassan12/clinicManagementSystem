@@ -18,10 +18,9 @@ namespace clinicManagementSystem
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DefaultConnection")));
-
+           
+     builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.User.AllowedUserNameCharacters =
@@ -80,9 +79,16 @@ namespace clinicManagementSystem
             builder.Services.AddScoped<IAppointmentService, AppointmentService>();
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
+            //builder.Services.AddControllersWithViews()
+            //    .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
+            //    .AddDataAnnotationsLocalization();
             builder.Services.AddControllersWithViews()
-                .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
-                .AddDataAnnotationsLocalization();
+    .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization(options =>
+    {
+        options.DataAnnotationLocalizerProvider = (type, factory) =>
+            factory.Create(typeof(SharedResource));
+    });
             builder.Services.AddRazorPages();
 
             var supportedCultures = new[]

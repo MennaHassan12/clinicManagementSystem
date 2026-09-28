@@ -1,7 +1,7 @@
 ﻿@model clinicManagementSystem.ViewModels.PatientBookingVM
 
 @{
-    ViewData["Title"] = "Add New Patient & Book Appointment";
+    ViewData["Title"] = SharedLocalizer["Add New Patient & Book Appointment"];
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,7 +9,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-sm border-0 rounded-4 p-4">
-                <h3 class="fw-bold text-primary mb-4">Add New Patient & Book Appointment</h3>
+                <h3 class="fw-bold text-primary mb-4">@SharedLocalizer["Add New Patient & Book Appointment"]</h3>
 
                 @if (TempData["error_notification"] != null)
                 {
@@ -22,77 +22,77 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                     <!-- Patient Info Section -->
-                    <h5 class="fw-bold text-secondary mb-3 border-bottom pb-2">Patient Information</h5>
+                    <h5 class="fw-bold text-secondary mb-3 border-bottom pb-2">@SharedLocalizer["Patient Information"]</h5>
 
                     <div class="mb-3">
-                        <label asp-for="PatientName" class="form-label fw-bold">Patient Name *</label>
-                        <input asp-for="PatientName" class="form-control" placeholder="Enter full name" />
+                        <label asp-for="PatientName" class="form-label fw-bold">@SharedLocalizer["Patient Name"] *</label>
+                        <input asp-for="PatientName" class="form-control" placeholder="@SharedLocalizer["Enter full name"]" />
                         <span asp-validation-for="PatientName" class="text-danger small fw-bold d-block mt-1"></span>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label asp-for="PatientPhone" class="form-label fw-bold">Phone Number *</label>
-                            <input asp-for="PatientPhone" class="form-control" placeholder="e.g. 01012345678" />
+                            <label asp-for="PatientPhone" class="form-label fw-bold">@SharedLocalizer["Phone Number"] *</label>
+                            <input asp-for="PatientPhone" class="form-control" placeholder="@SharedLocalizer["e.g. 01012345678"]" />
                             <span asp-validation-for="PatientPhone" class="text-danger small fw-bold d-block mt-1"></span>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label asp-for="BirthDate" class="form-label fw-bold">Date of Birth *</label>
+                            <label asp-for="BirthDate" class="form-label fw-bold">@SharedLocalizer["Date of Birth"] *</label>
                             <input asp-for="BirthDate" type="date" class="form-control" />
                             <span asp-validation-for="BirthDate" class="text-danger small fw-bold d-block mt-1"></span>
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="PatientEmail" class="form-label fw-bold">Email Address *</label>
-                        <input asp-for="PatientEmail" type="email" class="form-control" placeholder="example@domain.com" />
+                        <label asp-for="PatientEmail" class="form-label fw-bold">@SharedLocalizer["Email Address"] *</label>
+                        <input asp-for="PatientEmail" type="email" class="form-control" placeholder="@SharedLocalizer["example@domain.com"]" />
                         <span asp-validation-for="PatientEmail" class="text-danger small fw-bold d-block mt-1"></span>
                     </div>
 
                     <!-- Appointment Details Section -->
-                    <h5 class="fw-bold text-secondary mt-4 mb-3 border-bottom pb-2">Appointment Details</h5>
+                    <h5 class="fw-bold text-secondary mt-4 mb-3 border-bottom pb-2">@SharedLocalizer["Appointment Details"]</h5>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Select Doctor *</label>
+                        <label class="form-label fw-bold">@SharedLocalizer["Select Doctor"] *</label>
                         <select id="DoctorId" name="DoctorId" asp-for="DoctorId" asp-items="Model.Doctors" class="form-select">
-                            <option value="">-- Select Doctor --</option>
+                            <option value="">-- @SharedLocalizer["Select Doctor"] --</option>
                         </select>
                         <span asp-validation-for="DoctorId" class="text-danger small fw-bold d-block mt-1"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Select Working Shift / Day *</label>
+                        <label class="form-label fw-bold">@SharedLocalizer["Select Working Shift / Day"] *</label>
                         <select id="DoctorScheduleId" name="DoctorScheduleId" asp-for="DoctorScheduleId" class="form-select">
-                            <option value="">-- Select Shift --</option>
+                            <option value="">-- @SharedLocalizer["Select Shift"] --</option>
                         </select>
                         <span asp-validation-for="DoctorScheduleId" class="text-danger small fw-bold d-block mt-1"></span>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Select Date *</label>
+                        <label class="form-label fw-bold">@SharedLocalizer["Select Date"] *</label>
                         <input type="date" name="AppointmentDate" id="AppointmentDate" asp-for="AppointmentDate" class="form-control" />
                         <span asp-validation-for="AppointmentDate" class="text-danger small fw-bold d-block mt-1"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Select Time Slot *</label>
+                        <label class="form-label fw-bold">@SharedLocalizer["Select Time Slot"] *</label>
                         <select id="AppointmentTime" name="AppointmentTime" asp-for="AppointmentTime" class="form-select">
-                            <option value="">-- Select Time Slot --</option>
+                            <option value="">-- @SharedLocalizer["Select Time Slot"] --</option>
                         </select>
                         <span asp-validation-for="AppointmentTime" class="text-danger small fw-bold d-block mt-1"></span>
                     </div>
 
                     <div class="mb-4">
-                        <label asp-for="Notes" class="form-label fw-bold">Notes / Medical Comments (Optional)</label>
-                        <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Enter additional notes..."></textarea>
+                        <label asp-for="Notes" class="form-label fw-bold">@SharedLocalizer["Notes / Medical Comments (Optional)"]</label>
+                        <textarea asp-for="Notes" class="form-control" rows="3" placeholder="@SharedLocalizer["Enter additional notes..."]"></textarea>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm rounded-pill">
-                            Confirm & Book
+                            @SharedLocalizer["Confirm & Book"]
                         </button>
                         <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2 fw-semibold rounded-pill">
-                            Cancel
+                            @SharedLocalizer["Cancel"]
                         </a>
                     </div>
                 </form>

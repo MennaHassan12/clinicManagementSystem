@@ -1,7 +1,7 @@
 ﻿@model clinicManagementSystem.Models.MedicalFile
 
 @{
-    ViewData["Title"] = "Edit Medical File";
+    ViewData["Title"] = SharedLocalizer["Edit Medical File"];
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 
     var medicalRecords =
@@ -14,11 +14,11 @@
 
         <div>
             <h2 class="fw-bold text-primary mb-1">
-                Edit Medical File
+                @SharedLocalizer["Edit Medical File"]
             </h2>
 
             <p class="text-muted mb-0">
-                Update medical record link, date, or replace the file
+                @SharedLocalizer["Update medical record link, date, or replace the file"]
             </p>
         </div>
 
@@ -54,14 +54,14 @@
                 <div class="mb-4">
 
                     <label class="form-label fw-semibold">
-                        Medical Record
+                        @SharedLocalizer["Medical Record"]
                     </label>
 
                     <select name="MedicalRecordId"
                             class="form-select">
 
                         <option value="">
-                            -- Select Medical Record --
+                            -- @SharedLocalizer["Select Medical Record"] --
                         </option>
 
                         @if (medicalRecords != null)
@@ -84,7 +84,7 @@
                 <div class="mb-4">
 
                     <label class="form-label fw-semibold">
-                        Current File
+                        @SharedLocalizer["Current File"]
                     </label>
 
                     <div class="p-3 bg-light rounded-3">
@@ -108,7 +108,7 @@
                 <div class="mb-4">
 
                     <label class="form-label fw-semibold">
-                        Replace File <small class="text-muted fw-normal">(optional)</small>
+                        @SharedLocalizer["Replace File"] <small class="text-muted fw-normal">(@SharedLocalizer["optional"])</small>
                     </label>
 
                     <input type="file"
@@ -118,9 +118,7 @@
 
                     <div class="form-text mt-2">
                         <i class="fas fa-info-circle me-1"></i>
-                        Leave empty to keep the current file.
-                        Allowed files: PDF, JPG, JPEG and PNG.
-                        Maximum size: 10 MB.
+                        @SharedLocalizer["Leave empty to keep the current file. Allowed files: PDF, JPG, JPEG and PNG. Maximum size: 10 MB."]
                     </div>
 
                 </div>
@@ -130,7 +128,7 @@
                 <div class="mb-4">
 
                     <label class="form-label fw-semibold">
-                        Upload Date
+                        @SharedLocalizer["Upload Date"]
                     </label>
 
                     <input type="date"
@@ -147,7 +145,7 @@
                     <button type="submit"
                             class="btn btn-primary px-4 rounded-pill">
 
-                        Save Changes
+                        @SharedLocalizer["Save Changes"]
 
                     </button>
 
@@ -155,7 +153,7 @@
                        asp-controller="MedicalFiles"
                        asp-action="Index"
                        class="btn btn-outline-secondary rounded-pill px-4">
-                        Cancel
+                        @SharedLocalizer["Cancel"]
                     </a>
 
                    
