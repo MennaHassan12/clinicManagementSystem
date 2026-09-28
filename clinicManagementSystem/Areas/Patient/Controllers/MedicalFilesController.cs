@@ -1,4 +1,4 @@
-﻿using clinicManagementSystem.Models;
+using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
 using clinicManagementSystem.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +10,7 @@ using PatientModel = clinicManagementSystem.Models.Patient;
 namespace clinicManagementSystem.Areas.Patient.Controllers
 {
     [Area(SD.PATIENT_AREA)]
-    [Authorize]
+    [Authorize(Policy = "RequirePatientRole")]
     public class MedicalFilesController : Controller
     {
         private readonly IRepository<MedicalFile> _medicalFileRepository;

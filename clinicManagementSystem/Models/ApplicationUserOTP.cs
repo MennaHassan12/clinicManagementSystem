@@ -1,4 +1,4 @@
-﻿namespace clinicManagementSystem.Models
+namespace clinicManagementSystem.Models
 {
     public class ApplicationUserOTP
     {
@@ -13,5 +13,7 @@
         public DateTime ValidTo { get; set; } = DateTime.Now.AddMinutes(20);
 
         public bool IsUsed { get; set; }
+        
+        public int FailedAttempts { get; set; }
     }
 }

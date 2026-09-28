@@ -1,4 +1,4 @@
-﻿using clinicManagementSystem.Models;
+using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
 using clinicManagementSystem.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +10,7 @@ using PatientModel = clinicManagementSystem.Models.Patient;
 namespace clinicManagementSystem.Areas.Patient.Controllers
 {
     [Area(SD.PATIENT_AREA)]
-    [Authorize]
+  
     public class ReviewsController : Controller
     {
         private readonly IRepository<Review> _reviewRepository;
@@ -31,6 +31,7 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         // INDEX (My Reviews)
         // =========================
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var patient = await GetCurrentPatientAsync();
@@ -59,6 +60,7 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         // CREATE - GET
         // =========================
         [HttpGet]
+        [Authorize(Policy = "RequirePatientRole")]
         public async Task<IActionResult> Create(int? appointmentId)
         {
             var patient = await GetCurrentPatientAsync();
@@ -84,6 +86,7 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequirePatientRole")]
         public async Task<IActionResult> Create(Review review)
         {
             var patient = await GetCurrentPatientAsync();
@@ -154,6 +157,7 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         // EDIT - GET
         // =========================
         [HttpGet]
+        [Authorize(Policy = "RequirePatientRole")]
         public async Task<IActionResult> Edit(int id)
         {
             var patient = await GetCurrentPatientAsync();
@@ -181,6 +185,7 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = "RequirePatientRole")]
         public async Task<IActionResult> Edit(int id, Review review)
         {
             if (id != review.ReviewId)
@@ -227,6 +232,7 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
         // DELETE - GET
         // =========================
         [HttpGet]
+        [Authorize(Policy = "RequirePatientRole")]
         public async Task<IActionResult> Delete(int id)
         {
             var patient = await GetCurrentPatientAsync();

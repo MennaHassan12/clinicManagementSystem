@@ -1,4 +1,4 @@
-﻿using clinicManagementSystem.Areas.Identity.Controllers;
+using clinicManagementSystem.Areas.Identity.Controllers;
 using clinicManagementSystem.Data;
 using clinicManagementSystem.Models;
 using clinicManagementSystem.Repositories.IRepositories;
@@ -8,14 +8,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace clinicManagementSystem.Services
 {
     public enum EmailType
     {
         Register,
-        ResendConfirmation,
-        ForgetPassword
+        ResendConfirmation
+       
     }
 
     public class AccountService : IAccountService
@@ -78,17 +79,6 @@ namespace clinicManagementSystem.Services
                             buttonText: "Confirm My Account");
                     }
                     break;
-
-                case EmailType.ForgetPassword:
-                    {
-                        subject = "Reset Your Password – Clinic System";
-                        message = BuildConfirmationEmail(
-                            title: "Reset Your Password",
-                            introText: "We received a request to reset your Clinic System password. Click the button below to choose a new password. If you didn't make this request, you can ignore this email.",
-                            link: link,
-                            buttonText: "Reset My Password");
-                    }
-                    break;
             }
 
             await _emailSender.SendEmailAsync(user.Email, subject, message);
@@ -97,18 +87,30 @@ namespace clinicManagementSystem.Services
         // === الميثود الجديدة بتاعة الـ OTP (لصفحة Forget Password) ===
         public async Task SendOtpMailAsync(ApplicationUser user)
         {
-            var otpCode = Random.Shared.Next(100000, 999999).ToString();
+            var now = DateTime.UtcNow;
 
-            var otpEntity = new ApplicationUserOTP
+            // 1) Rate limit: 3 أكواد كل 24 ساعة (بيغطي ForgetPassword و ResendOTP)
+            var sentLast24h = (await _applicationUserOTPRepository.GetAsync(
+                e => e.ApplicationUserId == user.Id && e.CreateAt >= now.AddHours(-24))).Count();
+            if (sentLast24h >= 3) return;
+
+            // 2) بطّل أي OTP قديم شغال
+            var oldOtps = await _applicationUserOTPRepository.GetAsync(
+                e => e.ApplicationUserId == user.Id && !e.IsUsed && e.ValidTo >= now);
+            foreach (var old in oldOtps) old.IsUsed = true;
+
+            // 3) كود آمن
+            var otpCode = RandomNumberGenerator.GetInt32(100000, 1000000).ToString();
+
+            await _applicationUserOTPRepository.CreateAsync(new ApplicationUserOTP
             {
                 ApplicationUserId = user.Id,
                 OTP = otpCode,
-                CreateAt = DateTime.Now,
-                ValidTo = DateTime.Now.AddMinutes(10),
-                IsUsed = false
-            };
-
-            await _applicationUserOTPRepository.CreateAsync(otpEntity);   // ← الريبو
+                CreateAt = now,
+                ValidTo = now.AddMinutes(10),
+                IsUsed = false,
+                FailedAttempts = 0
+            });
             await _applicationUserOTPRepository.CommitAsync();
 
             string subject = "Your Password Reset Code – Clinic System";

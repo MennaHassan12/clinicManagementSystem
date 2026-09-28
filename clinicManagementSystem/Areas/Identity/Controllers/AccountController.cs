@@ -1,4 +1,4 @@
-﻿ 
+ 
 using clinicManagementSystem.Areas.Admin.Controllers;
 using clinicManagementSystem.Areas.Patient.Controllers;
 using clinicManagementSystem.Models;
@@ -85,6 +85,7 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
 
         public async Task<IActionResult> Confirm(string token, string id)
         {
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(id)) return NotFound();
             var user = await _userManager.FindByIdAsync(id);
 
             if (user is null) return NotFound();
@@ -114,6 +115,7 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginVM loginVM)
         {
             if (!ModelState.IsValid)
@@ -136,6 +138,11 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
 
                 return View(loginVM);
             }
+            if (result.IsLockedOut)
+            {
+                ModelState.AddModelError(string.Empty, "Account locked due to many failed attempts. Try again later or reset your password.");
+                return View(loginVM);
+            }
 
             if (!result.Succeeded)
             {
@@ -150,25 +157,7 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
             if (!string.IsNullOrEmpty(loginVM.ReturnUrl) && Url.IsLocalUrl(loginVM.ReturnUrl))
                 return LocalRedirect(loginVM.ReturnUrl);
 
-            var roles = await _userManager.GetRolesAsync(user);
-
-            if (roles.Contains(SD.ROLE_SUPER_ADMIN) || roles.Contains(SD.ROLE_ADMIN))
-            {
-                return RedirectToAction("Index", "Dashboard",
-                    new { area = SD.ADMIN_AREA });
-            }
-
-            if (roles.Contains(SD.ROLE_DOCTOR))
-            {
-                return RedirectToAction("Index", "Dashboard", new { area = SD.DOCTOR_AREA });
-            }
-
-            if (roles.Contains(SD.ROLE_PATIENT))
-            {
-                return RedirectToAction("Index", "Home", new { area = SD.PATIENT_AREA});
-            }
-
-            return RedirectToAction("Index", "Home", new { area = SD.PATIENT_AREA });
+            return await RedirectToHomeByRole(user);
         }
 
         [HttpGet]
@@ -178,6 +167,7 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResendEmailConfirmation(ResendEmailConfirmationVM resendEmailConfirmationVM)
         {
             if (!ModelState.IsValid)
@@ -205,6 +195,7 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgetPassword(ForgetPasswordVM forgetPasswordVM)
         {
             if (!ModelState.IsValid)
@@ -232,26 +223,31 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ValidateOTP(ValidateOTPVM validateOTPVM)
         {
-            if (!ModelState.IsValid)
-                return View(validateOTPVM);
+            if (!ModelState.IsValid) return View(validateOTPVM);
 
             var user = await _userManager.FindByEmailAsync(validateOTPVM.Email);
-
             if (user is null)
             {
                 ModelState.AddModelError(nameof(ValidateOTPVM.Otp), "Invalid or expired OTP");
                 return View(validateOTPVM);
             }
 
-            var otp = await _applicationUserOTPRepository.GetOneAsync(e => e.ApplicationUserId == user.Id
-                         && e.OTP == validateOTPVM.Otp
-                         && !e.IsUsed
-                         && e.ValidTo >= DateTime.Now);
+            var otp = await _applicationUserOTPRepository.GetOneAsync(e =>
+                e.ApplicationUserId == user.Id
+                && !e.IsUsed
+                && e.ValidTo >= DateTime.UtcNow
+                && e.FailedAttempts < 5);
 
-            if (otp is null)
+            if (otp is null || otp.OTP != validateOTPVM.Otp)
             {
+                if (otp is not null)
+                {
+                    otp.FailedAttempts++;
+                    await _applicationUserOTPRepository.CommitAsync();
+                }
                 ModelState.AddModelError(nameof(ValidateOTPVM.Otp), "Invalid or expired OTP");
                 return View(validateOTPVM);
             }
@@ -259,67 +255,58 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
             otp.IsUsed = true;
             await _applicationUserOTPRepository.CommitAsync();
 
-             
-            return RedirectToAction(nameof(ResetPassword), new { email = validateOTPVM.Email });
+            TempData["ResetToken"] = await _userManager.GeneratePasswordResetTokenAsync(user);
+            TempData["ResetEmail"] = user.Email;
+            return RedirectToAction(nameof(ResetPassword));
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResendOTP(string email)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                return NotFound();
+            if (string.IsNullOrWhiteSpace(email)) return NotFound();
 
             var user = await _userManager.FindByEmailAsync(email);
-
             if (user is not null)
-            {
-                var totalOtp = (await _applicationUserOTPRepository.GetAsync(
-                    e => e.ApplicationUserId == user.Id && e.CreateAt >= DateTime.Now.AddHours(-24))).Count();
-
-                if (totalOtp > 3)
-                {
-                    TempData["error_notification"] = "You have exceeded the maximum number of OTP attempts. Please try again later.";
-                    return RedirectToAction(nameof(ValidateOTP), new { email });
-                }
-
                 await _accountService.SendOtpMailAsync(user);
-            }
 
-            TempData["success_notification"] = "OTP number sent successfully. Please check your email.";
+            TempData["success_notification"] = "If this email exists, a new code has been sent (max 3 codes per 24 hours).";
             return RedirectToAction(nameof(ValidateOTP), new { email });
         }
 
         [HttpGet]
-        public IActionResult ResetPassword(string email)
+        public IActionResult ResetPassword(string? token = null, string? email = null)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                return NotFound();
+            token ??= TempData["ResetToken"] as string;
+            email ??= TempData["ResetEmail"] as string;
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
+                return RedirectToAction(nameof(ForgetPassword));
 
-            return View(new NewPasswordVM { Email = email });
+            return View(new NewPasswordVM { Email = email, Token = token });
         }
 
         [HttpPost]
-        public async Task<IActionResult> ResetPassword(NewPasswordVM newPasswordVM)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(NewPasswordVM vm)
         {
             if (!ModelState.IsValid)
-                return View(newPasswordVM);
+                return View(vm);
 
-            var user = await _userManager.FindByEmailAsync(newPasswordVM.Email);
+            var user = await _userManager.FindByEmailAsync(vm.Email);
+            if (user is null) return BadRequest();
 
-            if (user is null) return NotFound();
-
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _userManager.ResetPasswordAsync(user, token, newPasswordVM.Password);
+            var result = await _userManager.ResetPasswordAsync(user, vm.Token, vm.Password);
 
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
                     ModelState.AddModelError(string.Empty, error.Description);
-
-                return View(newPasswordVM);
+                return View(vm);
             }
 
-            TempData["success_notification"] = "Password changed successfully, you can now log in";
+            await _userManager.SetLockoutEndDateAsync(user, null);
+            await _userManager.ResetAccessFailedCountAsync(user);
 
+            TempData["success_notification"] = "Password changed successfully, you can now log in";
             return RedirectToAction(nameof(Login));
         }
 
@@ -337,9 +324,15 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
         {
             if (!ModelState.IsValid)
                 return View(changePasswordVM);
+           
 
             var user = await _userManager.GetUserAsync(User);
             if (user is null) return NotFound();
+            if (!await _userManager.HasPasswordAsync(user))
+            {
+                TempData["error_notification"] = "Your account uses Google sign-in. Use 'Forgot password' to create a password.";
+                return RedirectToAction(nameof(ProfileController.Index), "Profile", new { area = SD.IDENTITY_AREA });
+            }
 
             var result = await _userManager.ChangePasswordAsync(user, changePasswordVM.CurrentPassword, changePasswordVM.NewPassword);
 
@@ -351,6 +344,7 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
             }
 
             TempData["success_notification"] = "Password changed successfully";
+            await _signInManager.RefreshSignInAsync(user);
 
             return RedirectToAction(nameof(ProfileController.Index), "Profile" );
         }
@@ -373,10 +367,7 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
-            var redirectUrl = Url.Action(
-                nameof(ExternalLoginCallback),
-                "Account",
-                new { returnUrl });
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { area = SD.IDENTITY_AREA, returnUrl });
 
             var properties =
                 _signInManager.ConfigureExternalAuthenticationProperties(
@@ -387,129 +378,84 @@ namespace clinicManagementSystem.Areas.Identity.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ExternalLoginCallback(
-    string returnUrl = null,
-    string remoteError = null)
+        public async Task<IActionResult> ExternalLoginCallback(string? returnUrl = null, string? remoteError = null)
         {
             if (remoteError != null)
             {
-                ModelState.AddModelError(
-                    string.Empty,
-                    $"Error from external provider: {remoteError}");
-
+                TempData["error_notification"] = $"Error from external provider: {remoteError}";
                 return RedirectToAction(nameof(Login));
             }
 
-            var info =
-                await _signInManager.GetExternalLoginInfoAsync();
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null) return RedirectToAction(nameof(Login));
 
-            if (info == null)
-            {
-                return RedirectToAction(nameof(Login));
-            }
-
-            var signInResult =
-                await _signInManager.ExternalLoginSignInAsync(
-                    info.LoginProvider,
-                    info.ProviderKey,
-                    isPersistent: false);
-
-            if (signInResult.Succeeded)
-            {
-                return LocalRedirect(returnUrl ?? "/");
-            }
-
-            var email =
-                info.Principal.FindFirstValue(ClaimTypes.Email);
-
-            var username =
-                info.Principal.FindFirstValue(ClaimTypes.Name);
-
-            if (email == null)
-            {
-                ModelState.AddModelError(
-                    string.Empty,
-                    "Email was not provided by Google.");
-
-                return RedirectToAction(nameof(Login));
-            }
-
-            var user =
-                await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
             if (user == null)
             {
-                var random = new Random();
-
-                var randomNumber =
-                    random.Next(1000, 9999);
-
-                user = new ApplicationUser
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                if (string.IsNullOrEmpty(email))
                 {
-                    UserName =
-                        (username ?? email.Split('@')[0])
-                        .Replace(" ", "") + randomNumber,
-
-                    Email = email,
-
-                    EmailConfirmed = true
-                };
-
-                var createUserResult =
-                    await _userManager.CreateAsync(user);
-
-                if (!createUserResult.Succeeded)
-                {
-                    foreach (var error in createUserResult.Errors)
-                    {
-                        ModelState.AddModelError(
-                            string.Empty,
-                            error.Description);
-                    }
-
+                    TempData["error_notification"] = "Email was not provided by Google.";
                     return RedirectToAction(nameof(Login));
                 }
 
-                await _userManager.AddToRoleAsync(user, SD.ROLE_PATIENT);
+                user = await _userManager.FindByEmailAsync(email);
+
+                if (user == null)
+                {
+                    var name = info.Principal.FindFirstValue(ClaimTypes.Name) ?? email.Split('@')[0];
+                    user = new ApplicationUser
+                    {
+                        UserName = email,
+                        Email = email,
+                        FullName = name.Length > 30 ? name[..30] : name,
+                        EmailConfirmed = true
+                    };
+                    var create = await _userManager.CreateAsync(user);
+                    if (!create.Succeeded)
+                    {
+                        TempData["error_notification"] = string.Join(", ", create.Errors.Select(e => e.Description));
+                        return RedirectToAction(nameof(Login));
+                    }
+                }
+                else if (!user.EmailConfirmed)
+                {
+                    // حماية من pre-hijacking
+                    user.EmailConfirmed = true;
+                    await _userManager.UpdateAsync(user);
+                    if (await _userManager.HasPasswordAsync(user))
+                        await _userManager.RemovePasswordAsync(user);
+                }
+
+                var add = await _userManager.AddLoginAsync(user, info);
+                if (!add.Succeeded)
+                {
+                    TempData["error_notification"] = string.Join(", ", add.Errors.Select(e => e.Description));
+                    return RedirectToAction(nameof(Login));
+                }
             }
 
-            var existingLogins =
-                await _userManager.GetLoginsAsync(user);
-
-            var hasGoogleLogin =
-                existingLogins.Any(
-                    l => l.LoginProvider == info.LoginProvider);
-
-            if (!hasGoogleLogin)
+            if (await _userManager.IsLockedOutAsync(user))
             {
-                var addLoginResult =
-                    await _userManager.AddLoginAsync(
-                        user,
-                        info);
-
-                if (!addLoginResult.Succeeded)
-                {
-                    foreach (var error in addLoginResult.Errors)
-                    {
-                        ModelState.AddModelError(
-                            string.Empty,
-                            error.Description);
-                    }
-
-                    return RedirectToAction(nameof(Login));
-                }
+                TempData["error_notification"] = "Your account is locked. Try again later.";
+                return RedirectToAction(nameof(Login));
             }
 
-            await _signInManager.SignInAsync(
-                user,
-                isPersistent: false);
+            if (!(await _userManager.GetRolesAsync(user)).Any())
+                await _userManager.AddToRoleAsync(user, SD.ROLE_PATIENT);
 
-            return LocalRedirect(returnUrl ?? "/");
+            await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return await RedirectToHomeByRole(user);
         }
 
-        private async Task<IActionResult> RedirectToHomeByRole()
+        private async Task<IActionResult> RedirectToHomeByRole(ApplicationUser appUser = null)
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = appUser ?? await _userManager.GetUserAsync(User);
 
             if (user is not null)
             {

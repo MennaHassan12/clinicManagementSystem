@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace clinicManagementSystem.ViewModels
 {
@@ -8,6 +8,9 @@ namespace clinicManagementSystem.ViewModels
 
         [Required]
         public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string Token { get; set; } = string.Empty;
 
         [Required]
         [DataType(DataType.Password)]

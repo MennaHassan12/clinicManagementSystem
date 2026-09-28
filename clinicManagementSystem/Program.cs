@@ -8,6 +8,7 @@ using clinicManagementSystem.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace clinicManagementSystem
 {
@@ -48,10 +49,18 @@ namespace clinicManagementSystem
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = $"/Identity/Account/Login";
-                options.LogoutPath = $"/Identity/Account/Logout";
-                options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+                options.LoginPath = "/Identity/Account/Login";
+                options.LogoutPath = "/Identity/Account/Logout";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.ExpireTimeSpan = TimeSpan.FromHours(8);
+                options.SlidingExpiration = true;
             });
+            builder.Services.Configure<SecurityStampValidatorOptions>(o =>
+    o.ValidationInterval = TimeSpan.FromMinutes(1));
+          
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdminOrSuperAdmin", policy => policy.RequireRole("Admin", "SuperAdmin"));
