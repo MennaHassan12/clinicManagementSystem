@@ -131,7 +131,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                         var setPasswordLink = Url.Action(
                             action: "ResetPassword",
                             controller: "Account",
-                            values: new { area = "Identity", code = token, email = user.Email },
+                            values: new { area = "Identity", token = token, email = user.Email },
                             protocol: Request.Scheme
                         );
 
@@ -248,7 +248,7 @@ namespace clinicManagementSystem.Areas.Admin.Controllers
                             setPasswordLink = Url.Action(
                                 action: "ResetPassword",
                                 controller: "Account",
-                                values: new { area = "Identity", code = token, email = model.Email },
+                                values: new { area = "Identity", token = token, email = model.Email },
                                 protocol: Request.Scheme
                             );
                         }
