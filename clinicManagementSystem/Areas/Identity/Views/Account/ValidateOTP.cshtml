@@ -27,7 +27,7 @@
         <span asp-validation-for="Otp" class="field-error" style="text-align:center;"></span>
     </div>
 
-    <button type="submit" class="btn-primary">@SharedLocalizer["VERIFY CODE"]</button>
+    <button type="submit" class="btn-primary text-uppercase">@SharedLocalizer["Verify Code"]</button>
 </form>
 
 <div class="resend-link">
@@ -37,7 +37,7 @@
 <form asp-action="ResendOTP" asp-controller="Account" method="post">
     @Html.AntiForgeryToken()
     <input type="hidden" name="email" value="@Model.Email" />
-    <button type="submit" class="btn-secondary">@SharedLocalizer["RESEND CODE"]</button>
+    <button type="submit" class="btn-secondary text-uppercase">@SharedLocalizer["Resend Code"]</button>
 </form>
 
 @section Scripts {

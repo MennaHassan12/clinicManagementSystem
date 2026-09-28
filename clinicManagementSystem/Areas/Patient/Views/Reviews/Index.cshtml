@@ -7,15 +7,6 @@
 
 <div class="container py-4">
 
-    @if (TempData["success_notification"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm mb-4" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i>
-            @SharedLocalizer[TempData["success_notification"]?.ToString() ?? ""]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-
     @if (TempData["error_notification"] != null)
     {
         <div class="alert alert-danger alert-dismissible fade show rounded-3 shadow-sm mb-4" role="alert">
