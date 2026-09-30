@@ -15,7 +15,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] HealthCare Portal</title>
+    <title>@ViewData["Title"] - Clinova</title>
 
     @if (isRtl)
     {
@@ -38,7 +38,7 @@
         <div class="container d-flex justify-content-between align-items-center">
             <div class="d-flex gap-4">
                 <span><i class="bi bi-geo-alt-fill text-primary me-1"></i> 123 Health Street, Cairo, Egypt</span>
-                <span><i class="bi bi-envelope-fill text-primary me-1"></i> support@healthcareportal.com</span>
+                <span><i class="bi bi-envelope-fill text-primary me-1"></i> support@clinova.com</span>
             </div>
             <div>
                 <partial name="_SelectLanguagePartial" />
@@ -51,7 +51,7 @@
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2 fw-bold fs-3 text-primary" href="/Patient/Home/Index">
                 <i class="bi bi-heart-pulse-fill fs-3"></i>
-                <span class="tracking-wide">@SharedLocalizer["HealthCare"]</span>
+                <span class="tracking-wide">@SharedLocalizer["Clinova"]</span>
             </a>
 
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
@@ -168,7 +168,7 @@
         <div class="row g-4 mb-4">
 
             <div class="col-lg-3 col-md-6">
-                <h5 class="fw-bold text-primary mb-3"><i class="bi bi-heart-pulse-fill me-2"></i>@SharedLocalizer["HealthCare"]</h5>
+                <h5 class="fw-bold text-primary mb-3"><i class="bi bi-heart-pulse-fill me-2"></i>@SharedLocalizer["Clinova"]</h5>
                 <p class="text-light opacity-75 fs-7">@SharedLocalizer["Providing trusted healthcare services, easy online appointment bookings, and comprehensive medical record management."]</p>
             </div>
 
@@ -198,12 +198,12 @@
                 <h5 class="fw-bold text-white mb-3">@SharedLocalizer["Contact Info"]</h5>
                 <p class="text-light opacity-75 mb-2 fs-7"><i class="bi bi-geo-alt me-2 text-primary"></i>@SharedLocalizer["123 Health Street, Cairo, Egypt"]</p>
                 <p class="text-light opacity-75 mb-2 fs-7"><i class="bi bi-telephone me-2 text-primary"></i>+20 123 456 7890</p>
-                <p class="text-light opacity-75 fs-7"><i class="bi bi-envelope me-2 text-primary"></i>support@healthcareportal.com</p>
+                <p class="text-light opacity-75 fs-7"><i class="bi bi-envelope me-2 text-primary"></i>support@clinova.com</p>
             </div>
         </div>
         <hr class="border-secondary opacity-25">
         <div class="text-center pt-2">
-            <small class="text-light opacity-50">&copy; @DateTime.Now.Year @SharedLocalizer["HealthCare Portal"]. @SharedLocalizer["All Rights Reserved."]</small>
+            <small class="text-light opacity-50">&copy; @DateTime.Now.Year @SharedLocalizer["Clinova"]. @SharedLocalizer["All Rights Reserved."]</small>
         </div>
     </div>
 </footer>

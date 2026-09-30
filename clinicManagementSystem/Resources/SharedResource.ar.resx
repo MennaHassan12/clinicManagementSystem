@@ -558,8 +558,11 @@
   <data name="Create Account" xml:space="preserve">
     <value>إنشاء حساب جديد</value>
   </data>
-  <data name="Fill in your details to access the diagnostic platform" xml:space="preserve">
-    <value>املأ بياناتك للوصول إلى المنصة</value>
+  <data name= "Join Clinova+" xml:space="preserve">
+    <value>انضم إلى Clinova+</value>
+  </data>
+	<data name=  "Create your account to get started" xml:space="preserve">
+    <value>أنشئ حسابك للبدء</value>
   </data>
   <data name="Full Name" xml:space="preserve">
     <value>الاسم بالكامل</value>
