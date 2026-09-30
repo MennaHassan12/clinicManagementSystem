@@ -28,7 +28,7 @@ namespace clinicManagementSystem.Services
             string body = $@"
             <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;'>
                 <div style='background-color: #0d6efd; color: white; padding: 20px; text-align: center;'>
-                    <h2 style='margin: 0;'>Clinic Management System</h2>
+                    <h2 style='margin: 0;'>Clinova</h2>
                     <p style='margin: 5px 0 0 0;'>Appointment Confirmation</p>
                 </div>
                 <div style='padding: 20px; color: #333;'>
@@ -61,7 +61,7 @@ namespace clinicManagementSystem.Services
             string body = $@"
             <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;'>
                 <div style='background-color: {statusColor}; color: white; padding: 20px; text-align: center;'>
-                    <h2 style='margin: 0;'>Clinic Management System</h2>
+                    <h2 style='margin: 0;'>Clinova</h2>
                     <p style='margin: 5px 0 0 0;'>Appointment Status Update</p>
                 </div>
                 <div style='padding: 20px; color: #333;'>
@@ -81,7 +81,7 @@ namespace clinicManagementSystem.Services
             string body = $@"
             <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;'>
                 <div style='background-color: #0d6efd; color: white; padding: 20px; text-align: center;'>
-                    <h2 style='margin: 0;'>Clinic Management System</h2>
+                    <h2 style='margin: 0;'>Clinova</h2>
                     <p style='margin: 5px 0 0 0;'>Visit Completed & Prescription Ready</p>
                 </div>
                 <div style='padding: 20px; color: #333;'>
@@ -93,7 +93,7 @@ namespace clinicManagementSystem.Services
                         <p style='margin: 0;'><strong>Diagnosis:</strong> {diagnosis}</p>
                     </div>
 
-                    <p style='margin-top: 25px; font-size: 0.9em; color: #6c757d;'>Thank you for choosing Clinic Management System.</p>
+                    <p style='margin-top: 25px; font-size: 0.9em; color: #6c757d;'>Thank you for choosing Clinova.</p>
                 </div>
             </div>";
 
@@ -102,12 +102,12 @@ namespace clinicManagementSystem.Services
 
         public async Task SendAppointmentBookingEmailAsync(string toEmail, string patientName, string doctorName, DateOnly date, TimeOnly time)
         {
-            string subject = "Appointment Confirmation - Clinic Management System";
+            string subject = "Appointment Confirmation - Clinova";
             string formattedTime = DateTime.Today.Add(time.ToTimeSpan()).ToString("hh:mm tt");
             string body = $@"
             <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;'>
                 <div style='background-color: #0d6efd; color: white; padding: 20px; text-align: center;'>
-                    <h2 style='margin: 0;'>Clinic Management System</h2>
+                    <h2 style='margin: 0;'>Clinova</h2>
                     <p style='margin: 5px 0 0 0;'>Appointment Booking Confirmation</p>
                 </div>
                 <div style='padding: 20px; color: #333;'>
@@ -119,7 +119,7 @@ namespace clinicManagementSystem.Services
                         <p style='margin: 0;'><strong>Time:</strong> {formattedTime}</p>
                     </div>
 
-                    <p style='margin-top: 25px; font-size: 0.9em; color: #6c757d;'>Thank you for choosing Clinic Management System.</p>
+                    <p style='margin-top: 25px; font-size: 0.9em; color: #6c757d;'>Thank you for choosing Clinova.</p>
                 </div>
             </div>";
 

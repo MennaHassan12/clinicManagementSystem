@@ -124,7 +124,7 @@
     <value>Privacy</value>
   </data>
   <data name="Clinic Management System" xml:space="preserve">
-    <value>Clinic Management System</value>
+    <value>Clinova</value>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>
@@ -169,7 +169,10 @@
     <value>Patient Dashboard</value>
   </data>
   <data name="HealthCare" xml:space="preserve">
-    <value>HealthCare</value>
+    <value>Clinova</value>
+  </data>
+	<data name="Clinova" xml:space="preserve">
+    <value>Clinova</value>
   </data>
   <data name="Pages" xml:space="preserve">
     <value>Pages</value>
@@ -556,10 +559,13 @@
     <value>Resend email confirmation</value>
   </data>
   <data name="Create Account" xml:space="preserve">
-    <value>Create Account</value>
+    <value>Join Clinova+</value>
   </data>
-  <data name="Fill in your details to access the diagnostic platform" xml:space="preserve">
-    <value>Fill in your details to access the diagnostic platform</value>
+	<data name="Create Account" xml:space="preserve">
+    <value>Join Clinova+</value>
+  </data>
+  <data name= "Create your account to get started" xml:space="preserve">
+    <value> "Create your account to get started".</value>
   </data>
   <data name="Full Name" xml:space="preserve">
     <value>Full Name</value>
@@ -2140,7 +2146,7 @@
     <value>Holidays</value>
   </data>
   <data name="HealthCare Portal" xml:space="preserve">
-    <value>HealthCare Portal</value>
+    <value>Clinova</value>
   </data>
   <data name="All Rights Reserved." xml:space="preserve">
     <value>All Rights Reserved.</value>

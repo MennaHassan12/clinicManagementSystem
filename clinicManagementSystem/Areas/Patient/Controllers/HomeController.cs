@@ -152,7 +152,7 @@ namespace clinicManagementSystem.Areas.Patient.Controllers
                     string emailBody = $@"
                     <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;'>
                         <div style='background-color: #0d6efd; color: white; padding: 20px; text-align: center;'>
-                            <h2 style='margin: 0;'>Clinic Management System</h2>
+                            <h2 style='margin: 0;'>Clinova</h2>
                             <p style='margin: 5px 0 0 0;'>New Patient Inquiry</p>
                         </div>
                         <div style='padding: 20px; color: #333;'>

@@ -16,7 +16,7 @@ namespace clinicManagementSystem.Services
         {
             string title = isNewAccount ? "Your Doctor Account Has Been Created" : "Your Account Details Updated";
             string introText = isNewAccount
-                ? $"Welcome to Clinic Management System, Dr. <strong>{doctorName}</strong>. Your doctor account has been successfully created by administration."
+                ? $"Welcome to Clinova, Dr. <strong>{doctorName}</strong>. Your doctor account has been successfully created by administration."
                 : $"Hello Dr. <strong>{doctorName}</strong>, your account details have been updated by administration.";
 
             string body = $@"
